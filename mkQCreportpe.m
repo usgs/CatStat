@@ -4,10 +4,10 @@ clear
 close all
 
 % Load Catalog
-pathname = '../Data/ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
-catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
+pathname = '~/Bulletins/Pde/Backbone/bb_hdf.csv'; %% This is a hardcoded directory that must be changed based on the user
+catalogname = 'Hdf'; %% Also must be changed based on the user
 
-catalog = loadlibcomcat(pathname,catalogname);
+catalog = loadbackbone(pathname,catalogname);
 
 sortcsv = catalog.data;
 id = catalog.id;
