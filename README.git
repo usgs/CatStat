@@ -1,2 +1,38 @@
 Download this code
 git clone https://github.com/ekmyers/CatStat.git
+
+Upload changes to personal repository
+% git status
+% git add README.git loadlibcomcat.m mkQCreport.m Data
+% status
+% commit -am"new loading subroutines"
+% git status
+% git push origin master
+
+
+Creating a local copy of a repository:
+
+git clone URL
+
+Adding a file to the local copy of a repository:
+
+git add FILE
+
+Seeing the changes you made to a file:
+
+git diff FILE
+
+Committing (locally!) the changes you've made to any files:
+
+git commit -am"LOG MESSAGE"
+
+Pushing those changes to GitHub:
+
+git push origin master
+
+Offhand I don't remember how to re-sync your local copy with the
+"authoritative" repo, I'll have to look that up.
+
+https://help.github.com/articles/configuring-a-remote-for-a-fork/
+
+https://help.github.com/articles/syncing-a-fork/
