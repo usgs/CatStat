@@ -1,5 +1,5 @@
-function [cat] = loadlibcomcat()
-% This fuction loads output from Mike Hearne's libcomcat program
+function [cat] = loadlibcomcat(pathname,catalogname)
+% This function loads output from Mike Hearne's libcomcat program
 % Input: currently has no input and catalog name and path are hard coded
 % Output: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -9,8 +9,8 @@ function [cat] = loadlibcomcat()
 %         cat.evtype character cell array of event types  
 
 
-cat.file = '../Data/ci_1900.csv';
-cat.name = 'Southern Califorinia Seismic Network (CI)';
+cat.file = pathname;
+cat.name = catalogname;
 fid = fopen(cat.file, 'rt');
 S = textscan(fid,'%s %s %f %f %f %f %s','HeaderLines',1,'Delimiter',',');
 fclose(fid);

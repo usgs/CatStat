@@ -463,6 +463,8 @@ title('Cumulative number of events withing X seconds and Z km (Z specified in le
 xlabel('Seconds')
 ylabel('Total Number of Events')
 
+legend(num2str(kmLimits'),'location','NorthWest')
+
 %% Possible Duplicate Events
 
 secondsMax = 1;
