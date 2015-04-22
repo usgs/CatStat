@@ -1,4 +1,4 @@
-function catmagcomp(catalog,yrmagcsv,s)
+function catmagcomphist(catalog,yrmagcsv,s)
 % This function plots and compares the magnitude completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,9 +8,10 @@ function catmagcomp(catalog,yrmagcsv,s)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-disp(['While the median magnitude can give an approximate look at magnitude ']);
-disp(['distributions (cumulative and incremental) provide further indicators of ']);
-disp(['catalog completeness.']);
+% Magnitude color plot
+disp(['The final plot is a colorized histogram plot of magnitude for each year ']);
+disp(['of the catalog, showing how the completeness changes ']);
+disp(['through time. It is shown with the corresponding event count through time.']);
 disp([' ']);
 
 M = length(yrmagcsv);
@@ -49,20 +50,32 @@ for cmag = mags
   
 end
 
-figure
-hh = semilogy(mags,cdf,'k+','linewidth',1.5);
+figure('Color',[1 1 1]);
+subplot(2,1,1)
+hist2d(datenum(catalog.data(:,1)),catalog.data(:,5),min(datenum(catalog.data(:,1))):365:max(datenum(catalog.data(:,1))),0:0.5:maxmag);
+datetick
+colormap([[0.9,0.9,0.9];jet(max(nn(:)))])
+set(gca,'ydir','normal')
+colorbar
 hold on
-hh = semilogy(xx,nn,'ro','linewidth',1.5);
-[yy,ii] = max(nn);
-estcomp = mags(ii);
-disp(['Estimated Completeness (max incremental): ',num2str(estcomp)]);
-disp([' ']);
-axis([minmag maxmag 10^0 10^6])
-legend('Cumulative','Incremental')
-xlabel('Magnitude','fontsize',18)
-ylabel('Number of Events','fontsize',18)
-title('Magnitude Distributions','fontsize',18)
-set(gca,'linewidth',1.5)
-set(gca,'fontsize',15)
+ylabel('Magnitude','fontsize',18)
+set(gca,'fontsize',10)
 set(gca,'box','on')
+axis([min(datenum(catalog.data(:,1))) max(datenum(catalog.data(:,1))) 0 maxmag])
 
+subplot(2,1,2)
+minyr = begyear;
+maxyr = endyear;
+[nn,xx] = hist(yrmagcsv(:,1),[minyr:1:maxyr]);
+hist(yrmagcsv(:,1),[minyr:1:maxyr]);
+xlabel('Year','fontsize',18)
+ylabel('Number of Events','fontsize',18)
+set(gca,'linewidth',1.5)
+set(gca,'fontsize',10)
+ax = axis;
+axis([minyr maxyr+1 0 max(nn)*1.1])
+hh = colorbar;
+set(hh,'visible','off');
+%set(gca,'xtick',x(1973):10:x(2015));
+
+hold off

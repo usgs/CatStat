@@ -1,6 +1,11 @@
-function catdupsearch(sortcsv)
+function catdupsearch(catalog)
 % This function plots and searches for possible duplicate events based on various time and distance parameters.
-% Input: Sorted catalog matrix
+% Input: a structure containing normalized catalog data
+%         cat.name   name of catalog
+%         cat.file   name of file contining the catalog
+%         cat.data   real array of origin-time, lat, lon, depth, mag 
+%         cat.id     character cell array of event IDs
+%         cat.evtype character cell array of event types 
 % Output: None
 
 % Calculate Number of Events within X seconds and Z km
@@ -9,9 +14,9 @@ function catdupsearch(sortcsv)
 % separation. It is an estimate because it just compares events adjacent in
 % time. It does not compare each event to every other event in the catalog.
 
-nquakes = length(sortcsv);
-tdifsec = abs(diff(sortcsv(:,1)))*24*60*60;
-ddelkm = distance(sortcsv(1:(nquakes-1),2:3),sortcsv(2:nquakes,2:3))*111.12;
+nquakes = length(catalog.data);
+tdifsec = abs(diff(catalog.data(:,1)))*24*60*60;
+ddelkm = distance(catalog.data(1:(nquakes-1),2:3),catalog.data(2:nquakes,2:3))*111.12;
 
 nn = []; xx = [];
 kmLimits = [1,2,4,8,16,32,64,128];

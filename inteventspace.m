@@ -1,6 +1,11 @@
-function inteventspace(sortcsv)
+function inteventspace(catalog)
 % This function plots and compares the time between events (inter-temporal event spacing). 
-% Input: Sorted catalog matrix
+% Input: a structure containing normalized catalog data
+%         cat.name   name of catalog
+%         cat.file   name of file contining the catalog
+%         cat.data   real array of origin-time, lat, lon, depth, mag 
+%         cat.id     character cell array of event IDs
+%         cat.evtype character cell array of event types 
 % Output: None
 
 disp(['The amount of time that passes between individual events can further']);
@@ -9,11 +14,11 @@ disp(['demonstrate gaps in the catalog. The median and maximum time separation '
 disp(['for each year is also graphed to show the general trend in event frequency.']);
 disp([' ']);
 
-M = length(sortcsv);
+M = length(catalog.data);
 timesep = [];
 
-timesep = diff(sortcsv,1);
-datetimesep = horzcat(sortcsv(1:(M-1),1),timesep(:,1));
+timesep = diff(catalog.data,1);
+datetimesep = horzcat(catalog.data(1:(M-1),1),timesep(:,1));
 
 sorttime = sortrows(timesep,1);
 mediansep = median(sorttime(:,1));
@@ -33,8 +38,8 @@ axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(datetimesep(:,2)
 
 % Time Separation Year Specific Statistics
 
-timedif = diff(sortcsv(:,1));
-dateV = datevec(sortcsv(:,1));
+timedif = diff(catalog.data(:,1));
+dateV = datevec(catalog.data(:,1));
 years = dateV(:,1);
 years(1) = []; % make years same size as difference vector
 XX = min(years):max(years);

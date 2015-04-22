@@ -4,49 +4,56 @@ clear
 close all
 
 % Load Catalog
-pathname = '../Data/ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
+pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
 catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
 
 catalog = loadlibcomcat(pathname,catalogname);
 
-sortcsv = catalog.data;
-id = catalog.id;
-evtype = catalog.evtype;
-filename = catalog.name;
-
 %% Basic Catalog Summary
 
-basiccatsum(sortcsv,evtype,filename);
+basiccatsum(catalog);
 
 %% Seismicity Map
 
-plotcatmap(sortcsv);
+plotcatmap(catalog);
 
 %% Depth Distribution
 
-plotcatdeps(sortcsv);
+plotcatdeps(catalog);
 
 %% Event Frequency
 
-eventfreq(sortcsv);
+eventfreq(catalog);
+
+%% Hourly Event Frequency
+
+hreventfreq(catalog);
 
 %% Inter-Event Temporal Spacing
 
-inteventspace(sortcsv);
+inteventspace(catalog);
 
-%% Magnitude Distribution: Through Time
+%% Magnitude Distribution: All Magnitudes
 
-[yrmagcsv,s] = catmagdistrib(sortcsv);
+[yrmagcsv] = catmagdistrib(catalog);
 
-%% Magnitude Distribution: Completeness
+%% Magnitude Distribution: Yearly Median Magnitudes
 
-catmagcomp(sortcsv,yrmagcsv,s);
+[s] = plotyrmedmag(catalog,yrmagcsv);
+
+%% Magnitude Distribution: Overall Completeness
+
+catmagcomp(catalog,yrmagcsv,s);
+
+%% Magnitude Distribution: Completeness Through Time
+
+catmagcomphist(catalog,yrmagcsv,s);
 
 %% Searching for Duplicate Events
 
-catdupsearch(sortcsv);
+catdupsearch(catalog);
 
 %% Possible Duplicate Events
 
-catdupevents(sortcsv,filename,id);
+catdupevents(catalog);
 

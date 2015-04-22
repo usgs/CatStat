@@ -1,32 +1,36 @@
-function basiccatsum(sortcsv,evtype,filename)
-% This function provides basic information and statistics about the catalog 
-% Input: Catalog information
+function basiccatsum(catalog)
+% This function provcatalog.ides basic information and statistics about the catalog 
+% Input: a structure containing normalized catalog data
+%         cat.name   name of catalog
+%         cat.file   name of file contining the catalog
+%         cat.data   real array of origin-time, lat, lon, depth, mag 
+%         cat.id     character cell array of event IDs
+%         cat.evtype character cell array of event types 
 % Output: None
 
+begdate = datestr(catalog.data(1,1),'yyyy-mm-dd HH:MM:SS.FFF');
+enddate = datestr(catalog.data(length(catalog.data),1),'yyyy-mm-dd HH:MM:SS.FFF');
 
-begdate = datestr(sortcsv(1,1),'yyyy-mm-dd HH:MM:SS.FFF');
-enddate = datestr(sortcsv(length(sortcsv),1),'yyyy-mm-dd HH:MM:SS.FFF');
+M = length(catalog.data);
 
-M = length(sortcsv);
+maxlat = max(catalog.data(:,2)); 
+minlat = min(catalog.data(:,2));     
+maxlon = max(catalog.data(:,3));     
+minlon = min(catalog.data(:,3));
+maxdep = max(catalog.data(:,4));
+mindep = min(catalog.data(:,4)); 
+nandepcount = sum(isnan(catalog.data(:,4)));
+maxmag = max(catalog.data(:,5));
+minmag = min(catalog.data(:,5));
+zerocount = sum(catalog.data(:,5) == 0);
+nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
 
-maxlat = max(sortcsv(:,2)); 
-minlat = min(sortcsv(:,2));     
-maxlon = max(sortcsv(:,3));     
-minlon = min(sortcsv(:,3));
-maxdep = max(sortcsv(:,4));
-mindep = min(sortcsv(:,4)); 
-nandepcount = sum(isnan(sortcsv(:,4)));
-maxmag = max(sortcsv(:,5));
-minmag = min(sortcsv(:,5));
-zerocount = sum(sortcsv(:,5) == 0);
-nancount = sum(isnan(sortcsv(:,5)) | sortcsv(:,5) == -9.9);
-
-disp(['Catalog Name: ',filename])
+disp(['Catalog Name: ',catalog.name])
 disp([' ']);
 disp(['First Date in Catalog: ',begdate])
 disp(['Last Date in Catalog: ',enddate])
 disp([' ']);
-disp(['Total Number of Events: ',int2str(length(sortcsv))])
+disp(['Total Number of Events: ',int2str(length(catalog.data))])
 disp([' ']);
 disp(['Minimum Latitude: ',num2str(minlat)])
 disp(['Maximum Latitude: ',num2str(maxlat)])
@@ -40,5 +44,5 @@ disp([' ']);
 disp(['Minimum Magnitude: ',num2str(minmag)])
 disp(['Maximum Magnitude: ',num2str(maxmag)])
 disp([' ']);
-disp(char(['Event types: ',unique(evtype)']))
+disp(char(['Event types: ',unique(catalog.evtype)']))
 
