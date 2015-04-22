@@ -19,10 +19,10 @@ Pushing those changes to GitHub:
 git push origin master
 
 Adding changes from the upstream master
-% git fetch upstream
-% git merge upstream/master
-% git status
-% git push origin master
+git fetch upstream %Fetch the branches and their respective commits from upstream repository
+git merge upstream/master %Merge changes into LOCAL master branch, syncing with the upstream without losing local changes
+git status %Review status of repoistory
+git push origin master %This will sync local repository to the merged changes
 
 How to re-sync your local copy with the "authoritative" repo
 git remote -v  %List the current conifigured remote repository for your fork
