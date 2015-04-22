@@ -20,24 +20,27 @@ lonbuf = 0.1*(maxlon-minlon);
 
 %hist2d(datenum(catalog.data(:,1)),catalog.data(:,5),min(datenum(catalog.data(:,1))):365:max(datenum(catalog.data(:,1))),0:0.5:maxmag);
 
-%hist3(catalog.data(:,2:3))
-
 hist2d(catalog.data(:,3),catalog.data(:,2))
 ax = gca;
 ax.YDir = 'normal';
-colormap([[0.9,0.9,0.9];jet(max(nn(:)))])
+colormap([[1,1,1];jet(max(nn(:)))])
 set(gca,'fontsize',15)
 hold on
 
-load ./Data/coastline.data
-coastline(coastline == 99999) = NaN;
-clat = coastline(:,2);
-clon = coastline(:,1);
-clon(abs(diff(clon))>180) = NaN;
-plot(clon,clat,'k','linewidth',1)
-xlabel('Longitude');
-ylabel('Latitude');
-hold on
+% load ./Data/coastline.data
+% coastline(coastline == 99999) = NaN;
+% clat = coastline(:,2);
+% clon = coastline(:,1);
+% clon(abs(diff(clon))>180) = NaN;
+% plot(clon,clat,'color',[0.6 0.6 0.6],'linewidth',1)
+% xlabel('Longitude');
+% ylabel('Latitude');
+% hold on
+
+figure
+hist3(catalog.data(:,2:3),[50 50])
+ax = gca;
+ax.YDir = 'reverse';
 
 %figure
 % % plot quakes
