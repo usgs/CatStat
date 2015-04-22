@@ -47,7 +47,7 @@ catmagcomp(catalog,yrmagcsv,s);
 
 %% Magnitude Distribution: Completeness Through Time
 
-catmagcomphist(catalog,yrmagcsv,s);
+[compmag] = catmagcomphist(catalog,yrmagcsv,s);
 
 %% Searching for Duplicate Events
 
@@ -56,4 +56,12 @@ catdupsearch(catalog);
 %% Possible Duplicate Events
 
 catdupevents(catalog);
+
+%% Largest Events
+
+lrgcatevnts(catalog);
+
+%% Seismicity Density Plot
+
+[nn,xx,maxlat] = catdensplot(catalog,compmag);
 

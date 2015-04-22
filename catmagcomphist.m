@@ -1,4 +1,4 @@
-function catmagcomphist(catalog,yrmagcsv,s)
+function [compmag] = catmagcomphist(catalog,yrmagcsv,s)
 % This function plots and compares the magnitude completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -29,7 +29,7 @@ end
 
 compmag = timemag(:,2);
 
-sortcompmag = sortrows(compmag(:,1),1);
+%sortcompmag = sortrows(compmag(:,1),1);
 L = length(compmag(:,1));
 
 minmag = floor(min(compmag(:,1)));

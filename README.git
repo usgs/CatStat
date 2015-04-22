@@ -32,3 +32,12 @@ Then follow directions above for adding changes from the upstream master
 	For reference:
 	https://help.github.com/articles/configuring-a-remote-for-a-fork/
 	https://help.github.com/articles/syncing-a-fork/
+
+How to fork a new project...
+Set up Git & authentication to GitHub
+Navitgate to your fork of the new project repository on GitHub
+git clone URL % This is the url with your username, make sure this is the location you want to create it in
+Then follow directions above for syncing with original, upstream repository
+	For reference:
+	https://help.github.com/articles/fork-a-repo/
+	https://help.github.com/articles/set-up-git/
