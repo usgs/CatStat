@@ -24,7 +24,11 @@ Adding changes from the upstream master
 % git status
 % git push origin master
 
-Offhand I don't remember how to re-sync your local copy with the
-"authoritative" repo, I'll have to look that up.
-https://help.github.com/articles/configuring-a-remote-for-a-fork/
-https://help.github.com/articles/syncing-a-fork/
+How to re-sync your local copy with the "authoritative" repo
+git remote -v  %List the current conifigured remote repository for your fork
+git remote add upstream https://github.com/ekmyers/CatStat.git % Specify new remote upstream repository to be synced with fork
+git remote -v %Verify new upsream repoistory
+Then follow directions above for adding changes from the upstream master
+	For reference:
+	https://help.github.com/articles/configuring-a-remote-for-a-fork/
+	https://help.github.com/articles/syncing-a-fork/
