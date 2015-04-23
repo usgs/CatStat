@@ -61,7 +61,7 @@ catdupevents(catalog);
 
 lrgcatevnts(catalog);
 
-% %% Seismicity Density Plot
-% 
-% [nn,xx,maxlat] = catdensplot(catalog,compmag);
+%% Seismicity Density Plot
+
+catdensplot(catalog,compmag);
 
