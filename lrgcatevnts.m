@@ -17,6 +17,6 @@ disp(['The ',int2str(largestnum),' largest events within ', catalog.name])
 disp(' ')
 
 for ii = length(sortmagcsv)-(largestnum-1):length(sortmagcsv)
-              disp([datestr(sortmagcsv(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(sortmagcsv(ii,2:5))])
+              fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(catalog.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),catalog.data(ii,2),catalog.data(ii,3),catalog.data(ii,4),catalog.data(ii,5))
               disp(' ')
 end
