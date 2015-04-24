@@ -1,4 +1,4 @@
-function catdensplot(catalog,compmag)
+function catdensplot(catalog)
 % This function creates a seismicity density map for the catalog
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog

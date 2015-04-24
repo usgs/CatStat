@@ -61,5 +61,5 @@ lrgcatevnts(catalog);
 
 %% Seismicity Density Plot
 
-catdensplot(catalog,compmag);
+catdensplot(catalog);
 
