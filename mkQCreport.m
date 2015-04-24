@@ -1,4 +1,4 @@
-%% Catalog Information
+%% Basic Catalog Summary
 
 clear
 close all
@@ -8,8 +8,6 @@ pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be chang
 catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
 
 catalog = loadlibcomcat(pathname,catalogname);
-
-%% Basic Catalog Summary
 
 basiccatsum(catalog);
 
