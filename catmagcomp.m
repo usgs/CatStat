@@ -8,9 +8,11 @@ function catmagcomp(catalog,yrmagcsv,s)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-disp(['While the median magnitude can give an approximate look at magnitude ']);
-disp(['distributions (cumulative and incremental) provide further indicators of ']);
-disp(['catalog completeness.']);
+disp(['Cumulative and incremental distributions provide an indication of ']);
+disp(['catalog completeness. The max of the incremental distribution is ']);
+disp(['generally 0.2 or 0.3 magnitude units smaller than the catalog ']);
+disp(['completness. This completeness estimation is not valid for catalogs ']);
+disp(['whose completeness varies in time.']);
 disp([' ']);
 
 M = length(yrmagcsv);
@@ -54,8 +56,10 @@ hh = semilogy(mags,cdf,'k+','linewidth',1.5);
 hold on
 hh = semilogy(xx,nn,'ro','linewidth',1.5);
 [yy,ii] = max(nn);
-estcomp = mags(ii);
-disp(['Estimated Completeness (max incremental): ',num2str(estcomp)]);
+maxincremcomp = mags(ii);
+disp(['Max Incremental: ',num2str(maxincremcomp)]);
+estcomp = mags(ii) + 0.3;
+disp(['Estimated Completeness: ',num2str(estcomp)]);
 disp([' ']);
 axis([minmag maxmag 10^0 10^6])
 legend('Cumulative','Incremental')
