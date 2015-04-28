@@ -38,7 +38,7 @@ disp(['through the time of the catalog.']);
 disp([' ']);
 
 figure
-bar(newmedians(:,1),newmedians(:,2))
+bar(newmedians(:,1),newmedians(:,2),'hist')
 set(gca,'fontsize',15)
 title('Yearly Median Magnitude','fontsize',18);
 ylabel('Magnitude','fontsize',18);

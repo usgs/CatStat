@@ -11,12 +11,13 @@ function lrgcatevnts(catalog)
 % Output: None
 
 largestnum = 10;
-sortmagcsv = sortrows(catalog.data,5);
+catalog.data = sortrows(catalog.data,5);
+nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
 
 disp(['The ',int2str(largestnum),' largest events within ', catalog.name])
 disp(' ')
 
-for ii = length(sortmagcsv)-(largestnum-1):length(sortmagcsv)
+for ii = length(catalog.data)-(largestnum-1)-(nancount):length(catalog.data)-nancount
               fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(catalog.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),catalog.data(ii,2),catalog.data(ii,3),catalog.data(ii,4),catalog.data(ii,5))
               disp(' ')
 end

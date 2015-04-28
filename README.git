@@ -10,6 +10,8 @@ git diff FILE
 Adding a file to the local copy of a repository:
 git status
 git add FILE
+%% Note that changing the hardcoded path in the main script will indicate a difference between the local and master branch.
+
 
 Committing (locally!) the changes you've made to any files:
 git commit -am"LOG MESSAGE"
