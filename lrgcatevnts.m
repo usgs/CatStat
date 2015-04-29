@@ -18,7 +18,7 @@ nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
 disp(['The ',int2str(largestnum),' largest events within ', catalog.name])
 disp(' ')
 
-for ii = length(nn)-(largestnum-1)-(nancount):length(nn)-nancount
+for ii = length(nn)-nancount:-1:length(nn)-(largestnum-1)-(nancount)
               fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),nn(ii,2),nn(ii,3),nn(ii,4),nn(ii,5))
               disp(' ')
 end

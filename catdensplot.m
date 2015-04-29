@@ -30,7 +30,7 @@ figure('Color','w');
 axis equal;  
 n = hist3(catalog.data(:,2:3),[50 50]); % creates a matrix of counts from hist3 binning
 %n1 = log(n); % log0 = -Inf and log1 = 0
-n(n==-Inf) = 0; % changes -Inf to 0's but that means original both 1's and 0's are converted to white space
+%n(n==-Inf) = 0; % changes -Inf to 0's but that means original both 1's and 0's are converted to white space
 mask = ~logical(filter2(ones(3),n)); %http://stackoverflow.com/questions/17474817/hide-zero-values-counts-in-hist3-plot
 n(mask) = NaN; % Converts all 0's to Nan
 %n1(n1==-Inf) = NaN; % changes -Inf to Nan

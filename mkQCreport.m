@@ -4,11 +4,13 @@ clear
 close all
 
 % Load Catalog
-pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
-catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
+pathname = '../NepalCat.csv';
+catalogname = 'National Seismological Centre - Nepal';
+% pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
+% catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
 
 %catalog = loadlibcomcat(pathname,catalogname);
-catalog = loadlibcomcat(pathname,catalogname);
+catalog = NepalReadIn(pathname,catalogname);
 
 basiccatsum(catalog);
 
@@ -16,17 +18,21 @@ basiccatsum(catalog);
 
 plotcatmap(catalog);
 
-%% Depth Distribution
+%% Seismicity Density Plot
 
-plotcatdeps(catalog);
+catdensplot(catalog);
+
+% Depth Distribution
+
+%plotcatdeps(catalog);
 
 %% Event Frequency
 
 eventfreq(catalog);
 
-%% Hourly Event Frequency
+% Hourly Event Frequency
 
-hreventfreq(catalog);
+%hreventfreq(catalog);
 
 %% Inter-Event Temporal Spacing
 
@@ -48,9 +54,9 @@ catmagcomp(catalog,yrmagcsv,s);
 
 [compmag] = catmagcomphist(catalog,yrmagcsv,s);
 
-%% Searching for Duplicate Events
+% Searching for Duplicate Events
 
-catdupsearch(catalog);
+%catdupsearch(catalog);
 
 %% Possible Duplicate Events
 
@@ -59,8 +65,3 @@ catdupevents(catalog);
 %% Largest Events
 
 lrgcatevnts(catalog)
-
-%% Seismicity Density Plot
-
-catdensplot(catalog);
-
