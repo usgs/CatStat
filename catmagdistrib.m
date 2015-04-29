@@ -36,9 +36,10 @@ disp([' ']);
 
 figure
 plot(datenum(catalog.data(:,1)),catalog.data(:,5),'.');
-datetick
+datetick('x','yyyy')
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog','fontsize',18);
 ylabel('Magnitude','fontsize',18);
-
+%ax = axis;
+%axis([catalog.data(1,1) catalog.data(length(catalog.data)) 0 ax(4)*1.1])
 

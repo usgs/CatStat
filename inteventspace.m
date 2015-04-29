@@ -28,7 +28,8 @@ disp(['The Median Time Between Events: ',num2str(mediansep)])
 disp(['The Maximum Time Between Events: ',num2str(maxsep)])
 
 subplot(3,1,1)
-comb(datetimesep(:,1),datetimesep(:,2))
+plot(datetimesep(:,1),datetimesep(:,2))
+%comb(datetimesep(:,1),datetimesep(:,2)) % Better for smaller data sets - do not use with large!
 datetick
 set(gca,'fontsize',15)
 title('Time Separation Between Events','fontsize',18)

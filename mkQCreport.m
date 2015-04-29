@@ -4,10 +4,10 @@ clear
 close all
 
 % Load Catalog
-pathname = '../NepalCat.csv';
-catalogname = 'National Seismological Centre - Nepal';
-% pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
-% catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
+pathname = '../ISCnepalcat.csv';
+catalogname = 'International Seismological Centre - Nepal';
+%pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
+%catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
 
 %catalog = loadlibcomcat(pathname,catalogname);
 catalog = NepalReadIn(pathname,catalogname);
@@ -34,9 +34,9 @@ eventfreq(catalog);
 
 %hreventfreq(catalog);
 
-%% Inter-Event Temporal Spacing
+% Inter-Event Temporal Spacing
 
-inteventspace(catalog);
+%inteventspace(catalog);
 
 %% Magnitude Distribution: All Magnitudes
 

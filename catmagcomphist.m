@@ -53,7 +53,9 @@ end
 figure('Color',[1 1 1]);
 subplot(2,1,1)
 hist2d(datenum(catalog.data(:,1)),catalog.data(:,5),min(datenum(catalog.data(:,1))):365:max(datenum(catalog.data(:,1))),0:0.5:maxmag);
-datetick
+%ax = gca;
+%ax.XTick = (catalog.data(1,1):(365*12):catalog.data(M,1));
+datetick('x','yyyy','keepticks')
 colormap([[0.9,0.9,0.9];jet(max(nn(:)))])
 set(gca,'ydir','normal')
 colorbar
@@ -64,16 +66,15 @@ set(gca,'box','on')
 axis([min(datenum(catalog.data(:,1))) max(datenum(catalog.data(:,1))) 0 maxmag])
 
 subplot(2,1,2)
-minyr = begyear;
-maxyr = endyear;
-[nn,xx] = hist(yrmagcsv(:,1),[minyr:1:maxyr]);
-hist(yrmagcsv(:,1),[minyr:1:maxyr]);
+[nn,xx] = hist(yrmagcsv(:,1),[begyear:1:endyear]);
+%hist(yrmagcsv(:,1),[minyr:1:maxyr]);
+bar(xx,nn,'histc')
 xlabel('Year','fontsize',18)
 ylabel('Number of Events','fontsize',18)
 set(gca,'linewidth',1.5)
 set(gca,'fontsize',10)
 ax = axis;
-axis([minyr maxyr+1 0 max(nn)*1.1])
+axis([begyear endyear+1 0 max(nn)*1.1])
 hh = colorbar;
 set(hh,'visible','off');
 %set(gca,'xtick',x(1973):10:x(2015));
