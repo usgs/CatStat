@@ -23,6 +23,7 @@ mapminlat = max(minlat-latbuf,-90);
 mapmaxlat = min(maxlat+latbuf,90);
 
 % plot quakes
+figure
 plot(catalog.data(:,3),catalog.data(:,2),'r.')
 daspect([1,1,1]);
 set(gca,'fontsize',15)
@@ -38,6 +39,7 @@ clon(abs(diff(clon))>180) = NaN;
 plot(clon,clat,'k','linewidth',1)
 xlabel('Longitude');
 ylabel('Latitude');
+title(catalog.name);
 hold on
 
 plot([minlon maxlon maxlon minlon minlon],[maxlat maxlat minlat minlat maxlat],'k');
