@@ -4,13 +4,13 @@ clear
 close all
 
 % Load Catalog
-pathname = '../recentNSC.csv';
-catalogname = 'National Seismological Centre - Nepal';
-%pathname = '../ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
-%catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
+pathname = 'Data/ci_1900.csv'; %% This is a hardcoded directory that must be changed based on the user
+catalogname = 'Southern Califorinia Seismic Network (CI)'; %% Also must be changed based on the user
+%pathname = '../recentNSC.csv';
+%catalogname = 'National Seismological Centre - Nepal';
 
-%catalog = loadlibcomcat(pathname,catalogname);
-catalog = NepalReadIn(pathname,catalogname);
+catalog = loadlibcomcat(pathname,catalogname);
+%catalog = NepalReadIn(pathname,catalogname);
 
 basiccatsum(catalog);
 
