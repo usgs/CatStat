@@ -1,30 +1,33 @@
-function [] = matchingevnts(cat1,cat2)
+function [] = matchingevnts(cat1,cat2,time,dist)
 % This function finds matching events between the two compared catalogs
-% Input: a structure containing normalized catalog data
+% Input: a structure containing normalized catalog data & comparison window
+% values
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types
+%         time       the given time window from the main script
+%         dist       the given distance window from the main script
 % Output: None.
 
 % Trim catalogs to be same time period
 startdate = max(cat2.data(1,1),cat1.data(1,1));
 enddate = min(cat2.data(length(cat2.data),1),cat1.data(length(cat1.data),1));
-disp(['Overlapping time period: ',datestr(startdate),' to ',datestr(enddate)])
-disp('Trimming catalogs to same time range...')
+%disp(['Overlapping time period: ',datestr(startdate),' to ',datestr(enddate)])
+%disp('Trimming catalogs to same time range...')
 cat2.data(cat2.data(:,1)<startdate,:) = [];
 cat1.data(cat1.data(:,1)<startdate,:) = [];
 cat2.data(cat2.data(:,1)>enddate,:) = [];
 cat1.data(cat1.data(:,1)>enddate,:) = [];
 
-tmax = 1/24/60/60;
-delmax = 5/111.12;
-notinref = [];
+tmax = time/24/60/60;
+delmax = dist/111.12;
 
 disp(' ')
 disp(['Looking for events in ',cat1.name,' (cat1) and '])
-disp([cat2.name,' (cat2) that MATCH, listed in cat1/cat2 pairs'])
+disp([cat2.name,' (cat2) that MATCH within ',num2str(time),' seconds and '])
+disp([num2str(dist),' kilometers. Events are listed as cat1/cat2 pairs.'])
 matchingevents = [];
 for ii = 1:length(cat1.data)
     

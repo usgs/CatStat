@@ -44,9 +44,15 @@ catname2 = 'ComCat Online Polygon Search CSV - Nepal Events'; %% Also must be ch
 
 %% Missing Events
 
-missingevnts(cat1,cat2);
+time = 120; %sec
+dist = 40; %km
+
+missingevnts(cat1,cat2,time,dist);
 
 %% Matching Events
 
-matchingevnts(cat1,cat2);
+time = 120; %sec
+dist = 40; %km
+
+matchingevnts(cat1,cat2,time,dist);
 
