@@ -25,6 +25,8 @@ minmag = min(catalog.data(:,5));
 zerocount = sum(catalog.data(:,5) == 0);
 nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
 
+disp(' ')
+disp('---- results from basiccatsum function-----')
 disp(['Catalog Name: ',catalog.name])
 disp([' ']);
 disp(['First Date in Catalog: ',begdate])
