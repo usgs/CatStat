@@ -40,7 +40,9 @@ for ii = 1:length(cat1.data)
         disp([datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:))))])
         missingevents = [missingevents;cat1.data(ii,:)];
      else %look for matching distance
-        mindist = min(distance(cat1.data(ii,2:3),timematch(:,2:3)));
+        [tdel,tazi] = lldistkm(cat2.data(ii,2:3),timematch(:,2:3));
+        mindist = min(tdel);
+        %mindist = min(distance(cat1.data(ii,2:3),timematch(:,2:3)));
         if(mindist > delmax)
           disp([num2str(mindist*111.12),' match time not distance: ',datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:))))])
           missingevents = [missingevents;cat1.data(ii,:)];
@@ -76,7 +78,9 @@ for ii = 1:length(cat2)
         disp([datestr(cat2.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat2.data(ii,2:length(cat2.data(1,:))))])
         missingevents = [missingevents;cat2.data(ii,:)];
      else %look for matching distance
-        mindist = min(distance(cat2.data(ii,2:3),timematch(:,2:3)));
+        [tdel,tazi] = lldistkm(cat2.data(ii,2:3),timematch(:,2:3));
+        mindist = min(tdel);
+        %mindist = min(distance(cat1.data(ii,2:3),timematch(:,2:3)));
         if(mindist > delmax)
           disp([num2str(mindist*111.12),' match time not distance: ',datestr(cat2.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat2.data(ii,2:length(cat2.data(1,:))))])
           missingevents = [missingevents;cat2.data(ii,:)];
