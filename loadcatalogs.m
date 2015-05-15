@@ -16,7 +16,6 @@ cat1.name = catname1;
 fid = fopen(cat1.file, 'rt');
 T = textscan(fid,'%s %f %f %f %f %s %s','Delimiter',','); %NSC Format Upload
 fclose(fid);
-
 time = datenum(T{1},'yyyy/mm/dd HH:MM');
 [cat1.data,ii] = sortrows(horzcat(time,T{2:5}),1);
 cat1.id = T{6}(ii);
