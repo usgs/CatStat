@@ -20,6 +20,8 @@ git status
 Pushing those changes to GitHub:
 git push origin master
 
+Then submit a pull request via the github.com website
+
 Adding changes from the upstream master
 git fetch upstream %Fetch the branches and their respective commits from upstream repository
 git merge upstream/master %Merge changes into LOCAL master branch, syncing with the upstream without losing local changes
