@@ -1,20 +1,23 @@
 function [matching] = matchingevnts(cat1,cat2,tmax,delmax)
 % This function finds matching events between the two compared catalogs
 % call: matchingevnts(cat1,cat2,tmax,delmax)
-% Input: a structure containing normalized catalog data
+% Input:
+%  cat1,cat2 Two structures containing normalized catalog data
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types
-%         time       the given time window from the main script
-%         dist       the given distance window from the main script
-% Output: None.
+
+%         tmax: max time window to search for matching events [seconds]
+%         delmax: max distence window to search for matching events [km] 
+
+% Output: A matrix of events from cat1 that match between the two catalogs
 
 disp(' ')
 disp('------- results from matchingevnts function ------ ')
 disp(' ')
-disp(['Time window: ',num2str(tmax),' distance window: ',num2str(delmax)])
+disp(['Time window: ',num2str(tmax),' Distance window: ',num2str(delmax)])
 tmax = tmax/24/60/60;
 delmax = delmax/111.12;
 
@@ -28,7 +31,7 @@ cat1.data(cat1.data(:,1)<startdate,:) = [];
 cat2.data(cat2.data(:,1)>enddate,:) = [];
 cat1.data(cat1.data(:,1)>enddate,:) = [];
 
-% trim catalogs to be the same region
+% Trim catalogs to be the same region
 minlat = min(cat2.data(:,2))-1;
 maxlat = max(cat2.data(:,2))+1;
 minlon = min(cat2.data(:,3))-1;
@@ -46,14 +49,11 @@ disp(' ')
 disp(['Looking for events in ',cat1.name,' (cat1) and '])
 disp([cat2.name,' (cat2) that MATCH within ',num2str(tmax*24*3600),' seconds and '])
 disp([num2str(delmax*111.12),' kilometers. Events are listed as cat1/cat2 pairs.'])
-matchingevents = [];
 
-notinref = [];
 matching = [];
 matchtimeonly = [];
 
 for ii = 1:length(cat1.data)
-    
     %find time matches
     tdif = abs(cat1.data(ii,1)-cat2.data(:,1));
     timematch = cat2.data(tdif < tmax,:);
@@ -84,7 +84,6 @@ for ii = 1:length(cat1.data)
     if(mod(ii,100000) == 0)
         disp(ii)
     end
-   
 end
 
 if size(matching,1) == 0;

@@ -1,4 +1,4 @@
-function [cat] = loadcatalogs(pathname1,catname1)
+function [cat] = loadcomcatcsv(pathname1,catname1)
 % This function loads the two catalogs that will be compared based on their
 % format. This upload format must be changed based on the catalog type.
 % Input: currently has no input and catalog name and path are hard coded -

@@ -1,4 +1,4 @@
-function inteventspace(catalog)
+function inteventspace(catalog,size)
 % This function plots and compares the time between events (inter-temporal event spacing). 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -7,12 +7,6 @@ function inteventspace(catalog)
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types 
 % Output: None
-
-disp(['The amount of time that passes between individual events can further']);
-disp(['indicate how frequently events are occurring. Large time separations could']);
-disp(['demonstrate gaps in the catalog. The median and maximum time separation ']);
-disp(['for each year is also graphed to show the general trend in event frequency.']);
-disp([' ']);
 
 M = length(catalog.data);
 timesep = [];
@@ -30,42 +24,132 @@ disp(['The Maximum Time Between Events: ',num2str(maxsep)])
 subplot(3,1,1)
 plot(datetimesep(:,1),datetimesep(:,2))
 %comb(datetimesep(:,1),datetimesep(:,2)) % Better for smaller data sets - do not use with large!
-datetick
 set(gca,'fontsize',15)
 title('Time Separation Between Events','fontsize',18)
-xlabel('Year','fontsize',18);
+if length(size) > 3
+    datetick('x','yyyy');
+elseif length(size) == 1
+    datetick('x','mm-dd-yy');
+else
+    datetick('x','mmmyy');
+end
 ax = axis;
 axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(datetimesep(:,2))*1.1])
 
-% Time Separation Year Specific Statistics
+if length(size) > 3
 
-timedif = diff(catalog.data(:,1));
-dateV = datevec(catalog.data(:,1));
-years = dateV(:,1);
-years(1) = []; % make years same size as difference vector
-XX = min(years):max(years);
+    % Time Separation Year Specific Statistics
 
-for ii = 1:length(XX)
-    maxsepyr(ii) = max(timedif(years == XX(ii)));
-    medsepyr(ii) = median(timedif(years == XX(ii)));
+    timedif = diff(catalog.data(:,1));
+    dateV = datevec(catalog.data(:,1));
+    years = dateV(:,1);
+    years(1) = []; % make years same size as difference vector
+    XX = min(years):max(years);
+
+    for ii = 1:length(XX)
+         maxsepyr(ii) = max(timedif(years == XX(ii)));
+         medsepyr(ii) = median(timedif(years == XX(ii)));
+    end
+
+    subplot(3,1,2)
+    bar(XX,maxsepyr,1)
+    set(gca,'fontsize',15)
+    title('Maximum Event Separation by Year','fontsize',18)
+    ylabel('Length of Time Separation (Days)','fontsize',18)
+    xlabel('Year','fontsize',18);
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+
+    subplot(3,1,3)
+    bar(XX,medsepyr,1)
+    set(gca,'fontsize',15)
+    title('Median Event Separation by Year','fontsize',18)
+    xlabel('Year','fontsize',18);
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+
+elseif length(size) == 1
+    
+    % Time Separation Daily Specific Statistics
+    
+    timedif = diff(catalog.data(:,1));
+    dateV = datevec(catalog.data(:,1));
+    
+    daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
+    [~,subs] = ismember(dateV(:,1:3),daily,'rows');
+    L = length(subs)-1;
+    maxsepday = accumarray(subs(1:L),timedif(:,1),[],@max);
+    medsepday = accumarray(subs(1:L),timedif(:,1),[],@median);
+    matones = ones(length(daily(:,1)),1);
+    fakedayyear = horzcat(daily,matones);
+    dailydatenum = datenum(fakedayyear(:,1:3));
+    
+    subplot(3,1,2)
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+    bar(dailydatenum,maxsepday,'hist')
+    datetick('x','mm-dd-yy')
+    set(gca,'fontsize',15)
+    title('Maximum Event Separation by Day','fontsize',16)
+    ylabel('Length of Time Separation (Days)','fontsize',16)
+    delete(findobj('marker','*'))
+    ax = axis;
+    axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(maxsepday)*1.1])
+
+    subplot(3,1,3)
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+    bar(dailydatenum,medsepday,'hist')
+    datetick('x','mm-dd-yy')
+    set(gca,'fontsize',15)
+    title('Median Event Separation by Day','fontsize',16)
+    delete(findobj('marker','*'))
+    ax = axis;
+    axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(medsepday)*1.1])
+    
+else
+    
+    % Time Separation Monthly Specific Statistics
+    
+    timedif = diff(catalog.data(:,1));
+    dateV = datevec(catalog.data(:,1));
+
+    monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
+    [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
+    L = length(subs)-1;
+    maxsepmth = accumarray(subs(1:L),timedif(:,1),[],@max);
+    medsepmth = accumarray(subs(1:L),timedif(:,1),[],@median);
+    matones = ones(length(monthly(:,1)),1);
+    fakemonthyear = horzcat(monthly,matones);
+    monthlydatenum = datenum(fakemonthyear(:,:));
+    
+    subplot(3,1,2)
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+    bar(monthlydatenum,maxsepmth,'hist')
+    datetick('x','mmmyy')
+    set(gca,'fontsize',15)
+    title('Maximum Event Separation by Month','fontsize',16)
+    ylabel('Length of Time Separation (Days)','fontsize',16)
+    delete(findobj('marker','*'))
+    ax = axis;
+    axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(maxsepmth)*1.1])
+
+    subplot(3,1,3)
+    axis tight;
+    ax = axis;
+    axis([ax(1:2), 0 ax(4)*1.1])
+    bar(monthlydatenum,medsepmth,'hist')
+    datetick('x','mmmyy')
+    set(gca,'fontsize',15)
+    title('Median Event Separation by Month','fontsize',16)
+    delete(findobj('marker','*'))
+    ax = axis;
+    axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(medsepmth)*1.1])
+    
 end
-
-subplot(3,1,2)
-bar(XX,maxsepyr,1)
-set(gca,'fontsize',15)
-title('Maximum Event Separation by Year','fontsize',18)
-ylabel('Length of Time Separation (Days)','fontsize',18)
-xlabel('Year','fontsize',18);
-axis tight;
-ax = axis;
-axis([ax(1:2), 0 ax(4)*1.1])
-
-subplot(3,1,3)
-bar(XX,medsepyr,1)
-set(gca,'fontsize',15)
-title('Median Event Separation by Year','fontsize',18)
-xlabel('Year','fontsize',18);
-axis tight;
-ax = axis;
-axis([ax(1:2), 0 ax(4)*1.1])
-
