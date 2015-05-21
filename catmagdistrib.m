@@ -1,4 +1,4 @@
-function [yrmagcsv] = catmagdistrib(catalog)
+function [yrmagcsv] = catmagdistrib(catalog,size)
 % This function plots and compares the distribution of magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -23,8 +23,7 @@ disp([' ']);
 formatOut = 'yyyy';
 time = datestr(catalog.data(:,1),formatOut);
 time = str2num(time);
-yrmagcsv = catalog.data;
-yrmagcsv(:,1) = time(:,1); % Converts time column to only years
+yrmagcsv = horzcat(time,catalog.data(:,2:5)); % Converts time column to only years
 
 yrmagcsv(yrmagcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
 % allmagcsv(allmagcsv(:,5)==0,5) = NaN; %Converts all 0 preferred mags to NaN
@@ -36,7 +35,13 @@ disp([' ']);
 
 figure
 plot(datenum(catalog.data(:,1)),catalog.data(:,5),'.');
-datetick('x','yyyy')
+if length(size) > 3
+    datetick('x','yyyy')
+elseif length(size) == 1
+    datetick('x','mm-dd-yy')
+else
+    datetick('x','mmmyy')
+end
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog','fontsize',18);
 ylabel('Magnitude','fontsize',18);

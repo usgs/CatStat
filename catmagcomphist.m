@@ -9,9 +9,9 @@ function [compmag] = catmagcomphist(catalog,yrmagcsv,s)
 % Output: None
 
 % Magnitude color plot
-disp(['The final plot is a colorized histogram plot of magnitude for each year ']);
-disp(['of the catalog, showing how the completeness changes ']);
-disp(['through time. It is shown with the corresponding event count through time.']);
+disp(['The final plot is a colorized histogram plot of magnitude for each']);
+disp(['year of the catalog, showing how the completeness changes through ']);
+disp(['time. It is shown with the corresponding event count through time.']);
 disp([' ']);
 
 M = length(yrmagcsv);
