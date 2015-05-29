@@ -19,6 +19,7 @@ disp(['The ',int2str(largestnum),' largest events within ', catalog.name])
 disp(' ')
 
 for ii = length(nn)-nancount:-1:length(nn)-(largestnum-1)-(nancount)
-              fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),nn(ii,2),nn(ii,3),nn(ii,4),nn(ii,5))
+              %fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),nn(ii,2),nn(ii,3),nn(ii,4),nn(ii,5))
+              disp([(datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF')),'  ',catalog.id{ii},' ',num2str(nn(ii,2:5))])
               disp(' ')
 end

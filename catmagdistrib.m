@@ -1,4 +1,4 @@
-function [yrmagcsv] = catmagdistrib(catalog,size)
+function [yrmagcsv] = catmagdistrib(catalog,sizenum)
 % This function plots and compares the distribution of magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -35,12 +35,12 @@ disp([' ']);
 
 figure
 plot(datenum(catalog.data(:,1)),catalog.data(:,5),'.');
-if length(size) > 3
+if sizenum == 1
     datetick('x','yyyy')
-elseif length(size) == 1
-    datetick('x','mm-dd-yy')
-else
+elseif sizenum == 2
     datetick('x','mmmyy')
+else
+    datetick('x','mm-dd-yy')
 end
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog','fontsize',18);

@@ -1,4 +1,4 @@
-function [s] = plotyrmedmag(catalog,yrmagcsv,size)
+function [s] = plotyrmedmag(catalog,yrmagcsv,sizenum)
 % This function plots and compares the trend of yearly median magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -41,7 +41,7 @@ disp(['Plot of the median magnitude (an approximate gauge for completeness)']);
 disp(['through the time of the catalog.']);
 disp([' ']);
 
-if length(size) > 3
+if sizenum == 1
     
     figure
     bar(newmedians(:,1),newmedians(:,2),'hist')
@@ -51,7 +51,7 @@ if length(size) > 3
     xlabel('Year','fontsize',18);
     axis([min(newmedians(:,1)) max(newmedians(:,1)) 0 max(newmedians(:,2))*1.1])
 
-elseif length(size) == 1
+elseif sizenum == 3
     
     dateV = datevec(catalog.data(:,1));
     daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
