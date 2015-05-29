@@ -1,4 +1,4 @@
-function inteventspace(catalog,size)
+function inteventspace(catalog,sizenum)
 % This function plots and compares the time between events (inter-temporal event spacing). 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -26,17 +26,17 @@ plot(datetimesep(:,1),datetimesep(:,2))
 %comb(datetimesep(:,1),datetimesep(:,2)) % Better for smaller data sets - do not use with large!
 set(gca,'fontsize',15)
 title('Time Separation Between Events','fontsize',18)
-if length(size) > 3
+if sizenum == 1
     datetick('x','yyyy');
-elseif length(size) == 1
-    datetick('x','mm-dd-yy');
-else
+elseif sizenum == 2
     datetick('x','mmmyy');
+else
+    datetick('x','mm-dd-yy');
 end
 ax = axis;
 axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(datetimesep(:,2))*1.1])
 
-if length(size) > 3
+if sizenum == 1
 
     % Time Separation Year Specific Statistics
 
@@ -47,8 +47,10 @@ if length(size) > 3
     XX = min(years):max(years);
 
     for ii = 1:length(XX)
-         maxsepyr(ii) = max(timedif(years == XX(ii)));
-         medsepyr(ii) = median(timedif(years == XX(ii)));
+        if length(timedif(years == XX(ii))) > 0
+            maxsepyr(ii) = max(timedif(years == XX(ii)));
+            medsepyr(ii) = median(timedif(years == XX(ii)));
+        end
     end
 
     subplot(3,1,2)
@@ -70,7 +72,7 @@ if length(size) > 3
     ax = axis;
     axis([ax(1:2), 0 ax(4)*1.1])
 
-elseif length(size) == 1
+elseif sizenum == 3
     
     % Time Separation Daily Specific Statistics
     

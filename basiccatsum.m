@@ -46,5 +46,5 @@ disp([' ']);
 disp(['Minimum Magnitude: ',num2str(minmag)])
 disp(['Maximum Magnitude: ',num2str(maxmag)])
 disp([' ']);
-disp(char(['Event types: ',unique(catalog.evtype)']))
+%disp(char(['Event types: ',unique(catalog.evtype)']))
 

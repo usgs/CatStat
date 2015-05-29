@@ -51,9 +51,10 @@ clat = coastline(:,2);
 clon = coastline(:,1);
 clon(abs(diff(clon))>180) = NaN;
 plot(clon,clat,'color',[0 0 0],'linewidth',2)
-xlabel('Longitude');
-ylabel('Latitude');
-title('Density Plot');
+set(gca,'fontsize',15)
+xlabel('Longitude','fontsize',18);
+ylabel('Latitude','fontsize',18);
+title('Density Plot','fontsize',18);
 
 %subplot(1,2,2) % Log Density Plot
 figure('Color','w');  
@@ -80,9 +81,10 @@ clat = coastline(:,2);
 clon = coastline(:,1);
 clon(abs(diff(clon))>180) = NaN;
 plot(clon,clat,'color',[0 0 0],'linewidth',2)
-xlabel('Longitude');
-ylabel('Latitude');
-title('Density Plot - Log Version');
+set(gca,'fontsize',15)
+xlabel('Longitude','fontsize',18);
+ylabel('Latitude','fontsize',18);
+title('Density Plot - Log Version','fontsize',18);
 
 % figure %% 3D Version of Density Plot
 % hist3(catalog.data(:,2:3),[50 50]);

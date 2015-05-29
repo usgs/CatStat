@@ -1,4 +1,4 @@
-function [size] = catalogsize(catalog)
+function [sizenum] = catalogsize(catalog)
 % This function plots and compares event frequency over the entire catalog. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,21 +8,42 @@ function [size] = catalogsize(catalog)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-formatOut = 'yyyy';
-time = datestr(catalog.data(:,1),formatOut);
-time = str2num(time);
+% formatOut = 'yyyy';
+% time = datestr(catalog.data(:,1),formatOut);
+% time = str2num(time);
+% 
+% M = length(time);
+% begyear = time(1,1);
+% endyear = time(M,1);
+% 
+% size = struct([]);
+% count = 1;
+% 
+% for jj = begyear:endyear % Create structure divided by year
+%     
+%     ii = find(time==jj);
+%     size(count).jj = time(ii,:);
+%     count = count + 1; 
+%     
+% end
+% 
 
-M = length(time);
-begyear = time(1,1);
-endyear = time(M,1);
+timediff = diff(catalog.data(:,1));
+dateV = datevec(catalog.data(:,1));    
+check = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
 
-size = struct([]);
-count = 1;
-
-for jj = begyear:endyear % Create structure divided by year
-    
-    ii = find(time==jj);
-    size(count).jj = time(ii,:);
-    count = count + 1; 
-    
+if length(check) > 5 % If there are more than 5 unique month and year combinations
+    check = unique(dateV(:,1),'rows'); % Check how many years are present
+    if length(check) > 4
+        sizenum = 1; % If more than 5 year month combinations and more than 3 years, then use yearly plotting
+    else
+        sizenum = 2; % If more than 5 year month combinations but less than 3 years, then use monthly plotting
+    end
+else
+    sizenum = 3; % If less than 5 year month combinations, then use daily plotting
 end
+       
+    
+    
+    
+    

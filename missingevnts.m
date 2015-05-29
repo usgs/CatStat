@@ -23,6 +23,9 @@ disp(['Time window: ',num2str(tmax),' Distance window: ',num2str(delmax)])
 tmax = tmax/24/60/60;
 delmax = delmax/111.12;
 
+disp(['Cat1: ',num2str(length(cat1.data(:,1)))])
+disp(['Cat2: ',num2str(length(cat2.data(:,1)))])
+
 % Trim catalogs to be same time period
 startdate = max(cat2.data(1,1),cat1.data(1,1))-tmax;
 enddate = min(cat2.data(length(cat2.data),1),cat1.data(length(cat1.data),1))+tmax;
@@ -32,6 +35,9 @@ cat2.data(cat2.data(:,1)<startdate,:) = [];
 cat1.data(cat1.data(:,1)<startdate,:) = [];
 cat2.data(cat2.data(:,1)>enddate,:) = [];
 cat1.data(cat1.data(:,1)>enddate,:) = [];
+
+disp(['Cat1 post time trim: ',num2str(length(cat1.data(:,1)))])
+disp(['Cat2 post time trim: ',num2str(length(cat2.data(:,1)))])
 
 % Trim catalogs to be the same region
 cat2.data(cat2.data(:,2)<(setminlat-1),:) = [];
@@ -43,11 +49,17 @@ cat1.data(cat1.data(:,3)<(setminlon-1),:) = [];
 cat2.data(cat2.data(:,3)>(setmaxlon+1),:) = [];
 cat1.data(cat1.data(:,3)>(setmaxlon+1),:) = [];
 
+disp(['Cat1 post regional trim: ',num2str(length(cat1.data(:,1)))])
+disp(['Cat2 post regional trim: ',num2str(length(cat2.data(:,1)))])
+
 % Trim catalogs to a specific magnitude range/above set limit
 cat1.data(cat1.data(:,5)<setmaglim,5) = NaN;
 cat2.data(cat2.data(:,5)<setmaglim,5) = NaN;
 cat1.data(isnan(cat1.data(:,5)),:) = [];
 cat2.data(isnan(cat2.data(:,5)),:) = [];
+
+disp(['Cat1 post mag limit: ',num2str(length(cat1.data(:,1)))])
+disp(['Cat2 post mag limit: ',num2str(length(cat2.data(:,1)))])
 
 missingevents = [];
 
@@ -120,11 +132,11 @@ clon(abs(diff(clon))>180) = NaN;
 plot(clon,clat,'k','linewidth',1)
 xlabel('Longitude');
 ylabel('Latitude');
-title('IDC Catalog - Events > M4');
-legend('In IDC & AFTAC','In IDC, Missing from AFTAC','Location','SouthWest');
+title('USHIS Catalog - Events within 10s/100km');
+legend('In USHIS & ISCGEM','In USHIS, Missing from ISCGEM','Location','SouthWest');
 hold on
 
-%plot([minlon maxlon maxlon minlon minlon],[maxlat maxlat minlat minlat maxlat],'k');
+plot([minlon maxlon maxlon minlon minlon],[maxlat maxlat minlat minlat maxlat],'k');
 
 disp(' ')
 disp(['Looking for events in ',cat2.name,' that are NOT in ',cat1.name])
@@ -200,9 +212,9 @@ clon(abs(diff(clon))>180) = NaN;
 plot(clon,clat,'k','linewidth',1)
 xlabel('Longitude');
 ylabel('Latitude');
-title('AFTAC Catalog - Events > M4');
-legend('In AFTAC & IDC','In AFTAC, Missing from IDC','Location','SouthWest');
+title('ISCGEM Catalog - Events Within 10s/100km');
+legend('In ISCGEM & USHIS','In ISCGEM, Missing from USHIS','Location','SouthWest');
 hold on
 
-%plot([minlon maxlon maxlon minlon minlon],[maxlat maxlat minlat minlat maxlat],'k');
+plot([minlon maxlon maxlon minlon minlon],[maxlat maxlat minlat minlat maxlat],'k');
 
