@@ -6,10 +6,10 @@ close all
 % Load Catalog
 % pathname = 'Data/examplepde.csv'; %% This is a hardcoded directory that must be changed based on the user
 % catalogname = 'PDE Catalog 1973-Present, Events > M5'; %% Also must be changed based on the user
-% pathname = 'Data/examplepdedays.csv'; %% This is a hardcoded directory that must be changed based on the user
-% catalogname = 'PDE Catalog 2015-Present'; %% Also must be changed based on the user
-pathname = '../Networks/uw_prod.csv'; %% This is a hardcoded directory that must be changed based on the user
-catalogname = 'University of Washington'; %% Also must be changed based on the user
+ pathname = 'Data/examplepdeshrt.csv'; %% This is a hardcoded directory that must be changed based on the user
+ catalogname = 'PDE Catalog 2013-Present'; %% Also must be changed based on the user
+% pathname = '../Networks/uw_prod.csv'; %% This is a hardcoded directory that must be changed based on the user
+% catalogname = 'University of Washington'; %% Also must be changed based on the user
 
 catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
 %catalog = loadkansas(pathname,catalogname);
