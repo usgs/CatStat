@@ -6,23 +6,22 @@ close all
 % Load Catalog
 % pathname = 'Data/examplepde.csv'; %% This is a hardcoded directory that must be changed based on the user
 % catalogname = 'PDE Catalog 1973-Present, Events > M5'; %% Also must be changed based on the user
- pathname = '../examplepdedays.csv'; %% This is a hardcoded directory that must be changed based on the user
- catalogname = 'PDE Catalog 2015-Present'; %% Also must be changed based on the user
+% pathname = 'Data/examplepdedays.csv'; %% This is a hardcoded directory that must be changed based on the user
+% catalogname = 'PDE Catalog 2015-Present'; %% Also must be changed based on the user
+pathname = '../Networks/uw_prod.csv'; %% This is a hardcoded directory that must be changed based on the user
+catalogname = 'University of Washington'; %% Also must be changed based on the user
 
-catalog = loadlibcomcat(pathname,catalogname);
+catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
 %catalog = loadkansas(pathname,catalogname);
 %catalog = loadiscgemsupp(pathname,catalogname);
 
 basiccatsum(catalog);
 
-[sizenum] = catalogsize(catalog); 
-% Used to determine if plots should be made by year or month or day based
-% on catalog size
-% Need to edit for possible few month long catalogs that span multiple years
+[sizenum] = catalogsize(catalog); % Used to determine if plots should be made by year or month or day based on catalog size
 
 %% Seismicity Map
 
-plotcatmap(catalog);
+[eqevents] = plotcatmap(catalog); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
 
 %% Seismicity Density Plot
 
@@ -30,15 +29,15 @@ catdensplot(catalog);
 
 %% Depth Distribution
 
-plotcatdeps(catalog);
+plotcatdeps(eqevents,catalog);
 
 %% Event Frequency
 
-eventfreq(catalog,sizenum);
+eventfreq(eqevents,catalog,sizenum);
 
-% Hourly Event Frequency
+%% Hourly Event Frequency
 
-%hreventfreq(catalog); % Make sure to edit the change in timezone for regional networks
+%hreventfreq(eqevents,catalog); % Make sure to edit the change in timezone for regional networks
 
 %% Inter-Event Temporal Spacing
 
@@ -46,25 +45,45 @@ inteventspace(catalog,sizenum);
 
 %% Magnitude Distribution: All Magnitudes
 
-[yrmagcsv] = catmagdistrib(catalog,sizenum);
+[yrmageqcsv] = catmagdistrib(eqevents,catalog,sizenum);
 
-%% Magnitude Distribution: Yearly Median Magnitudes
+%% Magnitude Distribution: All Magnitudes Histogram
 
-[s] = plotyrmedmag(catalog,yrmagcsv,sizenum);
+catmaghist(eqevents)
+
+%% Magnitude & Event Count
+
+if sizenum == 1
+    magspecs(yrmageqcsv,eqevents,catalog,sizenum);
+end
+
+%% Magnitude Distribution: Median Magnitudes
+
+[s] = plotyrmedmag(eqevents,catalog,yrmageqcsv,sizenum);
 
 %% Magnitude Distribution: Overall Completeness
 
-catmagcomp(catalog,yrmagcsv,s);
+catmagcomp(catalog,yrmageqcsv,s);
+
+%% Magnitude Distribution: 5 Year Completeness
+
+if sizenum == 1
+    catmagyrcomp(catalog,yrmageqcsv,s);
+end
 
 %% Magnitude Distribution: Completeness Through Time
 
 if sizenum == 1
-    [compmag] = catmagcomphist(catalog,yrmagcsv,s);
+    [compmag] = catmagcomphist(eqevents,catalog,yrmageqcsv,s);
 end
-    
+
+%% Event Type Frequency
+
+evtypetest(catalog,sizenum)
+
 %% Searching for Duplicate Events
 
-%catdupsearch(catalog);
+catdupsearch(catalog);
 
 %% Possible Duplicate Events
 
@@ -73,10 +92,6 @@ catdupevents(catalog);
 %% Largest Events
 
 lrgcatevnts(catalog)
-
-%% Event Type Frequency
-
-evtypetest(catalog,sizenum)
 
 % Yearly Event Count List
 

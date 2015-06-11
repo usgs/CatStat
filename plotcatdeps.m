@@ -1,4 +1,4 @@
-function plotcatdeps(catalog)
+function plotcatdeps(eqevents,catalog)
 % This function plots the distribution of event depth 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,18 +8,20 @@ function plotcatdeps(catalog)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-maxdep = max(catalog.data(:,4));
-mindep = min(catalog.data(:,4));
-nandepcount = sum(isnan(catalog.data(:,4)));
+disp(['Depth distribution of earthquake events only. All other event types ignored.']);
+
+maxdep = max(eqevents(:,4));
+mindep = min(eqevents(:,4));
+nandepcount = sum(isnan(eqevents(:,4)));
 
 disp(['Minimum Depth: ',int2str(mindep)])
 disp(['Maximum Depth: ',int2str(maxdep)])
 disp(['Number of Events without a Depth: ',int2str(nandepcount)])
 
 figure
-catalog.data(catalog.data(:,4)==-999,4) = NaN;
+eqevents(eqevents(:,4)==-999,4) = NaN;
 %[nn,xx] = hist(catalog.data(:,4),ceil(mindep):1:maxdep);
-hist(catalog.data(:,4),(mindep+0.5):(maxdep-0.5))
+hist(eqevents(:,4),(mindep+0.5):(maxdep-0.5))
 
 axis tight;
 ax = axis;

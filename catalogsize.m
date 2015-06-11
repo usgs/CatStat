@@ -34,7 +34,7 @@ check = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
 
 if length(check) > 5 % If there are more than 5 unique month and year combinations
     check = unique(dateV(:,1),'rows'); % Check how many years are present
-    if length(check) > 4
+    if length(check) > 3
         sizenum = 1; % If more than 5 year month combinations and more than 3 years, then use yearly plotting
     else
         sizenum = 2; % If more than 5 year month combinations but less than 3 years, then use monthly plotting
