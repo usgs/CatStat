@@ -1,4 +1,4 @@
-function catmagcomp(catalog,yrmagcsv,s)
+function catmagcomp(catalog,yrmageqcsv,s)
 % This function plots and compares the magnitude completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,6 +8,8 @@ function catmagcomp(catalog,yrmagcsv,s)
 %         cat.evtype character cell array of event types 
 % Output: None
 
+disp(['Magnitude distribution of earthquake events only. All other event types ignored.']);
+disp([' ']);
 disp(['Cumulative and incremental distributions provide an indication of ']);
 disp(['catalog completeness. The max of the incremental distribution is ']);
 disp(['generally 0.2 or 0.3 magnitude units smaller than the catalog ']);
@@ -15,9 +17,9 @@ disp(['completness. This completeness estimation is not valid for catalogs ']);
 disp(['whose completeness varies in time.']);
 disp([' ']);
 
-M = length(yrmagcsv);
-begyear = yrmagcsv(1,1);
-endyear = yrmagcsv(M,1);
+M = length(yrmageqcsv);
+begyear = yrmageqcsv(1,1);
+endyear = yrmageqcsv(M,1);
 
 timemag = [];
 
@@ -70,3 +72,45 @@ set(gca,'linewidth',1.5)
 set(gca,'fontsize',15)
 set(gca,'box','on')
 
+
+% mc = 1/(floor((endyear-begyear)/30));
+% 
+% for ww = 5:15:((floor((endyear-begyear)/5))*5)
+%     
+%     timemag = [];
+%     for x = 1:((endyear-(endyear-ww))+1)
+%         row = horzcat(s(x).jj(:,1),s(x).jj(:,5));
+%         timemag = [timemag;row];
+%     end
+%     
+%     compmag = timemag(:,2);
+%     
+%     sortcompmag = sortrows(compmag(:,1),1);
+%     L = length(compmag(:,1));
+%     
+%     minmag = floor(min(compmag(:,1)));
+%     maxmag = ceil(max(compmag(:,1)));
+%     [nn,xx] = hist(compmag(:,1),[minmag:0.1:maxmag]);
+%     
+%     % Calculate cumulative magnitude distribution
+%     cdf =[];
+%     idf =[];
+%     jj = 0;
+%     mags = [minmag:0.1:maxmag];
+%     
+%     for cmag = mags
+%         jj = jj+1;
+%         cdf(jj) = sum(round(compmag(:,1)*10)>=round(cmag*10));
+%         idf(jj) = sum(round(compmag(:,1)*10)==round(cmag));
+%     end
+%     
+%     hh = semilogy(mags,cdf,'+','linewidth',1.5);
+%     set(hh,'Color',[mc mc mc]);
+%     
+%     mc = mc - 1/(floor((endyear-begyear)/3));
+%     %ww = ww + 5;
+%     %yy = yy + 5;
+%     
+% end
+% 
+% 

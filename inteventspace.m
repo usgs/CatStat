@@ -22,8 +22,8 @@ disp(['The Median Time Between Events: ',num2str(mediansep)])
 disp(['The Maximum Time Between Events: ',num2str(maxsep)])
 
 subplot(3,1,1)
-plot(datetimesep(:,1),datetimesep(:,2))
-%comb(datetimesep(:,1),datetimesep(:,2)) % Better for smaller data sets - do not use with large!
+stem(datetimesep(:,1),datetimesep(:,2),'Marker','none')
+%plot(datetimesep(:,1),datetimesep(:,2))
 set(gca,'fontsize',15)
 title('Time Separation Between Events','fontsize',18)
 if sizenum == 1
@@ -89,10 +89,7 @@ elseif sizenum == 3
     dailydatenum = datenum(fakedayyear(:,1:3));
     
     subplot(3,1,2)
-    axis tight;
-    ax = axis;
-    axis([ax(1:2), 0 ax(4)*1.1])
-    bar(dailydatenum,maxsepday,'hist')
+    bar(dailydatenum(1:(length(dailydatenum)-1),:),maxsepday,'hist')
     datetick('x','mm-dd-yy')
     set(gca,'fontsize',15)
     title('Maximum Event Separation by Day','fontsize',16)
@@ -102,10 +99,7 @@ elseif sizenum == 3
     axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(maxsepday)*1.1])
 
     subplot(3,1,3)
-    axis tight;
-    ax = axis;
-    axis([ax(1:2), 0 ax(4)*1.1])
-    bar(dailydatenum,medsepday,'hist')
+    bar(dailydatenum(1:(length(dailydatenum)-1),:),medsepday,'hist')
     datetick('x','mm-dd-yy')
     set(gca,'fontsize',15)
     title('Median Event Separation by Day','fontsize',16)
@@ -130,10 +124,8 @@ else
     monthlydatenum = datenum(fakemonthyear(:,:));
     
     subplot(3,1,2)
-    axis tight;
-    ax = axis;
-    axis([ax(1:2), 0 ax(4)*1.1])
     bar(monthlydatenum,maxsepmth,'hist')
+    %bar(monthlydatenum(1:(length(monthlydatenum)-1),:),maxsepmth,'hist')
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
     title('Maximum Event Separation by Month','fontsize',16)
@@ -143,10 +135,8 @@ else
     axis([datetimesep(1,1) datetimesep(length(datetimesep),1) 0 max(maxsepmth)*1.1])
 
     subplot(3,1,3)
-    axis tight;
-    ax = axis;
-    axis([ax(1:2), 0 ax(4)*1.1])
     bar(monthlydatenum,medsepmth,'hist')
+    %bar(monthlydatenum(1:(length(monthlydatenum)-1),:),medsepmth,'hist')
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
     title('Median Event Separation by Month','fontsize',16)

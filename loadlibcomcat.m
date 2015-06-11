@@ -19,3 +19,21 @@ time = datenum(S{2},'yyyy-mm-dd HH:MM:SS.FFF');
 [cat.data,ii] = sortrows(horzcat(time,S{3:6}),1);
 cat.id = S{1}(ii);
 cat.evtype = S{7}(ii);
+
+%     index = find(cat.data(:,5) < 3.0); % Finds index of events below 3.0
+% 
+%     for ii = 1:length(index)
+%         row = index(ii,1);
+%         cat.data(row,5) = NaN; % removes all earthquakes below 3.0
+%     end
+% 
+%     cat.data(isnan(cat.data(:,5)),:) = [];
+%     
+%     count = 0;
+%     for ii = 1:length(index)
+%         row = index(ii,1);
+%         cat.evtype(row-count,:) = []; % deletes all rows of earthquakes below 3.0
+%         count = count + 1;
+%     end
+    
+    

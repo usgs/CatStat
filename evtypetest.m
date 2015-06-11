@@ -28,8 +28,9 @@ for ii = 1:length(typecount)
     count = count + 1;
 end
 
-matrix = cell2mat(catalog.evtype);
-numeqtype = str2num(matrix(:,1));
+%matrix = cell2mat(catalog.evtype);
+%numeqtype = str2num(matrix(:,1));
+numeqtype = str2double(catalog.evtype);
 onecol = ones(length(numeqtype),1);
 
 fullref = horzcat(catalog.data(:,1:5),numeqtype,onecol);
@@ -79,6 +80,7 @@ end
 set(gca,'fontsize',15)
 xlabel('Event Type Through Time','fontsize',18)
 ylabel('Cumulative Number of Events','fontsize',18)
+legend(types,'Location','NorthWest')
 
 
 count = 1;

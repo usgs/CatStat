@@ -1,4 +1,4 @@
-function [yrmagcsv] = catmagdistrib(catalog,sizenum)
+function [yrmageqcsv] = catmagdistrib(eqevents,catalog,sizenum)
 % This function plots and compares the distribution of magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,10 +8,12 @@ function [yrmagcsv] = catmagdistrib(catalog,sizenum)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-maxmag = max(catalog.data(:,5));
-minmag = min(catalog.data(:,5));
-zerocount = sum(catalog.data(:,5) == 0);
-nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
+disp(['Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.']);
+
+maxmag = max(eqevents(:,5));
+minmag = min(eqevents(:,5));
+zerocount = sum(eqevents(:,5) == 0);
+nancount = sum(isnan(eqevents(:,5)) | eqevents(:,5) == -9.9);
 
 disp(['Minimum Magnitude: ',num2str(minmag)])
 disp(['Maximum Magnitude: ',num2str(maxmag)])
@@ -20,21 +22,16 @@ disp(['Number of Events with Zero Magnitude: ',int2str(zerocount)])
 disp(['Number of Events without a Magnitude: ',int2str(nancount)])
 disp([' ']);
 
-formatOut = 'yyyy';
-time = datestr(catalog.data(:,1),formatOut);
+time = datestr(eqevents(:,1),'yyyy');
 time = str2num(time);
-yrmagcsv = horzcat(time,catalog.data(:,2:5)); % Converts time column to only years
+yrmageqcsv = horzcat(time,eqevents(:,2:5)); % Converts time column to only years
 
-yrmagcsv(yrmagcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
+yrmageqcsv(yrmageqcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
 % allmagcsv(allmagcsv(:,5)==0,5) = NaN; %Converts all 0 preferred mags to NaN
-yrmagcsv(isnan(yrmagcsv(:,5)),:) = []; %Removes all rows with NaN for preferred mag
-
-disp(['Plot of magnitudes over the span of the catalog - demonstrates gaps ']);
-disp(['in the catalog that have 0 or NaN for the preferred magnitude.']);
-disp([' ']);
+yrmageqcsv(isnan(yrmageqcsv(:,5)),:) = []; %Removes all rows with NaN for preferred mag
 
 figure
-plot(datenum(catalog.data(:,1)),catalog.data(:,5),'.');
+plot(datenum(eqevents(:,1)),eqevents(:,5),'.');
 if sizenum == 1
     datetick('x','yyyy')
 elseif sizenum == 2

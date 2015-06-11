@@ -1,4 +1,4 @@
-function [s] = plotyrmedmag(catalog,yrmagcsv,sizenum)
+function [s] = plotyrmedmag(eqevents,catalog,yrmageqcsv,sizenum)
 % This function plots and compares the trend of yearly median magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,20 +8,22 @@ function [s] = plotyrmedmag(catalog,yrmagcsv,sizenum)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-catalog.data(catalog.data(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN - so that it will match yrmagcsv
-catalog.data(isnan(catalog.data(:,5)),:) = []; %Removes all rows with NaN for preferred mag
+disp(['Median magnitude distribution of earthquake events only. All other event types ignored.']);
 
-M = length(yrmagcsv);
-begyear = yrmagcsv(1,1);
-endyear = yrmagcsv(M,1);
+eqevents(eqevents(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN - so that it will match yrmagcsv
+eqevents(isnan(eqevents(:,5)),:) = []; %Removes all rows with NaN for preferred mag
+
+M = length(yrmageqcsv);
+begyear = yrmageqcsv(1,1);
+endyear = yrmageqcsv(M,1);
 
 s = struct([]);
 count = 1;
 
 for jj = begyear:endyear % Create structure divided by year
     
-    ii = find(yrmagcsv==jj);
-    s(count).jj = yrmagcsv(ii,:);
+    ii = find(yrmageqcsv==jj);
+    s(count).jj = yrmageqcsv(ii,:);
     count = count + 1; 
     
 end
@@ -37,10 +39,6 @@ for yy = begyear:endyear % Create median file
     
 end
 
-disp(['Plot of the median magnitude (an approximate gauge for completeness)']);
-disp(['through the time of the catalog.']);
-disp([' ']);
-
 if sizenum == 1
     
     figure
@@ -53,21 +51,21 @@ if sizenum == 1
 
 elseif sizenum == 3
     
-    dateV = datevec(catalog.data(:,1));
+    dateV = datevec(eqevents(:,1));
     daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:3),daily,'rows');
     L = length(subs);
-    medmagday = accumarray(subs,catalog.data(:,1),[],@median);
+    medmagday = accumarray(subs,eqevents(:,1),[],@median);
     matones = ones(length(daily(:,1)),1);
     fakedayyear = horzcat(daily,matones);
     dailydatenum = datenum(fakedayyear(:,1:3));
     
-    timedif = diff(catalog.data(:,1));
-    dateV = datevec(catalog.data(:,1));
+    timedif = diff(eqevents(:,1));
+    dateV = datevec(eqevents(:,1));
     
     daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:3),daily,'rows');
-    medmagday = accumarray(subs,catalog.data(:,5),[],@median);
+    medmagday = accumarray(subs,eqevents(:,5),[],@median);
     
     figure
     %bar(newmedians(:,1),newmedians(:,2))
@@ -78,25 +76,25 @@ elseif sizenum == 3
     ylabel('Magnitude','fontsize',18);
     delete(findobj('marker','*'))
     ax = axis;
-    axis([catalog.data(1,1) catalog.data(length(catalog.data(:,1)),1) 0 max(medmagday)*1.1])
+    axis([eqevents(1,1) eqevents(length(eqevents(:,1)),1) 0 max(medmagday)*1.1])
     
 else
     
-    dateV = datevec(catalog.data(:,1));
+    dateV = datevec(eqevents(:,1));
     monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
     L = length(subs);
-    medmagmth = accumarray(subs,catalog.data(:,1),[],@median);
+    medmagmth = accumarray(subs,eqevents(:,1),[],@median);
     matones = ones(length(monthly(:,1)),1);
     fakemonthyear = horzcat(monthly,matones);
     monthlydatenum = datenum(fakemonthyear(:,:));
     
-    timedif = diff(catalog.data(:,1));
-    dateV = datevec(catalog.data(:,1));
+    timedif = diff(eqevents(:,1));
+    dateV = datevec(eqevents(:,1));
     
     monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
-    medmagmth = accumarray(subs,catalog.data(:,5),[],@median);
+    medmagmth = accumarray(subs,eqevents(:,5),[],@median);
 
     figure
     %bar(newmedians(:,1),newmedians(:,2))
@@ -107,7 +105,7 @@ else
     ylabel('Magnitude','fontsize',18);
     delete(findobj('marker','*'))
     ax = axis;
-    axis([catalog.data(1,1) catalog.data(length(catalog.data(:,1)),1) 0 max(medmagmth)*1.1])
+    axis([eqevents(1,1) eqevents(length(eqevents(:,1)),1) 0 max(medmagmth)*1.1])
 
 end
 
