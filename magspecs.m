@@ -50,4 +50,3 @@ for mm = 1:maxmag
     end
     
 end
-
