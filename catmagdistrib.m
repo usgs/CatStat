@@ -42,6 +42,6 @@ end
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog','fontsize',18);
 ylabel('Magnitude','fontsize',18);
-%ax = axis;
-%axis([catalog.data(1,1) catalog.data(length(catalog.data)) 0 ax(4)*1.1])
+ax = axis;
+axis([eqevents(1,1) eqevents(length(eqevents),1) minmag maxmag])
 

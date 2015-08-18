@@ -15,6 +15,8 @@ fid = fopen(cat.file, 'rt');
 S = textscan(fid,'%s %s %f %f %f %f %s','HeaderLines',1,'Delimiter',',');
 fclose(fid);
 
+rawtime = strcat(S{1},{' '},S{2});
+
 time = datenum(S{2},'yyyy-mm-dd HH:MM:SS.FFF');
 [cat.data,ii] = sortrows(horzcat(time,S{3:6}),1);
 cat.id = S{1}(ii);

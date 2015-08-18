@@ -1,4 +1,4 @@
-function [cat] = loadcomcatcsv(pathname1,catname1)
+function [cat] = loadisf(pathname,catname)
 % This function loads the two catalogs that will be compared based on their
 % format. This upload format must be changed based on the catalog type.
 % Input: currently has no input and catalog name and path are hard coded -
@@ -11,13 +11,13 @@ function [cat] = loadcomcatcsv(pathname1,catname1)
 %         cat.evtype character cell array of event types  
 
 
-cat.file = pathname1;
-cat.name = catname1;
+cat.file = pathname;
+cat.name = catname;
 fid = fopen(cat.file, 'rt');
-Tref = textscan(fid,'%s %f %f %f %f %s %f %f %s %f %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
+Tref = textscan(fid,'%f %f %f %f %f %f %f %f %f %f %f %f %f %f %s','Delimiter',',');
 fclose(fid);
 
-time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
-[cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
-cat.id = Tref{12}(ii);
-cat.evtype = Tref{16}(ii);
+time = datenum(Tref{1:6});
+[cat.data,ii] = sortrows(horzcat(time,Tref{7:14}),1);
+cat.id = Tref{15}(ii);
+cat.evtype = Tref{15}(ii);

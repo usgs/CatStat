@@ -9,7 +9,7 @@ function basiccatsum(catalog)
 % Output: None
 
 begdate = datestr(catalog.data(1,1),'yyyy-mm-dd HH:MM:SS.FFF');
-enddate = datestr(catalog.data(length(catalog.data),1),'yyyy-mm-dd HH:MM:SS.FFF');
+enddate = datestr(catalog.data(size(catalog.data,1)),'yyyy-mm-dd HH:MM:SS.FFF');
 
 M = length(catalog.data);
 
@@ -30,7 +30,7 @@ disp([' ']);
 disp(['First Date in Catalog: ',begdate])
 disp(['Last Date in Catalog: ',enddate])
 disp([' ']);
-disp(['Total Number of Events: ',int2str(length(catalog.data))])
+disp(['Total Number of Events: ',int2str(size(catalog.data,1))])
 disp([' ']);
 disp(['Minimum Latitude: ',num2str(minlat)])
 disp(['Maximum Latitude: ',num2str(maxlat)])

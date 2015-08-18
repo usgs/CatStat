@@ -11,12 +11,12 @@ function hreventfreq(eqevents,catalog)
 disp(['Distribution of earthquake events throughout the hours of the day. All other event types ignored.']);
 
 % find hour of the day in particular time zone
-hour = mod(eqevents(:,1)*24-9,24);
+hour = mod(eqevents(:,1)*24-6,24);
 
 figure
 hist(hour,0.5:23.5);
 %hist(eqevents(:,1),0.5:23.5);
-xlabel('Hour of the Day (Hawaii Time Zone UTC-9)','fontsize',18)
+xlabel('Hour of the Day (Central Time Zone UTC-6)','fontsize',18)
 ylabel('Number of Events','fontsize',18)
 title('Events per Hour of the Day','fontsize',18)
 set(gca,'linewidth',1.5)
