@@ -8,10 +8,10 @@ close all
 % catalogname = 'PDE Catalog 1973-Present, Events > M5'; %% Also must be changed based on the user
 % pathname = 'Data/examplepdeshrt.csv'; %% This is a hardcoded directory that must be changed based on the user
 % catalogname = 'PDE Catalog 2013-Present'; %% Also must be changed based on the user
- pathname = '../iscgem_1973.csv'; %% This is a hardcoded directory that must be changed based on the user
- catalogname = 'ISCGEM 1973 to Present'; %% Also must be changed based on the user
+ pathname = '../sra_dev.csv'; %% This is a hardcoded directory that must be changed based on the user
+ catalogname = 'SRA (Dev)'; %% Also must be changed based on the user
 
- catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
+  catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
 % catalog = loadcomcatcsv(pathname,catalogname);
 % catalog = loadkansas(pathname,catalogname);
 % catalog = loadiscgemsupp(pathname,catalogname);
@@ -19,6 +19,7 @@ close all
 % catalog = loadenergycomcattemp(pathname,catalogname);
 % catalog = loadakharley(pathname,catalogname);
 % catalog = loadokdan(pathname,catalogname);
+%  catalog = loadAFTAC(pathname,catalogname);
 
 basiccatsum(catalog);
 
