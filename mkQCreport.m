@@ -8,8 +8,13 @@ close all
 % catalogname = 'PDE Catalog 1973-Present, Events > M5'; %% Also must be changed based on the user
 % pathname = 'Data/examplepdeshrt.csv'; %% This is a hardcoded directory that must be changed based on the user
 % catalogname = 'PDE Catalog 2013-Present'; %% Also must be changed based on the user
- pathname = '../sra_dev.csv'; %% This is a hardcoded directory that must be changed based on the user
- catalogname = 'SRA (Dev)'; %% Also must be changed based on the user
+
+%Original input from Emma
+% pathname = '../sra_dev.csv'; %% This is a hardcoded directory that must be changed based on the user
+% catalogname = 'SRA (Dev)'; %% Also must be changed based on the user
+
+pathname = input('Enter filename   ','s')
+catalogname = input('Enter user-based catalog name   ','s')
 
   catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
 % catalog = loadcomcatcsv(pathname,catalogname);
