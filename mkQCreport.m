@@ -13,18 +13,11 @@ close all
 % pathname = '../sra_dev.csv'; %% This is a hardcoded directory that must be changed based on the user
 % catalogname = 'SRA (Dev)'; %% Also must be changed based on the user
 
-pathname = input('Enter filename   ','s')
-catalogname = input('Enter user-based catalog name   ','s')
+%pathname = input('Enter filename   ','s')
+%catalogname = input('Enter user-based catalog name   ','s')
 
-  catalog = loadlibcomcat(pathname,catalogname); % May need to check if milliseconds are indicated
-% catalog = loadcomcatcsv(pathname,catalogname);
-% catalog = loadkansas(pathname,catalogname);
-% catalog = loadiscgemsupp(pathname,catalogname);
-% catalog = loadisf(pathname,catalogname);
-% catalog = loadenergycomcattemp(pathname,catalogname);
-% catalog = loadakharley(pathname,catalogname);
-% catalog = loadokdan(pathname,catalogname);
-%  catalog = loadAFTAC(pathname,catalogname);
+%catalog = loadcat(pathname,catalogname); % May need to check if milliseconds are indicated
+catalog = loadcat('Data_examples/ismp.csv','test'); % May need to check if milliseconds are indicated
 
 basiccatsum(catalog);
 
@@ -34,9 +27,9 @@ basiccatsum(catalog);
 
 [eqevents] = plotcatmap(catalog); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
 
-%% Seismicity Density Plot
+% Seismicity Density Plot
 
-catdensplot(catalog);
+%catdensplot(catalog);
 
 %% Depth Distribution
 
@@ -48,7 +41,7 @@ eventfreq(eqevents,catalog,sizenum);
 
 %% Hourly Event Frequency
 
-%hreventfreq(eqevents,catalog); % Make sure to edit the change in timezone for regional networks
+hreventfreq(eqevents,catalog); % Make sure to edit the change in timezone for regional networks
 
 %% Inter-Event Temporal Spacing
 
