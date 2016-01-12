@@ -17,8 +17,9 @@ function catdupsearch(catalog)
 
 nquakes = length(catalog.data);
 tdifsec = abs(diff(catalog.data(:,1)))*24*60*60;
-ddelkm = distance(catalog.data(1:(nquakes-1),2:3),catalog.data(2:nquakes,2:3))*111.12;
-
+% Modified to allow for generic distance formula that doesn't require Mapping toolbox
+%ddelkm = distance(catalog.data(1:(nquakes-1),2:3),catalog.data(2:nquakes,2:3))*111.12;
+[~,ddelkm] = distance(catalog.data(1:(nquakes-1),2), catalog.data(1:(nquakes-1),3), catalog.data(2:nquakes,2), catalog.data(2:nquakes,3));
 nn = []; xx = [];
 kmLimits = [1,2,4,8,16,32,64,128];
 tmax = 5;
