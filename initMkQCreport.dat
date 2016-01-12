@@ -1,0 +1,16 @@
+% Catalog Data file name
+Data/exampleKansasComCat.csv
+% Human readable catalog description
+example Kansas ISMP catalog
+% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
+1
+% UTC offset [hours]
+-6
+% Time Zone 
+Central Time Zone UTC-6 
+% Diretory to put report in
+Report
+% File format for report
+pdf
+% show code in report (true/false)
+false
