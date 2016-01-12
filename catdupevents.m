@@ -8,8 +8,8 @@ function catdupevents(catalog)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-secondsMax = 1;
-kmMax = 1;
+secondsMax = 2;
+kmMax = 2;
 magthres = -10;
 disp(['List of event pairs within ', num2str(secondsMax),' seconds and ', num2str(kmMax) ' kilometers'] )
 disp(' ')

@@ -35,7 +35,7 @@ clon(abs(diff(clon))>360) = NaN;
 
 %subplot(1,2,1) % Density Plot
 figure('Color','w');   
-n = hist3(catalog.data(:,2:3),[50 50]); % creates a matrix of counts from hist3 binning  yrmagcsv(yrmagcsv(:,5)==-9.9,5) = NaN;
+n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
 n(n == 0) = NaN; % Converts all 0's to Nan
 %n(size(n,1)+1,size(n,2)+1) = 0;
 xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
@@ -56,7 +56,7 @@ title('Density Plot','fontsize',18);
 
 %subplot(1,2,2) % Log Density Plot
 figure('Color','w');   
-n = hist3(catalog.data(:,2:3),[50 50]); % creates a matrix of counts from hist3 binning
+n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
 n1 = log(n); % log0 = -Inf and log1 = 0
 %n1(n1==-Inf) = 0; % changes -Inf to 0's but that means original both 1's and 0's are converted to white space
 mask = ~logical(filter2(ones(3),n1)); %Smoothing? http://stackoverflow.com/questions/17474817/hide-zero-values-counts-in-hist3-plot
@@ -84,7 +84,7 @@ else
 %subplot(1,2,1) % Density Plot
 figure('Color','w');  
 axis equal;  
-n = hist3(catalog.data(:,2:3),[50 50]); % creates a matrix of counts from hist3 binning  yrmagcsv(yrmagcsv(:,5)==-9.9,5) = NaN;
+n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
 n(n == 0) = NaN; % Converts all 0's to Nan
 %n(size(n,1)+1,size(n,2)+1) = 0;
 xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
@@ -96,7 +96,12 @@ set(hchild,'edgecolor','none') %removes box outlines
 colormap(parula)
 colorbar
 hold on
-load ./Data/coastline.data
+
+[tmppath,tmpname,tmpext] = fileparts(which('MkQCreport'));
+tmpcmd = ['load ',tmppath,'/Data/coastline.data']; 
+eval(tmpcmd)
+clear tmppath tmpname tmpext tmpcmd
+
 coastline(coastline == 99999) = NaN;
 clat = coastline(:,2);
 clon = coastline(:,1);
@@ -111,7 +116,7 @@ title('Density Plot','fontsize',18);
 %subplot(1,2,2) % Log Density Plot
 figure('Color','w');  
 axis equal;  
-n = hist3(catalog.data(:,2:3),[50 50]); % creates a matrix of counts from hist3 binning
+n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
 n1 = log(n); % log0 = -Inf and log1 = 0
 %n1(n1==-Inf) = 0; % changes -Inf to 0's but that means original both 1's and 0's are converted to white space
 mask = ~logical(filter2(ones(3),n1)); %Smoothing? http://stackoverflow.com/questions/17474817/hide-zero-values-counts-in-hist3-plot
@@ -127,7 +132,12 @@ set(hchild,'edgecolor','none') %removes box outlines
 colormap(parula)
 colorbar
 hold on
-load ./Data/coastline.data
+
+[tmppath,tmpname,tmpext] = fileparts(which('QCreport'));
+tmpcmd = ['load ',tmppath,'/Data/coastline.data']; 
+eval(tmpcmd)
+clear tmppath tmpname tmpext tmpcmd
+
 coastline(coastline == 99999) = NaN;
 clat = coastline(:,2);
 clon = coastline(:,1);
@@ -140,27 +150,3 @@ ylabel('Latitude','fontsize',18);
 title('Density Plot - Log Version','fontsize',18);
 
 end
-
-
-% figure %% 3D Version of Density Plot
-% hist3(catalog.data(:,2:3),[50 50]);
-% ax = gca;
-% ax.YDir = 'reverse';
-% h = get(gca,'child');
-% heights = get(h,'Zdata');
-% mask = ~logical(filter2(ones(3),heights));
-% heights(mask) = NaN;
-% set(h,'ZData',heights)
-% set(gcf,'renderer','opengl');
-% set(get(gca,'child'),'FaceColor','interp','CDataMode','auto');
-% %colormap(flipud(summer))
-% hold on
-% load ./Data/coastline.data
-% coastline(coastline == 99999) = NaN;
-% clat = coastline(:,2);
-% clon = coastline(:,1);
-% clon(abs(diff(clon))>180) = NaN;
-% plot(clon,clat,'color',[0.6 0.6 0.6],'linewidth',1)
-% xlabel('Longitude');
-% ylabel('Latitude');
-% hold on

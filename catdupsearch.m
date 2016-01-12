@@ -8,11 +8,12 @@ function catdupsearch(catalog)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-% Calculate Number of Events within X seconds and Z km
+% Calculate Number of Events within XX seconds and XZ km
 % This plot is to help pick thresholds to look for duplicate events. It
 % shows the number of events within a given time and distance
 % separation. It is an estimate because it just compares events adjacent in
 % time. It does not compare each event to every other event in the catalog.
+
 
 nquakes = length(catalog.data);
 tdifsec = abs(diff(catalog.data(:,1)))*24*60*60;

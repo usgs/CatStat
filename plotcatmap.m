@@ -112,7 +112,10 @@ axis([mapminlon mapmaxlon mapminlat mapmaxlat]);
 hold on
 
 % load, process, and plot coastline data
-load ./Data/coastline.data
+[tmppath,tmpname,tmpext] = fileparts(which('QCreport'));
+tmpcmd = ['load ',tmppath,'/Data/coastline.data']; 
+eval(tmpcmd)
+clear tmppath tmpname tmpext tmpcmd
 coastline(coastline == 99999) = NaN;
 clat = coastline(:,2);
 clon = coastline(:,1);

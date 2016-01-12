@@ -1,103 +1,43 @@
-%% Basic Catalog Summary
+%% Generate Basic Catalog Report 
 
 clear
-close all
 
-% Load Catalog
-% pathname = 'Data/examplepde.csv'; %% This is a hardcoded directory that must be changed based on the user
-% catalogname = 'PDE Catalog 1973-Present, Events > M5'; %% Also must be changed based on the user
-% pathname = 'Data/examplepdeshrt.csv'; %% This is a hardcoded directory that must be changed based on the user
-% catalogname = 'PDE Catalog 2013-Present'; %% Also must be changed based on the user
-
-%Original input from Emma
-% pathname = '../sra_dev.csv'; %% This is a hardcoded directory that must be changed based on the user
-% catalogname = 'SRA (Dev)'; %% Also must be changed based on the user
-
-%pathname = input('Enter filename   ','s')
-%catalogname = input('Enter user-based catalog name   ','s')
-
-%catalog = loadcat(pathname,catalogname); % May need to check if milliseconds are indicated
-catalog = loadcat('Data_examples/ismp.csv','test'); % May need to check if milliseconds are indicated
-
-basiccatsum(catalog);
-
-[sizenum] = catalogsize(catalog); % Used to determine if plots should be made by year or month or day based on catalog size
-
-%% Seismicity Map
-
-[eqevents] = plotcatmap(catalog); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
-
-% Seismicity Density Plot
-
-%catdensplot(catalog);
-
-%% Depth Distribution
-
-plotcatdeps(eqevents,catalog);
-
-%% Event Frequency
-
-eventfreq(eqevents,catalog,sizenum);
-
-%% Hourly Event Frequency
-
-hreventfreq(eqevents,catalog); % Make sure to edit the change in timezone for regional networks
-
-%% Inter-Event Temporal Spacing
-
-inteventspace(catalog,sizenum);
-
-%% Magnitude Distribution: All Magnitudes
-
-[yrmageqcsv] = catmagdistrib(eqevents,catalog,sizenum);
-
-%% Magnitude Distribution: All Magnitudes Histogram
-
-catmaghist(eqevents)
-
-%% Magnitude & Event Count
-
-if sizenum == 1
-    magspecs(yrmageqcsv,eqevents,catalog,sizenum);
+% set init file to use
+if exist('./initMkQCreport.dat','file')
+  disp('using local initMkQCreport.dat file')
+  initpath = ''; 
+  initfile = ['./initMkQCreport.dat']
+else 
+  disp('using default initMkQCreport.dat file')
+  [initpath,tmpname,tmpext] = fileparts(which('mkQCreport'));
+  initpath = [initpath,'/'];
+  initfile = [initpath,'/initMkQCreport.dat']
 end
 
-%% Magnitude Distribution: Median Magnitudes
+initfile;
 
-[s] = plotyrmedmag(eqevents,catalog,yrmageqcsv,sizenum);
+fid = fopen(initfile, 'rt');
+initdat = textscan(fid, '%s','delimiter', '\n');
 
-%% Magnitude Distribution: Overall Completeness
+catalog.file = [initpath,char(initdat{1}{2})]; 
 
-catmagcomp(catalog,yrmageqcsv,s);
-
-% Magnitude Distribution: 5 Year Completeness
-
-%if sizenum == 1
-%    catmagyrcomp(catalog,yrmageqcsv,s);
-%end
-
-%% Magnitude Distribution: Completeness Through Time
-
-if sizenum == 1
-    [compmag] = catmagcomphist(eqevents,catalog,yrmageqcsv,s);
+catalog.name = char(initdat{1}{4}); 
+catalog.format = str2num(initdat{1}{6}); 
+catalog.timeoffset= str2num(initdat{1}{8}); 
+catalog.timezone =  char(initdat{1}{10}); 
+pubopts.outputDir = char(initdat{1}{12});
+pubopts.format = char(initdat{1}{14}); 
+pubopts.showCode = char(initdat{1}{16}); 
+if(strcmp(pubopts.showCode,'true'))
+  pubopts.showCode = true;
+else
+ pubopts.showCode = false;
 end
 
-%% Event Type Frequency
+fclose(fid)
 
-evtypetest(catalog,sizenum)
+catalog
+pubopts
 
-%% Searching for Duplicate Events
-
-catdupsearch(catalog);
-
-%% Possible Duplicate Events
-
-catdupevents(catalog);
-
-%% Largest Events
-
-lrgcatevnts(catalog)
-
-% Yearly Event Count List
-
-%dispyrcount(catalog,sizenum)
-
+%QCreport
+publish('QCreport',pubopts)
