@@ -1,4 +1,4 @@
-function [dist_degree, dist_km] = distance(lat1, lon1, lat2, lon2)
+function [dist_km] = distance(lat1, lon1, lat2, lon2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculate the distance between two points on the globe using the
 % haversine formula.
@@ -12,6 +12,9 @@ function [dist_degree, dist_km] = distance(lat1, lon1, lat2, lon2)
 % Output
 % dist_degree - distance in degrees
 % dist_km - distance in kilometers
+% 
+% Last Edited: 13 January 2016 by Matthew R. Perry
+% Comments: Changed to one output
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 R = 6371000.;    % Earth's radius (m)
 d2r = pi/180;    % deg = rad*180/pi
@@ -26,7 +29,7 @@ a = (sin(si_del/2).^2) + (cos(si1).*cos(si2).*(sin(lam_del/2)).^2);
 c = 2 * atan2(sqrt(a), sqrt(1-a));
 %Convert distance radians back to degrees
 dist_km = (R*c)/1000;
-dist_degree = c * 180/pi;
+%dist_degree = c * 180/pi;
 end
 % End of function
 
