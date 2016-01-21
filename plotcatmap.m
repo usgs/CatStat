@@ -22,7 +22,7 @@ if minlon < -170 && maxlon > 170
         end
     end
     
-    load ./Data/coastline.data
+    load ~/Documents/MATLAB/CatStat/Data/coastline.data
     coastline(coastline == 99999) = NaN;
     clat = coastline(:,2);
     clon = coastline(:,1);

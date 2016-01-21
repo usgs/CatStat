@@ -59,15 +59,16 @@ if sizenum == 1
     title('Maximum Event Separation by Year','fontsize',18)
     ylabel('Length of Time Separation (Days)','fontsize',18)
     xlabel('Year','fontsize',18);
+    set(gca,'XTick',min(years):2:max(years))
     axis tight;
     ax = axis;
     axis([ax(1:2), 0 ax(4)*1.1])
-
     subplot(3,1,3)
     bar(XX,medsepyr,1)
     set(gca,'fontsize',15)
     title('Median Event Separation by Year','fontsize',18)
     xlabel('Year','fontsize',18);
+    set(gca,'XTick',min(years):2:max(years))
     axis tight;
     ax = axis;
     axis([ax(1:2), 0 ax(4)*1.1])

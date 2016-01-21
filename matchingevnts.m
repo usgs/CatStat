@@ -19,7 +19,7 @@ disp('------- results from matchingevnts function ------ ')
 disp(' ')
 disp(['Time window: ',num2str(tmax),' Distance window: ',num2str(delmax)])
 tmax = tmax/24/60/60;
-delmax = delmax/111.12;
+%delmax = delmax/111.12;
 
 % Trim catalogs to be same time period
 startdate = max(cat2.data(1,1),cat1.data(1,1))-tmax;
@@ -48,7 +48,7 @@ disp(['Overlapping time period: ',datestr(startdate),' to ',datestr(enddate)])
 disp(' ')
 disp(['Looking for events in ',cat1.name,' (cat1) and '])
 disp([cat2.name,' (cat2) that MATCH within ',num2str(tmax*24*3600),' seconds and '])
-disp([num2str(delmax*111.12),' kilometers. Events are listed as cat1/cat2 pairs.'])
+disp([num2str(delmax),' kilometers. Events are listed as cat1/cat2 pairs.'])
 
 matching = [];
 matchingids = [];
@@ -62,10 +62,10 @@ for ii = 1:length(cat1.data)
     %find distance matches for events with matching time
     if(isempty(timematch) == 0)
         for jj = 1:size(timematch,1)
-            mindist = min(distance(cat1.data(ii,2:3),timematch(jj,2:3)));
+            mindist = min(distance_hvrsn(cat1.data(ii,2),cat1.data(:,3),timematch(jj,2),timematch(jj,3)));
             if(mindist > delmax)
-                disp([datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:)))),' match time not distance: ',num2str(mindist*111.12)])
-                disp([datestr(timematch(jj,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(timematch(jj,2:length(timematch(jj,:)))),' match time not distance: ',num2str(mindist*111.12),])
+                disp([datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:)))),' match time not distance: ',num2str(mindist)])
+                disp([datestr(timematch(jj,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(timematch(jj,2:length(timematch(jj,:)))),' match time not distance: ',num2str(mindist),])
                 % disp([num2str(mindist*111.12),' match time not distance: ',datestr(cat2(ii,1)),' ',num2str(cat2(ii,2:length(cat2(1,:))))])
                 matchtimeonly = [matchtimeonly;cat1.data(ii,:)];
             else  % If match both time and distance

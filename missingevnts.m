@@ -21,7 +21,8 @@ disp(' ')
 disp(['Looking for events in ',cat1.name,' that are NOT in ',cat2.name])
 disp(['Time window: ',num2str(tmax),' Distance window: ',num2str(delmax)])
 tmax = tmax/24/60/60;
-delmax = delmax/111.12;
+% Output of distance.m is in km, no need for degrees
+%delmax = delmax/111.12;
 
 disp(['Cat1 (',cat1.name,'): ',num2str(length(cat1.data(:,1)))])
 disp(['Cat2 (',cat2.name,'): ',num2str(length(cat2.data(:,1)))])
@@ -75,10 +76,10 @@ for ii = 1:length(cat1.data)
         %missingids1 = [missingids1;cat1.id{ii,1}];
         missingevents1 = [missingevents1;cat1.data(ii,:)];
      else %look for matching distance
-        [tdel,tazi] = distance(cat1.data(ii,2:3),timematch(:,2:3));
+        [tdel] = distance_hvrsn(cat1.data(ii,2), cat1.data(ii,3),timematch(:,2),timematch(:,3));
         mindist = min(tdel);
         if(mindist > delmax)
-          disp([cat1.id{ii,:},' ',datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:)))),' match time not distance: ',num2str(mindist*111.12),' ',cat1.evtype{ii,:}])
+          disp([cat1.id{ii,:},' ',datestr(cat1.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat1.data(ii,2:length(cat1.data(1,:)))),' match time not distance: ',num2str(mindist),' ',cat1.evtype{ii,:}])
           %missingevents1 = [missingevents1;cat1.data(ii,:)];
           %missingids1 = [missingids1;cat1.id{ii,:}];
         end
@@ -160,10 +161,10 @@ for ii = 1:length(cat2.data)
         missingevents2 = [missingevents2;cat2.data(ii,:)];
         %missingids2 = [missingids2;cat2.id{ii,:}];
      else %look for matching distance
-        [tdel,tazi] = distance(cat2.data(ii,2:3),timematch(:,2:3));
+        [tdel] = distance_hvrsn(cat2.data(ii,2),cat2.data(ii,3),timematch(:,2),timematch(:,3));
         mindist = min(tdel);
         if(mindist > delmax)
-          disp([datestr(cat2.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat2.data(ii,2:length(cat2.data(1,:)))),' match time not distance: ',num2str(mindist*111.12)])
+          disp([datestr(cat2.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat2.data(ii,2:length(cat2.data(1,:)))),' match time not distance: ',num2str(mindist)])
           %disp([cat2.id{ii,:},' ',datestr(cat2.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),' ',num2str(cat2.data(ii,2:length(cat2.data(1,:)))),' match time not distance: ',num2str(mindist*111.12),' ',cat2.evtype{ii,:}])
           %missingevents2 = [missingevents2;cat2.data(ii,:)];
           %missingids2 = [missingids2;cat2.id{ii,:}];
