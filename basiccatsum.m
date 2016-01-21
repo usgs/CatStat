@@ -34,7 +34,6 @@ disp(['Total Number of Events: ',int2str(size(catalog.data,1))])
 disp([' ']);
 disp(['Minimum Latitude: ',num2str(minlat)])
 disp(['Maximum Latitude: ',num2str(maxlat)])
-disp([' ']);
 disp(['Minimum Longitude: ',num2str(minlon)])
 disp(['Maximum Longitude: ',num2str(maxlon)])
 disp([' ']);

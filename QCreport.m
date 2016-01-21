@@ -59,9 +59,9 @@ catmagcomp(catalog,yrmageqcsv,s);
 
 % Magnitude Distribution: 5 Year Completeness
 
-%if sizenum == 1
+% if sizenum == 1
 %    catmagyrcomp(catalog,yrmageqcsv,s);
-%end
+% end
 
 %% Magnitude Distribution: Completeness Through Time
 
@@ -86,6 +86,6 @@ catdupevents(catalog);
 lrgcatevnts(catalog)
 
 % Yearly Event Count List
-
-%dispyrcount(catalog,sizenum)
+% 
+% dispyrcount(catalog,sizenum)
 

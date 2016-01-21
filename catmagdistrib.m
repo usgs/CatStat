@@ -45,3 +45,4 @@ ylabel('Magnitude','fontsize',18);
 ax = axis;
 axis([eqevents(1,1) eqevents(length(eqevents),1) minmag maxmag])
 
+

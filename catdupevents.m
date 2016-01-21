@@ -16,7 +16,7 @@ disp(' ')
 dup = 0;
 for ii = 2:length(catalog.data)
        if(abs(catalog.data(ii,1)-catalog.data(ii-1,1)) <= secondsMax/24/60/60)
-           if(distance(catalog.data(ii,2:3),catalog.data(ii-1,2:3)) <= kmMax/111.12)
+           if(distance_hvrsn(catalog.data(ii,2), catalog.data(ii,3), catalog.data(ii-1,2), catalog.data(ii-1,3)) <= kmMax)
               %fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(catalog.data(ii-1,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii-1)),catalog.data(ii-1,2),catalog.data(ii-1,3),catalog.data(ii-1,4),catalog.data(ii-1,5))
               %fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(catalog.data(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),catalog.data(ii,2),catalog.data(ii,3),catalog.data(ii,4),catalog.data(ii,5))
               if(catalog.data(ii,5) > magthres || catalog.data(ii-1,5) > magthres)
