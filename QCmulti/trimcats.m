@@ -79,60 +79,19 @@ ind2 = inpolygon(cat2.data(:,3),cat2.data(:,2),poly(:,1),poly(:,2));
 %Print out
 %
 disp(' ')
+disp('------- Filters ------')
 disp(['Overlapping time period: ',datestr(startdate),' to ',datestr(enddate)])
-disp(' ')
-disp('------- Thresholds ------ ')
-disp(' ')
 disp(['Region: ',reg])
+disp(['Lower Mag. Limit: ',num2str(maglim)])
+disp(' ')
+disp('---Matching Criteria--- ')
 disp(['Time window: ',num2str(T),' s'])
 disp(['Distance window: ',num2str(delmax),' km'])
-disp(['Magnitude tolerance ',num2str(magdelmax)])
-disp(['Depth tolerance ',num2str(depdelmax),' km'])
 disp(' ')
-%
-%Initiate Figure
-%
-figure
-hold on
-%
-%Function that plots the world map
-%
-plotworld
-%
-%Plot Catalog 1 data
-%
-h1 = plot(cat1.data(ind1,3),cat1.data(ind1,2),'r.');
-h2 = plot(cat1.data(~ind1,3),cat1.data(~ind1,2),'r.');
-%
-%Plot Catalog 2 data
-%
-h3 = plot(cat2.data(ind2,3),cat2.data(ind2,2),'b.');
-h4 = plot(cat2.data(~ind2,3),cat2.data(~ind2,2),'b.');
-%
-% Plot region
-%
-plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
-%
-%Get minimum and maximum values for restricted axes
-%
-minlon = min(poly(:,1))-0.5;
-maxlon = max(poly(:,1))+0.5;
-minlat = min(poly(:,2))-0.5;
-maxlat = max(poly(:,2))+0.5;
-%
-%Plot formatting
-%
-legend([h1 h3],{cat1.name,cat2.name})
-axis([minlon maxlon minlat maxlat])
-midlat = (maxlat-minlat)/2;
-set(gca,'DataAspectRatio',[1,cosd(midlat),1])
-xlabel('Longitude','FontSize',14)
-ylabel('Latitude','FontSize',15)
-set(gca,'FontSize',15)
-title(['Comparison of ',cat1.name,' and ',cat2.name],'FontSize',14)
-box on
-hold off
-drawnow
+disp('--- Problem Event Parameter Tolerance ---')
+disp(['Magnitude tolerance: ',num2str(magdelmax)])
+disp(['Depth tolerance: ',num2str(depdelmax),' km'])
+disp(' ')
 %
 %Save output
 %

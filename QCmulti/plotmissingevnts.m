@@ -67,15 +67,15 @@ if ~isempty(missing.events1)
     disp(['There are ',num2str(size(missing.events1,1)),' ',cat1.name,' events missing ']);
     disp(['from the ',num2str(size(cat2.data,1)),' events in ',cat2.name]);
     disp('---------------------------------------------------')
-    if strcmpi(EL,'yes')
+    %if strcmpi(EL,'yes')
     %
     % If EL=='yes', print out all missing events
     %
-    fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
-    for ii = 1 : size(missing.events1,1)
-        fprintf(FormatSpec2, missing.ids1{ii,1}, datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)))
-    end
-    end
+    %fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
+    %for ii = 1 : size(missing.events1,1)
+    %    fprintf(FormatSpec2, missing.ids1{ii,1}, datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)))
+    %end
+%    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % Histograms
@@ -161,15 +161,15 @@ if ~isempty(missing.events2)
     disp(['There are ',num2str(size(missing.events2,1)),' ',cat2.name,' events missing ']);
     disp(['from the ',num2str(size(cat1.data,1)),' events in ',cat1.name]);
     disp('---------------------------------------------------')
-    if strcmpi(EL,'yes')
+%    if strcmpi(EL,'yes')
         %
         % If EL=='yes', print out all missing events
         %
-         fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
-    for ii = 1 : size(missing.events2,1)
-        fprintf(FormatSpec2, missing.ids2{ii,1}, datestr(missing.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)))
-    end
-    end
+%         fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
+%    for ii = 1 : size(missing.events2,1)
+%        fprintf(FormatSpec2, missing.ids2{ii,1}, datestr(missing.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)))
+%    end
+%    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % Histograms
