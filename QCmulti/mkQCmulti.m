@@ -30,31 +30,27 @@ if exist(initfile,'file')
     cat1.file = [initpath,char(initdat{1}{2})];
     cat1.name = char(initdat{1}{4}); 
     cat1.format = str2double(initdat{1}{6}); 
-    cat1.timeoffset= str2double(initdat{1}{8}); 
-    cat1.timezone =  char(initdat{1}{10});
     %
     % Get the information for the second catalog
     %
-    cat2.file = [initpath,char(initdat{1}{12})];
-    cat2.name = char(initdat{1}{14}); 
-    cat2.format = str2double(initdat{1}{16}); 
-    cat2.timeoffset= str2double(initdat{1}{18}); 
-    cat2.timezone =  char(initdat{1}{20});
+    cat2.file = [initpath,char(initdat{1}{8})];
+    cat2.name = char(initdat{1}{10}); 
+    cat2.format = str2double(initdat{1}{12}); 
     %
     % Get comparison criteria
     %
-    timewindow = str2double(initdat{1}{22}); % Time boundary
-    distwindow = str2double(initdat{1}{24}); % Distance limit
-    reg = char(initdat{1}{26}); % Region of interest
-    maglim = str2double(initdat{1}{28}); % Magnitude lower limit
-    magdelmax = str2double(initdat{1}{30}); % Magnitude residual limit
-    depdelmax = str2double(initdat{1}{32}); % Depth residual limit
+    timewindow = str2double(initdat{1}{14}); % Time boundary
+    distwindow = str2double(initdat{1}{16}); % Distance limit
+    reg = char(initdat{1}{18}); % Region of interest
+    maglim = str2double(initdat{1}{20}); % Magnitude lower limit
+    magdelmax = str2double(initdat{1}{22}); % Magnitude residual limit
+    depdelmax = str2double(initdat{1}{24}); % Depth residual limit
     %
     % Publishing options
     %
-    pubopts.outputDir = char(initdat{1}{34}); % Output directory
-    pubopts.format = char(initdat{1}{36}); % Format option. See doc publish for more information
-    pubopts.showCode = char(initdat{1}{38}); % Format option.  See doc publish for more information
+    pubopts.outputDir = char(initdat{1}{26}); % Output directory
+    pubopts.format = char(initdat{1}{28}); % Format option. See doc publish for more information
+    pubopts.showCode = char(initdat{1}{30}); % Format option.  See doc publish for more information
     if(strcmp(pubopts.showCode,'true'))
         pubopts.showCode = true;
     else
@@ -63,7 +59,7 @@ if exist(initfile,'file')
     %
     % Will determine if missing events are printed.
     % 
-    EL = char(initdat{1}{40});
+    EL = char(initdat{1}{32});
     fclose(fid);
 else
     % The files are not in the working directory, the
@@ -77,6 +73,20 @@ end
 % document
 %
 publish('QCmulti',pubopts)
+%
+% Create additional page to list missing events
+%
+if strcmpi(EL,'yes')
+	if ~isempty(matching.data)
+		publish('MatchingEvents',pubopts)
+	end
+	if ~isempty(missing.events1) || ~isempty(missing.events2)
+		publish('MissingEvents',pubopts)
+    end
+    if ~isempty(mags.events1) || ~isempty(dep.events1) || ~isempty(both.events1)
+		publish('ProblemEvents',pubopts)
+	end
+end
 close all
 %
 % End of Script

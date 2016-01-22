@@ -53,7 +53,7 @@ set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 xlabel('Longitude','FontSize',14)
 ylabel('Latitude','FontSize',15)
 set(gca,'FontSize',15)
-title(['Matching ',cat1.name,' and ',cat2.name,' events with depth residuals'],'FontSize',14)
+title(['Depth residuals'],'FontSize',14)
 box on
 hold off
 drawnow
@@ -61,14 +61,14 @@ drawnow
 %
 % Print Results
 %
-disp(['There are ',num2str(size(dep.events1,1)),' events with different depths'])
-fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'Res(km)')
-for ii = 1 : size(dep.events1,1)
-    fprintf(FormatSpec1,dep.ids{ii,1},datestr(dep.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events1(ii,2)),num2str(dep.events1(ii,3)),num2str(dep.events1(ii,4)),num2str(dep.events1(ii,5)),num2str(dep.events1(ii,6)))
-    fprintf(FormatSpec2,dep.ids{ii,2},datestr(dep.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events2(ii,2)),num2str(dep.events2(ii,3)),num2str(dep.events2(ii,4)),num2str(dep.events2(ii,5)));
-    disp('--')
-end
-disp('----------------------------------------------')
+%disp(['There are ',num2str(size(dep.events1,1)),' events with different depths'])
+%fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'Res(km)')
+%for ii = 1 : size(dep.events1,1)
+%    fprintf(FormatSpec1,dep.ids{ii,1},datestr(dep.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events1(ii,2)),num2str(dep.events1(ii,3)),num2str(dep.events1(ii,4)),num2str(dep.events1(ii,5)),num2str(dep.events1(ii,6)))
+%    fprintf(FormatSpec2,dep.ids{ii,2},datestr(dep.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events2(ii,2)),num2str(dep.events2(ii,3)),num2str(dep.events2(ii,4)),num2str(dep.events2(ii,5)));
+%    disp('--')
+%end
+%disp('----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Plot histogram of residuals
