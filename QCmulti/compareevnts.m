@@ -203,6 +203,7 @@ for ii = 1:size(cat2.data,1)
         missing.type2 = [missing.type2;cat2.evtype(ii,:)];
     end
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Summary Information
 %
@@ -225,25 +226,31 @@ disp(' ')
 %
 disp('   -------------------- MISSING EVENTS --------------------   ')
 disp(' ')
-disp('---- No Time Match ----')
+disp('                  ---Total Missing Events---')
+disp(['There are ',num2str(size(missing.events1,1)+size(dist.events1,1)),' event(s) in ',cat1.name])
+disp(['missing from ',cat2.name])
+disp(['There are ',num2str(size(missing.events2,1)+size(dist.events2,1)),' event(s) in ',cat2.name])
+disp(['missing from ',cat1.name])
+disp(' ')
+disp('---- No Similar Origin Times ----')
 if ~isempty(missing.events1)
-    disp([num2str(m1),' event(s) in ', cat1.name, ' and not in ', cat2.name])
+    disp([num2str(m1),' event(s) in ', cat1.name, ' have origin times not in ', cat2.name])
 else
-    disp(['0 event(s) in ',cat1.name, ' and not in ', cat2.name])
+    disp(['0 event(s) in ',cat1.name, ' have origin time not in ', cat2.name])
 end
 if ~isempty(missing.events2)
-    disp([num2str(m), ' event(s) in ', cat2.name, ' and not in ', cat1.name])
+    disp([num2str(m), ' event(s) in ', cat2.name, ' have origin times not in ', cat1.name])
 	disp(' ')
 else
-    disp(['0 event(s) in ',cat2.name, ' and not in ', cat1.name])
+    disp(['0 event(s) in ',cat2.name, ' have origin time not in ', cat1.name])
 	disp(' ')
 end
 %
 %Locations not similar
 %
 if ~isempty(dist.events1)
-	disp('---- Time Match but locations are not within tolerance ----')
-	disp([num2str(d),' events matched in time but location were greater than ',num2str(delmax),' km apart']);
+	disp('---- Match in time but NOT location ----')
+	disp([num2str(d),' events matched in time but location differences were greater than ',num2str(delmax),' km apart']);
 end
 disp(' ')
 %
@@ -251,14 +258,14 @@ disp(' ')
 %
 disp(['-------------------- POSSIBLE PROBLEM EVENTS ---------------    '])
 if ~isempty(dep.events1)
-	disp([num2str(D),' events matched in all, but depths were greater than ',num2str(depdelmax),' km apart']);
+	disp([num2str(D),' events matched origin time, location, and magnitude, but depths were greater than ',num2str(depdelmax),' km apart']);
 else
 end
 if ~isempty(mags.events1)
-	disp([num2str(G),' events matched in all, but magnitude residuals were greater than ',num2str(magdelmax),'.']);
+	disp([num2str(G),' events matched in origin time, location and depth, but magnitude residuals were greater than ',num2str(magdelmax),'.']);
 else
 if ~isempty(both.events1)
-	disp([num2str(B),' events matched but magnitude and depth residuals were greater than ',num2str(magdelmax),' and ',num2str(depdelmax),' km, respectively.']);
+	disp([num2str(B),' events matched in origin time and location, but magnitude and depth residuals were greater than ',num2str(magdelmax),' and ',num2str(depdelmax),' km, respectively.']);
 else
 end
 disp(' ')

@@ -44,7 +44,7 @@ end
 minlon = min(poly(:,1))-0.5;
 maxlon = max(poly(:,1))+0.5;
 minlat = min(poly(:,2))-0.5;
-maxlat = max(poly(:,2))+0.5;
+maxlat = max(poly(:,2))+1.0;
 %
 % Plot formatting
 %
