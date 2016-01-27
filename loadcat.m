@@ -16,7 +16,7 @@ fid = fopen(cat.file, 'rt');
 
 if(cat.format == 1); % ComCat format
   Tref = textscan(fid,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
-  time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS.FFFZ');
+  time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS.FFF');
   [cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
   cat.id = Tref{12}(ii);
   cat.evtype = Tref{15}(ii);
