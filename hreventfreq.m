@@ -12,21 +12,19 @@ disp(['Distribution of earthquake events throughout the hours of the day. All ot
 
 % find hour of the day in particular time zone
 hour = mod(eqevents(:,1)*24+catalog.timeoffset,24);
-
+%
+% Figure
+%
 figure
-hist(hour,0.5:23.5);
-%hist(eqevents(:,1),0.5:23.5);
-
+hold on
+histogram(hour,0.5:23.5);
+%
+% Formatting Options
+%
 xlabel(['Hour of the Day (', catalog.timezone,')'],'fontsize',18)
 ylabel('Number of Events','fontsize',18)
 title('Events per Hour of the Day','fontsize',18)
-set(gca,'linewidth',1.5)
 set(gca,'fontsize',15)
-
 axis tight;
-ax = axis;
-axis([ax(1:2),0,ax(4)*1.1])
-%hhh=vline(7,'k');
-%hhh=vline(14,'k');
 hold off
 

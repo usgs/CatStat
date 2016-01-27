@@ -27,8 +27,6 @@ function [sizenum] = catalogsize(catalog)
 %     
 % end
 % 
-
-timediff = diff(catalog.data(:,1));
 dateV = datevec(catalog.data(:,1));    
 check = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
 
@@ -42,7 +40,6 @@ if length(check) > 5 % If there are more than 5 unique month and year combinatio
 else
     sizenum = 3; % If less than 5 year month combinations, then use daily plotting
 end
-       
     
     
     

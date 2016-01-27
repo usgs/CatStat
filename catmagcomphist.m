@@ -1,4 +1,4 @@
-function [compmag] = catmagcomphist(eqevents,catalog,yrmageqcsv,s)
+function [] = catmagcomphist(eqevents,yrmageqcsv)
 % This function plots and compares the magnitude completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -22,36 +22,21 @@ endyear = yrmageqcsv(M,1);
 
 timemag = [];
 
-for x = 1:((endyear-begyear)+1)
-    
-    row = horzcat(s(x).jj(:,1),s(x).jj(:,5));
-    timemag = [timemag;row];
-    
-end
+% for x = 1:((endyear-begyear)+1)
+%     
+%     row = horzcat(s(x).jj(:,1),s(x).jj(:,5));
+%     timemag = [timemag;row];
+%     
+% end
 
-compmag = timemag(:,2);
-
-%sortcompmag = sortrows(compmag(:,1),1);
-L = length(compmag(:,1));
-
-minmag = floor(min(compmag(:,1)));
-maxmag = ceil(max(compmag(:,1)));
-[nn,xx] = hist(compmag(:,1),[minmag:0.1:maxmag]);
-
-% Calculate cumulative magnitude distribution
-cdf =[];
-idf =[];
-jj = 0;
-mags = [minmag:0.1:maxmag];
-
-for cmag = mags 
-    
-  jj = jj+1;
-  cdf(jj) = sum(round(compmag(:,1)*10)>=round(cmag*10));
-  idf(jj) = sum(round(compmag(:,1)*10)==round(cmag));
-  
-end
-
+% compmag = timemag(:,2);
+% 
+% %sortcompmag = sortrows(compmag(:,1),1);
+% L = length(compmag(:,1));
+% 
+minmag = floor(min(yrmageqcsv(:,5)));
+maxmag = ceil(max(yrmageqcsv(:,5)));
+[nn,xx] = hist(yrmageqcsv(:,5),[minmag:0.1:maxmag]);
 figure('Color',[1 1 1]);
 subplot(2,1,1)
 hist2d(datenum(eqevents(:,1)),eqevents(:,5),min(datenum(eqevents(:,1))):365:max(datenum(eqevents(:,1))),0:0.5:maxmag);

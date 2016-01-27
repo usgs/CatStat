@@ -1,4 +1,4 @@
-function magspecs(yrmageqcsv,eqevents,catalog,sizenum)
+function magspecs(yrmageqcsv,eqevents)
 % This function plots and compares the number of events of a specific magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -10,7 +10,7 @@ function magspecs(yrmageqcsv,eqevents,catalog,sizenum)
 
 % Find events below increasing magnitude threshold and plot event count
 
-disp(['Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.']);
+disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.');
 
 maxmag = ceil(max(yrmageqcsv(:,5)));
 count = 1;
@@ -18,11 +18,11 @@ M = length(yrmageqcsv(:,1));
 begyear = yrmageqcsv(1,1);
 endyear = yrmageqcsv(M,1);
 
-time = datestr(eqevents(:,1),'yyyy');
-time = str2num(time);
-yrmageqcsv = horzcat(time,eqevents(:,2:5)); % Converts time column to only years
-yrmageqcsv(yrmageqcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
-yrmageqcsv(isnan(yrmageqcsv(:,5)),:) = [];
+% time = datestr(eqevents(:,1),'yyyy');
+% time = str2num(time);
+% yrmageqcsv = horzcat(time,eqevents(:,2:5)); % Converts time column to only years
+% yrmageqcsv(yrmageqcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
+% yrmageqcsv(isnan(yrmageqcsv(:,5)),:) = [];
 
 for mm = 1:maxmag
     
@@ -33,7 +33,9 @@ for mm = 1:maxmag
     
         plotmag = runyrmageqcsv(index(:,1),:);
     
-        subplot(maxmag,1,count)
+        %subplot(maxmag,1,count)
+        figure
+        hold on
         [nn,xx] = hist(plotmag(:,1),[begyear:1:endyear]);
         bar(xx,nn,'histc')
         ylabel(mm)
@@ -42,7 +44,7 @@ for mm = 1:maxmag
         hh = colorbar;
         set(hh,'visible','off');
     
-        hold on
+        hold off
         count = count +1;
         
     else

@@ -73,6 +73,8 @@ end
 % document
 %
 publish('QCmulti',pubopts)
+% 
+% 
 %
 % Create additional page to list missing events
 %
@@ -88,7 +90,7 @@ if strcmpi(EL,'yes')
 	end
 end
 close all
-%
+
 % End of Script
 %
 

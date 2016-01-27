@@ -85,7 +85,5 @@ else
     disp('No events')
 end
 %Event Type Differences
-%SECTION NOT YET FINISHED
-% 
 
 

@@ -6,15 +6,13 @@ clear
 if exist('./initMkQCreport.dat','file')
   disp('using local initMkQCreport.dat file')
   initpath = ''; 
-  initfile = ['./initMkQCreport.dat']
+  initfile = ['./initMkQCreport.dat'];
 else 
   disp('using default initMkQCreport.dat file')
   [initpath,tmpname,tmpext] = fileparts(which('mkQCreport'));
   initpath = [initpath,'/'];
-  initfile = [initpath,'/initMkQCreport.dat']
+  initfile = [initpath,'/initMkQCreport.dat'];
 end
-
-initfile;
 
 fid = fopen(initfile, 'rt');
 initdat = textscan(fid, '%s','delimiter', '\n');
@@ -34,10 +32,5 @@ else
  pubopts.showCode = false;
 end
 
-fclose(fid)
-
-catalog
-pubopts
-
-%QCreport
+fclose(fid);
 publish('QCreport',pubopts)
