@@ -14,7 +14,7 @@ if ~isempty(missing.events1)
 	disp('---------------------------------------------------')
 	disp(' ')
 % List of Missing Events
-	fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
+	fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lat.','Lon.','Dep(km)', 'Mag')
 	for ii = 1 : size(missing.events1,1)
 		fprintf(FormatSpec2, missing.ids1{ii,1}, datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)))
 	end
@@ -45,7 +45,7 @@ end
 %% Location Disagreement
 %
 if ~isempty(dist.events1)
-	fprintf(FormatSpec1,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag','LocRes')
+	fprintf(FormatSpec1,'Event ID', 'Origin Time', 'Lat.','Lon.','Dep(km)', 'Mag','LocRes')
 	for ii = 1 : size(dist.events1)
 		fprintf(FormatSpec1,dist.ids1{ii,1}, datestr(dist.events1(ii,1),'yyyy/mm/dd HH:MM:SS'), num2str(dist.events1(ii,2)),num2str(dist.events1(ii,3)),num2str(dist.events1(ii,4)),num2str(dist.events1(ii,5)),num2str(dist.events1(ii,6)))
 		fprintf(FormatSpec2,dist.ids1{ii,2}, datestr(dist.events2(ii,1),'yyyy/mm/dd HH:MM:SS'), num2str(dist.events2(ii,2)),num2str(dist.events2(ii,3)),num2str(dist.events2(ii,4)),num2str(dist.events2(ii,5)))

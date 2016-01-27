@@ -1,4 +1,4 @@
-function plotmissingevnts(cat1, cat2, missing, reg, EL)
+function plotmissingevnts(cat1, cat2, missing, reg,timewindow)
 % This function produces figures related to the missing events from each
 % catalog.  They include maps and histograms.
 %
@@ -44,7 +44,7 @@ if ~isempty(missing.events1)
     minlon = min(poly(:,1))-0.5;
     maxlon = max(poly(:,1))+0.5;
     minlat = min(poly(:,2))-0.5;
-    maxlat = max(poly(:,2))+0.5;
+    maxlat = max(poly(:,2))+1.0;
     %
     % Plot formatting
     %
@@ -64,18 +64,8 @@ if ~isempty(missing.events1)
     % Print Results
     %
     disp('---------------------------------------------------')
-    disp(['There are ',num2str(size(missing.events1,1)),' ',cat1.name,' events missing ']);
-    disp(['from the ',num2str(size(cat2.data,1)),' events in ',cat2.name]);
+    disp([num2str(size(missing.events1,1)),' events in ',cat1.name,' have no corresponding event in ',cat2.name,' within ', num2str(timewindow),' seconds.']);
     disp('---------------------------------------------------')
-    %if strcmpi(EL,'yes')
-    %
-    % If EL=='yes', print out all missing events
-    %
-    %fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
-    %for ii = 1 : size(missing.events1,1)
-    %    fprintf(FormatSpec2, missing.ids1{ii,1}, datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)))
-    %end
-%    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % Histograms
@@ -139,7 +129,7 @@ if ~isempty(missing.events2)
     minlon = min(poly(:,1))-0.5;
     maxlon = max(poly(:,1))+0.5;
     minlat = min(poly(:,2))-0.5;
-    maxlat = max(poly(:,2))+0.5;
+    maxlat = max(poly(:,2))+1.0;
     %
     % Plot formatting
     %
@@ -157,19 +147,8 @@ if ~isempty(missing.events2)
     %
     % Print Results
     %
+    disp([num2str(size(missing.events2,1)),' events in ',cat2.name, ' have no corresponding event in  ',cat1.name,' within ', num2str(timewindow),' seconds.'])
     disp('---------------------------------------------------')
-    disp(['There are ',num2str(size(missing.events2,1)),' ',cat2.name,' events missing ']);
-    disp(['from the ',num2str(size(cat1.data,1)),' events in ',cat1.name]);
-    disp('---------------------------------------------------')
-%    if strcmpi(EL,'yes')
-        %
-        % If EL=='yes', print out all missing events
-        %
-%         fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
-%    for ii = 1 : size(missing.events2,1)
-%        fprintf(FormatSpec2, missing.ids2{ii,1}, datestr(missing.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)))
-%    end
-%    end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % Histograms

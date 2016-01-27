@@ -1,4 +1,4 @@
-function catmagcomp(catalog,yrmageqcsv,s)
+function catmagcomp(yrmageqcsv)
 % This function plots and compares the magnitude completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -16,53 +16,42 @@ disp(['generally 0.2 or 0.3 magnitude units smaller than the catalog ']);
 disp(['completness. This completeness estimation is not valid for catalogs ']);
 disp(['whose completeness varies in time.']);
 disp([' ']);
-
-M = length(yrmageqcsv);
-begyear = yrmageqcsv(1,1);
-endyear = yrmageqcsv(M,1);
-
-timemag = [];
-
-for x = 1:((endyear-begyear)+1)
-    
-    row = horzcat(s(x).jj(:,1),s(x).jj(:,5));
-    timemag = [timemag;row];
-    
-end
-
-compmag = timemag(:,2);
-
-sortcompmag = sortrows(compmag(:,1),1);
-L = length(compmag(:,1));
-
-minmag = floor(min(compmag(:,1)));
-maxmag = ceil(max(compmag(:,1)));
-[nn,xx] = hist(compmag(:,1),[minmag:0.1:maxmag]);
-
+%
+% Determine Magnitude Range
+%
+minmag = floor(min(yrmageqcsv(:,5)));
+maxmag = ceil(max(yrmageqcsv(:,5)));
+mags = minmag:0.1:maxmag;
+cdf = zeros(length(mags));
+%
 % Calculate cumulative magnitude distribution
-cdf =[];
-idf =[];
-jj = 0;
-mags = [minmag:0.1:maxmag];
-
-for cmag = mags 
-    
-  jj = jj+1;
-  cdf(jj) = sum(round(compmag(:,1)*10)>=round(cmag*10));
-  idf(jj) = sum(round(compmag(:,1)*10)==round(cmag));
-  
+%
+for ii = 1 : length(mags)
+    cdf(ii) = sum(round(yrmageqcsv(:,5),1,'decimals')>=round(mags(ii),1,'decimals'));
 end
-
-figure
-hh = semilogy(mags,cdf,'k+','linewidth',1.5);
-hold on
-hh = semilogy(xx,nn,'ro','linewidth',1.5);
-[yy,ii] = max(nn);
+%
+% Calculate incremental magnitude distribution
+%
+[idf, xx] = hist(yrmageqcsv(:,5),mags);
+[~,ii] = max(idf);
+%
+% Maximum incremental step
+%
 maxincremcomp = mags(ii);
-disp(['Max Incremental: ',num2str(maxincremcomp)]);
+%
+% Estimate magnitude of completeness??
+%
 estcomp = mags(ii) + 0.3;
-disp(['Estimated Completeness: ',num2str(estcomp)]);
-disp([' ']);
+%
+% Plot Results
+%
+figure
+hh1 = semilogy(mags,cdf,'k+','linewidth',1.5);
+hold on
+hh2 = semilogy(xx,idf,'ro','linewidth',1.5);
+%
+% Figure Options
+%
 axis([minmag maxmag 10^0 10^6])
 legend('Cumulative','Incremental')
 xlabel('Magnitude','fontsize',18)
@@ -71,46 +60,10 @@ title('Magnitude Distributions','fontsize',18)
 set(gca,'linewidth',1.5)
 set(gca,'fontsize',15)
 set(gca,'box','on')
-
-
-% mc = 1/(floor((endyear-begyear)/30));
-% 
-% for ww = 5:15:((floor((endyear-begyear)/5))*5)
-%     
-%     timemag = [];
-%     for x = 1:((endyear-(endyear-ww))+1)
-%         row = horzcat(s(x).jj(:,1),s(x).jj(:,5));
-%         timemag = [timemag;row];
-%     end
-%     
-%     compmag = timemag(:,2);
-%     
-%     sortcompmag = sortrows(compmag(:,1),1);
-%     L = length(compmag(:,1));
-%     
-%     minmag = floor(min(compmag(:,1)));
-%     maxmag = ceil(max(compmag(:,1)));
-%     [nn,xx] = hist(compmag(:,1),[minmag:0.1:maxmag]);
-%     
-%     % Calculate cumulative magnitude distribution
-%     cdf =[];
-%     idf =[];
-%     jj = 0;
-%     mags = [minmag:0.1:maxmag];
-%     
-%     for cmag = mags
-%         jj = jj+1;
-%         cdf(jj) = sum(round(compmag(:,1)*10)>=round(cmag*10));
-%         idf(jj) = sum(round(compmag(:,1)*10)==round(cmag));
-%     end
-%     
-%     hh = semilogy(mags,cdf,'+','linewidth',1.5);
-%     set(hh,'Color',[mc mc mc]);
-%     
-%     mc = mc - 1/(floor((endyear-begyear)/3));
-%     %ww = ww + 5;
-%     %yy = yy + 5;
-%     
-% end
-% 
-% 
+hold off
+%
+% Print out
+%
+disp(['Max Incremental: ',num2str(maxincremcomp)]);
+disp(['Estimated Completeness: ',num2str(estcomp)]);
+disp([' ']);

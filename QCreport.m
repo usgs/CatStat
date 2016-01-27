@@ -21,11 +21,11 @@ catdensplot(catalog);
 
 %% Depth Distribution
 
-plotcatdeps(eqevents,catalog);
+plotcatdeps(eqevents);
 
 %% Event Frequency
 
-eventfreq(eqevents,catalog,sizenum);
+eventfreq(eqevents,sizenum);
 
 %% Hourly Event Frequency
 
@@ -37,7 +37,7 @@ inteventspace(catalog,sizenum);
 
 %% Magnitude Distribution: All Magnitudes
 
-[yrmageqcsv] = catmagdistrib(eqevents,catalog,sizenum);
+[yrmageqcsv] = catmagdistrib(eqevents,sizenum);
 
 %% Magnitude Distribution: All Magnitudes Histogram
 
@@ -45,17 +45,17 @@ catmaghist(eqevents)
 
 %% Magnitude & Event Count
 
-if sizenum == 1
-    magspecs(yrmageqcsv,eqevents,catalog,sizenum);
-end
+% if sizenum == 1
+%     magspecs(yrmageqcsv,eqevents);
+% end
 
 %% Magnitude Distribution: Median Magnitudes
-
-[s] = plotyrmedmag(eqevents,catalog,yrmageqcsv,sizenum);
+ 
+plotyrmedmag(eqevents,sizenum);
 
 %% Magnitude Distribution: Overall Completeness
 
-catmagcomp(catalog,yrmageqcsv,s);
+catmagcomp(yrmageqcsv);
 
 % Magnitude Distribution: 5 Year Completeness
 
@@ -66,7 +66,7 @@ catmagcomp(catalog,yrmageqcsv,s);
 %% Magnitude Distribution: Completeness Through Time
 
 if sizenum == 1
-    [compmag] = catmagcomphist(eqevents,catalog,yrmageqcsv,s);
+    catmagcomphist(eqevents,yrmageqcsv);
 end
 
 %% Event Type Frequency
@@ -79,7 +79,7 @@ catdupsearch(catalog);
 
 %% Possible Duplicate Events
 
-catdupevents(catalog);
+dups=catdupevents(catalog);
 
 %% Largest Events
 

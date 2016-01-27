@@ -1,4 +1,4 @@
-function [s] = plotyrmedmag(eqevents,catalog,yrmageqcsv,sizenum)
+function plotyrmedmag(eqevents,sizenum)
 % This function plots and compares the trend of yearly median magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -13,99 +13,110 @@ disp(['Median magnitude distribution of earthquake events only. All other event 
 eqevents(eqevents(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN - so that it will match yrmagcsv
 eqevents(isnan(eqevents(:,5)),:) = []; %Removes all rows with NaN for preferred mag
 
-M = length(yrmageqcsv);
-begyear = yrmageqcsv(1,1);
-endyear = yrmageqcsv(M,1);
-
-s = struct([]);
-count = 1;
-
-for jj = begyear:endyear % Create structure divided by year
-    
-    ii = find(yrmageqcsv==jj);
-    s(count).jj = yrmageqcsv(ii,:);
-    count = count + 1; 
-    
-end
-
-count = 1;
-newmedians = []; 
-
-for yy = begyear:endyear % Create median file
-    
-    medrow = [yy,median(s(count).jj(:,5))];
-    newmedians = [newmedians;medrow];
-    count = count + 1;
-    
-end
-
+%
+% Plot results
+%
 if sizenum == 1
-    
+    %
+    % Find year range
+    %
+    years = datestr(eqevents(:,1),'yyyy');
+    years = str2num(years);
+    year = unique(years);
+    begyear = years(1,1);
+    endyear = years(end,1);
+    %
+    % Get medians
+    %
+    med = zeros(length(year),2);
+    for ii = 1 : length(year)
+        med(ii,:) = [year(ii), median(eqevents(year(ii) == years(:,1),5))];
+    end
+    %
+    % Plot Results
+    %
     figure
-    bar(newmedians(:,1),newmedians(:,2),'hist')
+    hold on
+    bar(med(:,1),med(:,2),'hist')
     set(gca,'fontsize',15)
-    title('Yearly Median Magnitude','fontsize',18);
-    ylabel('Magnitude','fontsize',18);
-    xlabel('Year','fontsize',18);
-    axis([min(newmedians(:,1)) max(newmedians(:,1)) 0 max(newmedians(:,2))*1.1])
-
+    title('Yearly Median Magnitude');
+    ylabel('Magnitude');
+    xlabel('Year');
+    axis tight
+    hold off
+    drawnow
 elseif sizenum == 3
-    
+    %
+    % Find Days (unique year, month, and day combinations)
+    %
     dateV = datevec(eqevents(:,1));
-    daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
+    daily = unique(dateV(:,1:3),'rows');
     [~,subs] = ismember(dateV(:,1:3),daily,'rows');
-    L = length(subs);
-    medmagday = accumarray(subs,eqevents(:,1),[],@median);
+    %
+    % Calculate median for each day
+    %
+    medmagday = accumarray(subs,eqevents(:,5),[],@median);
+    %
+    % Create first day of every month matrix and convert (might not be
+    % necessary) Used for plotting
+    %
     matones = ones(length(daily(:,1)),1);
     fakedayyear = horzcat(daily,matones);
     dailydatenum = datenum(fakedayyear(:,1:3));
-    
-    timedif = diff(eqevents(:,1));
-    dateV = datevec(eqevents(:,1));
-    
-    daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
-    [~,subs] = ismember(dateV(:,1:3),daily,'rows');
-    medmagday = accumarray(subs,eqevents(:,5),[],@median);
-    
+    %
+    % Plot Results
+    %
     figure
-    %bar(newmedians(:,1),newmedians(:,2))
+    hold on
     bar(dailydatenum,medmagday,'hist')
+    %
+    % Format Options
+    %
     datetick('x','mm-dd-yy')
     set(gca,'fontsize',15)
-    title('Daily Median Magnitude','fontsize',18);
-    ylabel('Magnitude','fontsize',18);
+    title('Daily Median Magnitude');
+    ylabel('Magnitude');
     delete(findobj('marker','*'))
-    ax = axis;
-    axis([eqevents(1,1) eqevents(length(eqevents(:,1)),1) 0 max(medmagday)*1.1])
-    
+    axis tight
+    hold off
+    drawnow
 else
-    
+    %
+    % Find unique year and month combinations
+    %
     dateV = datevec(eqevents(:,1));
-    monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
+    monthly = unique(dateV(:,1:2),'rows');
     [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
-    L = length(subs);
-    medmagmth = accumarray(subs,eqevents(:,1),[],@median);
-    matones = ones(length(monthly(:,1)),1);
+    %
+    % Calculate monthly median
+    %
+    medmagmth = accumarray(subs,eqevents(:,5),[],@median);
+    %
+    % Create a vector for plotting
+    %
+    matones = ones(length(monthly(:,1)),1); 
     fakemonthyear = horzcat(monthly,matones);
     monthlydatenum = datenum(fakemonthyear(:,:));
-    
-    timedif = diff(eqevents(:,1));
-    dateV = datevec(eqevents(:,1));
-    
-    monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
-    [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
-    medmagmth = accumarray(subs,eqevents(:,5),[],@median);
-
+    %
+    % Plot Results
+    %
     figure
-    %bar(newmedians(:,1),newmedians(:,2))
+    hold on
     bar(monthlydatenum,medmagmth,'hist')
+    %
+    % Format Options
+    %
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
-    title('Monthly Median Magnitude','fontsize',18);
-    ylabel('Magnitude','fontsize',18);
+    title('Monthly Median Magnitude');
+    ylabel('Magnitude');
     delete(findobj('marker','*'))
-    ax = axis;
-    axis([eqevents(1,1) eqevents(length(eqevents(:,1)),1) 0 max(medmagmth)*1.1])
-
+    axis tight
+    hold off
+    drawnow
+end
+%
+% End of Function
+%
 end
 

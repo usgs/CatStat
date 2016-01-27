@@ -11,19 +11,14 @@ function basiccatsum(catalog)
 begdate = datestr(catalog.data(1,1),'yyyy-mm-dd HH:MM:SS.FFF');
 enddate = datestr(catalog.data(size(catalog.data,1)),'yyyy-mm-dd HH:MM:SS.FFF');
 
-M = length(catalog.data);
-
 maxlat = max(catalog.data(:,2)); 
 minlat = min(catalog.data(:,2));     
 maxlon = max(catalog.data(:,3));     
 minlon = min(catalog.data(:,3));
 maxdep = max(catalog.data(:,4));
 mindep = min(catalog.data(:,4)); 
-nandepcount = sum(isnan(catalog.data(:,4)));
 maxmag = max(catalog.data(:,5));
 minmag = min(catalog.data(:,5));
-zerocount = sum(catalog.data(:,5) == 0);
-nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
 
 disp(['Catalog Name: ',catalog.name])
 disp([' ']);

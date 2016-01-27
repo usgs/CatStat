@@ -1,4 +1,4 @@
-function eventfreq(eqevents,catalog,sizenum)
+function eventfreq(eqevents,sizenum)
 % This function plots and compares event frequency over the entire catalog. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,11 +8,16 @@ function eventfreq(eqevents,catalog,sizenum)
 %         cat.evtype character cell array of event types 
 % Output: None
 
-disp(['Frequency of earthquake events only. All other event types ignored.']);
-
+disp(['Frequency of EARTHQUAKE EVENTS ONLY. All other event types ignored.']);
+%
+% Figure
+%
 figure
-%[nn,xx]= hist(eqevents(:,1),eqevents(1,1):1:eqevents(M,1));
-hist(eqevents(:,1),eqevents(1,1)-0.5:1:max(eqevents(:,1))-0.5)
+hold on
+histogram(eqevents(:,1),eqevents(1,1)-0.5:1:max(eqevents(:,1))-0.5)
+%
+% Format Options
+% 
 set(gca,'fontsize',15)
 title('Events per Day','fontsize',18)
 ylabel('Number of Events','fontsize',18)
@@ -27,5 +32,9 @@ else
     xlabel('Month-Day-Year','fontsize',18)
 end
 axis tight;
-ax = axis;
-axis([ax(1:2) 0 ax(4)*1.1])
+hold off
+drawnow
+%
+% End of Function
+%
+end

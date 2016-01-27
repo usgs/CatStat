@@ -75,6 +75,7 @@ ind1 = inpolygon(cat1.data(:,3),cat1.data(:,2),poly(:,1),poly(:,2));
 %Catalog 2
 %
 ind2 = inpolygon(cat2.data(:,3),cat2.data(:,2),poly(:,1),poly(:,2));
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %Print out
 %
@@ -91,6 +92,16 @@ disp(' ')
 disp('--- Problem Event Parameter Tolerance ---')
 disp(['Magnitude tolerance: ',num2str(magdelmax)])
 disp(['Depth tolerance: ',num2str(depdelmax),' km'])
+disp(' ')
+disp('Events from each catalog are removed from the comparison if they don''t match the filtering criteria.')
+disp(' ')
+disp('Events are determined to be matching if they are within both origin time and location matching criteria.')
+disp('There are two categories of missing events. The first is when events with similar origin ')
+disp('times cannot be found in either catalog.')
+disp('The second occurs if similar origin times are found but the locations are too far apart.')
+disp(' ')
+disp('Problem events match in both origin time and location, but could have descrepencies in')
+disp('depth, magnitude, or both.')
 disp(' ')
 %
 %Save output

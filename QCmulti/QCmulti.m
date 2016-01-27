@@ -30,9 +30,17 @@ end
 %% *Missing Events*
 % For a complete list of missing events, please click <./MissingEvents.html here>
 % 
-%% _No Time Match_
+disp('                  ---Total Missing Events---')
+disp(' ')
+disp(['There are ',num2str(size(missing.events1,1)+size(dist.events1,1)),' event(s) in ',cat1.name])
+disp(['missing from ',cat2.name])
+disp(' -- ')
+disp(['There are ',num2str(size(missing.events2,1)+size(dist.events2,1)),' event(s) in ',cat2.name])
+disp(['missing from ',cat1.name])
+disp(' ')
+%% _No Similar Origin Time_
 if ~isempty(missing.events1) || ~isempty(missing.events2)
-   plotmissingevnts(cat1, cat2, missing, reg, EL);
+   plotmissingevnts(cat1, cat2, missing, reg,timewindow);
 else
     disp('No missing events.')
 end
@@ -77,7 +85,5 @@ else
     disp('No events')
 end
 %Event Type Differences
-%SECTION NOT YET FINISHED
-% 
 
 
