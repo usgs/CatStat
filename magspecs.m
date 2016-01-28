@@ -45,7 +45,7 @@ for mm = 1:maxmag
         % Format Options
         %
         ylabel([num2str(mm-1),'-',num2str(mm)])
-close        set(gca,'linewidth',1.5)
+        set(gca,'linewidth',1.5)
         set(gca,'fontsize',12)
         set(gca,'XTick',xtick)
         hold off
