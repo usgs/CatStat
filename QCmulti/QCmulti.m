@@ -15,10 +15,9 @@ basiccatsum(cat2);
 % Map of all events in the overlapping time period that match the comparison criteria
 plottrimcats(cat1,cat2, reg);
 %% *Summary of Matching Events*
-%Parsing matching and missing events
-%
+Parsing matching and missing events
 [missing, dist, dep, mags, both, matching] = ...
-    compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+   compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
 %% *Matching events*
 % The following <./MatchingEvents.html events> were determined to be 'matching' based on the thresholds
 % defined in initMkQCmulti.dat.

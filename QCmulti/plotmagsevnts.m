@@ -32,7 +32,7 @@ plot(poly(:,1),poly(:,2),'Color',[1 1 1]*0.25,'LineWidth',2);
 %
 % Plot Events on the map
 %
-h1 = plot(mages.events1(:,3),mags.events1(:,2),'Color',[1 1 1]);
+h1 = plot(mags.events1(:,3),mags.events1(:,2),'Color',[1 1 1]);
 h2 = plot(mags.events1(:,3),mags.events1(:,2),'r.');
 h3 = plot(mags.events2(:,3),mags.events2(:,2),'b.');
 %
