@@ -45,7 +45,7 @@ catmaghist(eqevents)
 %% Magnitude & Event Count
 
 if sizenum == 1
-    magspecs(yrmageqcsv,eqevents);
+    magspecs(yrmageqcsv);
 end
 
 %% Magnitude Distribution: Median Magnitudes
