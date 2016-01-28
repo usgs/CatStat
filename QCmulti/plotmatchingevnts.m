@@ -73,7 +73,31 @@ box on
 hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Magnitude Comparison
 %
+p = polyfit(matching.data2(:,5),matching.data(:,5),1);
+[P] = polyval(p,matching.data2(:,5));
+R = corrcoef(P,matching.data(:,5));
+R = R(1,2)^2;
+figure
+hold on
+h1 = scatter(matching.data2(:,5),matching.data(:,5));
+h2 = plot(matching.data2(:,5),P,'r-');
+%
+%Figure formatting
+%
+ylabel([cat1.name,' Magnitude'],'FontSize',15)
+xlabel([cat2.name,' Magnitude'],'FontSize',15)
+title('Magnitude Comparison','FontSize',15)
+legend(h2,['R^2 = ',num2str(R)],'Location','NorthWest')
+axis([min(matching.data2(:,5)) max(matching.data2(:,5)) min(matching.data(:,5)) max(matching.data(:,5))])
+axis equal
+box on
+hold off
+drawnow
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
 % Depth Distribution
 %
 figure
@@ -89,6 +113,31 @@ axis tight
 box on
 hold off
 drawnow
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Depth Comparison
+%
+p = polyfit(matching.data2(:,4),matching.data(:,4),1);
+[P] = polyval(p,matching.data2(:,4));
+R = corrcoef(P,matching.data(:,4));
+R = R(1,2)^2;
+figure
+hold on
+h1 = scatter(matching.data2(:,4),matching.data(:,4));
+h2 = plot(matching.data2(:,4),P,'r-');
+%
+%Figure formatting
+%
+ylabel([cat1.name,' Depth'],'FontSize',15)
+xlabel([cat2.name,' Depth'],'FontSize',15)
+title('Depth Comparison','FontSize',15)
+legend(h2,['R^2 = ',num2str(R)],'Location','NorthWest')
+axis([min(matching.data2(:,4)) max(matching.data2(:,4)) min(matching.data(:,4)) max(matching.data(:,4))])
+axis equal
+box on
+hold off
+drawnow
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Time Residuals [86400 seconds in 1 day]
