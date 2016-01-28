@@ -21,3 +21,7 @@ ylabel('Number of Events')
 set(gca,'fontsize',15)
 hold off
 drawnow
+%
+% End of function
+%
+end

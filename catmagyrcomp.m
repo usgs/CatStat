@@ -1,5 +1,5 @@
-function catmagyrcomp(catalog,yrmageqcsv,s)
-% This function plots and compares the magnitude completeness. 
+function catmagyrcomp(yrmageqcsv,s)
+% This function plots and compares the magnitude 5-year completeness. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog

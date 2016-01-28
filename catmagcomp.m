@@ -1,13 +1,15 @@
 function catmagcomp(yrmageqcsv)
 % This function plots and compares the magnitude completeness. 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+% Input:
+%   yrmageqcsv - Magnitudes of earthquakes with year only in the time
+%   column
+%
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Display
+%
 disp(['Magnitude distribution of earthquake events only. All other event types ignored.']);
 disp([' ']);
 disp(['Cumulative and incremental distributions provide an indication of ']);
@@ -67,3 +69,7 @@ hold off
 disp(['Max Incremental: ',num2str(maxincremcomp)]);
 disp(['Estimated Completeness: ',num2str(estcomp)]);
 disp([' ']);
+%
+% End of Function
+%
+end

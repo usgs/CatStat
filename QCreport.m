@@ -1,22 +1,21 @@
 %% Basic Catalog Summary
-
+%
 close all
-
-
-
 % Load catalog data
 catalog = loadcat(catalog);
-
+% 
 basiccatsum(catalog);
-
-[sizenum] = catalogsize(catalog); % Used to determine if plots should be made by year or month or day based on catalog size
-
+%
+%Used to determine if plots should be made by year or month or day based on catalog size
+%
+[sizenum] = catalogsize(catalog); 
+%
 %% Seismicity Map
-
+%
 [eqevents] = plotcatmap(catalog); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
-
+%
 %% Seismicity Density Plot
-
+%
 catdensplot(catalog);
 
 %% Depth Distribution
@@ -45,9 +44,9 @@ catmaghist(eqevents)
 
 %% Magnitude & Event Count
 
-% if sizenum == 1
-%     magspecs(yrmageqcsv,eqevents);
-% end
+if sizenum == 1
+    magspecs(yrmageqcsv,eqevents);
+end
 
 %% Magnitude Distribution: Median Magnitudes
  
@@ -60,7 +59,7 @@ catmagcomp(yrmageqcsv);
 % Magnitude Distribution: 5 Year Completeness
 
 % if sizenum == 1
-%    catmagyrcomp(catalog,yrmageqcsv,s);
+%    catmagyrcomp(yrmageqcsv,s);
 % end
 
 %% Magnitude Distribution: Completeness Through Time

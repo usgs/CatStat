@@ -7,10 +7,12 @@ function hreventfreq(eqevents,catalog)
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types 
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['Distribution of earthquake events throughout the hours of the day. All other event types ignored.']);
-
+%
 % find hour of the day in particular time zone
+%
 hour = mod(eqevents(:,1)*24+catalog.timeoffset,24);
 %
 % Figure
@@ -27,4 +29,8 @@ title('Events per Hour of the Day','fontsize',18)
 set(gca,'fontsize',15)
 axis tight;
 hold off
+%
+% End of function
+%
+end
 

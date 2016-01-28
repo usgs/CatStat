@@ -1,22 +1,32 @@
 function plotcatdeps(eqevents)
 % This function plots the distribution of event depth 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+% Input:  eqevents - Only earthquake events from the original catalog
+%         
 % Output: None
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 disp('Depth distribution of EARTHQUAKE EVENTS ONLY. All other event types ignored.');
+%
+% Replace any erroneous depths with NaN
+%
 eqevents(eqevents(:,4)==-999,4) = NaN;
+%
+% Get minimum and maximum depths
+%
 maxdep = max(eqevents(:,4));
 mindep = min(eqevents(:,4));
 %
+% Determine the number of events with NaN as depths
+%
 nandepcount = sum(isnan(eqevents(:,4)));
+%
+% Print results
 %
 disp(['Minimum Depth: ',int2str(mindep)])
 disp(['Maximum Depth: ',int2str(maxdep)])
 disp(['Number of Events without a Depth: ',int2str(nandepcount)])
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Histogram of Depths
 %
@@ -36,3 +46,4 @@ drawnow
 %
 %End of Function
 %
+end

@@ -1,4 +1,4 @@
-function magspecs(yrmageqcsv,eqevents)
+function magspecs(yrmageqcsv)
 % This function plots and compares the number of events of a specific magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -9,46 +9,51 @@ function magspecs(yrmageqcsv,eqevents)
 % Output: None
 
 % Find events below increasing magnitude threshold and plot event count
-
-disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.');
-
-maxmag = ceil(max(yrmageqcsv(:,5)));
+%
+%
+%
 count = 1;
 M = length(yrmageqcsv(:,1));
+disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.');
+%
+% Get catalog statistics
+%
 begyear = yrmageqcsv(1,1);
 endyear = yrmageqcsv(M,1);
-
-% time = datestr(eqevents(:,1),'yyyy');
-% time = str2num(time);
-% yrmageqcsv = horzcat(time,eqevents(:,2:5)); % Converts time column to only years
-% yrmageqcsv(yrmageqcsv(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN
-% yrmageqcsv(isnan(yrmageqcsv(:,5)),:) = [];
-
+maxmag = ceil(max(yrmageqcsv(:,5)));
+%
+% Initialize Figure
+%
+figure
+hold on
+%
+% Go through bin
+%
+xtick = begyear:1:endyear;
 for mm = 1:maxmag
-    
-    runyrmageqcsv = yrmageqcsv;
-    index = find(runyrmageqcsv(:,5) >= mm);
-    
+    index = find(yrmageqcsv(:,5) > (mm-1) & yrmageqcsv(:,5) <= mm);
     if size(index,1) > 0
-    
-        plotmag = runyrmageqcsv(index(:,1),:);
-    
-        %subplot(maxmag,1,count)
-        figure
+        %
+        % Subplot
+        %
+        subplot(maxmag,1,count)
         hold on
-        [nn,xx] = hist(plotmag(:,1),[begyear:1:endyear]);
-        bar(xx,nn,'histc')
-        ylabel(mm)
-        set(gca,'linewidth',1.5)
+        plotmag = yrmageqcsv(index(:,1),:);
+        [nn,xx] = hist(plotmag(:,1),xtick);
+        bar(xx,nn)
+        %
+        % Format Options
+        %
+        ylabel([num2str(mm-1),'-',num2str(mm)])
+close        set(gca,'linewidth',1.5)
         set(gca,'fontsize',12)
-        hh = colorbar;
-        set(hh,'visible','off');
-    
+        set(gca,'XTick',xtick)
         hold off
         count = count +1;
-        
-    else
-        count = count;
     end
-    
+end
+hold off
+%
+% End of function
+%
 end

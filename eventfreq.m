@@ -1,16 +1,16 @@
 function eventfreq(eqevents,sizenum)
 % This function plots and compares event frequency over the entire catalog. 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+% Input: 
+%       eqevents - Earthquake events from catalog
+%       sizenum - plotting option determined in catalogsize
+%
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 disp(['Frequency of EARTHQUAKE EVENTS ONLY. All other event types ignored.']);
 %
-% Figure
+% Initialize Figure
 %
 figure
 hold on

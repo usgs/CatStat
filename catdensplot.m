@@ -1,6 +1,7 @@
 function catdensplot(catalog)
 % This function creates a seismicity density map for the catalog
-% Input: a structure containing normalized catalog data
+%
+% Input: a structure containing catalog data
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
@@ -8,7 +9,8 @@ function catdensplot(catalog)
 %         cat.evtype character cell array of event types 
 %         ** Hoping to add polygon for catalog as well
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Boundaries
 %
@@ -29,18 +31,18 @@ figure('Color','w')
 hold on
 n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
 if ii == 2;
-n1 = log(n);
-mask = ~logical(filter2(ones(3),n1));
-n1(mask) = NaN;
-n1(n1==-Inf) = NaN;
-xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n1,1));
-yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n1,1));
-pcolor(xb,yb,n1);
+    n1 = log(n);
+    mask = ~logical(filter2(ones(3),n1));
+    n1(mask) = NaN;
+    n1(n1==-Inf) = NaN;
+    xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n1,1));
+    yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n1,1));
+    pcolor(xb,yb,n1);
 else
-n(n == 0) = NaN; % Converts all 0's to Nan
-xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
-yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n,1));
-pcolor(xb,yb,n);
+    n(n == 0) = NaN;
+    xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
+    yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n,1));
+    pcolor(xb,yb,n);
 end
 %
 % Format Options
@@ -61,4 +63,7 @@ box on
 hold off
 drawnow
 end
+%
+% End of Function
+%
 end
