@@ -1,18 +1,19 @@
 function plotyrmedmag(eqevents,sizenum)
 % This function plots and compares the trend of yearly median magnitude. 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+% Input:
+%   eqevents - Earthquake events from catalog
+%   sizenum - plot formatting option from catalogsize
+%
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 disp(['Median magnitude distribution of earthquake events only. All other event types ignored.']);
-
-eqevents(eqevents(:,5)==-9.9,5) = NaN; %Converts all -9.9 preferred mags to NaN - so that it will match yrmagcsv
-eqevents(isnan(eqevents(:,5)),:) = []; %Removes all rows with NaN for preferred mag
-
+%
+%Converts all -9.9 preferred mags to NaN and removes them
+%
+eqevents(eqevents(:,5)==-9.9,5) = NaN; %
+eqevents(isnan(eqevents(:,5)),:) = [];
 %
 % Plot results
 %
@@ -38,6 +39,9 @@ if sizenum == 1
     figure
     hold on
     bar(med(:,1),med(:,2),'hist')
+    %
+    % Plot formatting
+    %
     set(gca,'fontsize',15)
     title('Yearly Median Magnitude');
     ylabel('Magnitude');
@@ -119,4 +123,3 @@ end
 % End of Function
 %
 end
-

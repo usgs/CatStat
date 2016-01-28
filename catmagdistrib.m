@@ -1,14 +1,15 @@
 function [yrmageqcsv] = catmagdistrib(eqevents,sizenum)
 % This function plots and compares the distribution of magnitude. 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-% Output: None
 %
+% Input: eqevents - Earthquake events from the original catalog
+%        sizenum - plot formatting option determined by catalogsize
 %
+% Output: yrmageqcsv - matrix contained year and magnitude information
+% about the earthquake events in the catalog
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Display
 %
 disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.')
 %
@@ -66,5 +67,4 @@ drawnow
 %
 % End of Function
 %
-
-
+end

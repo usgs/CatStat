@@ -6,13 +6,24 @@ function inteventspace(catalog,sizenum)
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types 
+%    
+%        Sizenum - plotting format determined by catalogsize
+%
 % Output: None
-
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Get catalog length
+%
 M = length(catalog.data);
-
+%
+% Determine the amount of time between events in the catalog
+%
 timesep = diff(catalog.data,1);
 datetimesep = horzcat(catalog.data(1:(M-1),1),timesep(:,1));
-
+%
+% Sort the inter-event spacing and get the median and max separation times
+%
 sorttime = sortrows(timesep,1);
 mediansep = median(sorttime(:,1));
 maxsep = sorttime(M-1,1);
