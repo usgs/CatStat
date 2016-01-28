@@ -66,7 +66,7 @@ histogram(matching.data(:,5))
 %Figure formatting
 %
 ylabel('Counts','FontSize',15)
-xlabel('Magnitude','FontSize',15)
+xlabel(['Magnitudes from ',cat1.name],'FontSize',15)
 title('Magnitudes for Matching Events','FontSize',15)
 axis tight
 box on
@@ -83,7 +83,7 @@ histogram(matching.data(:,4))
 % Figure formatting
 %
 ylabel('Counts','FontSize',15)
-xlabel('Depth (km)','FontSize',15)
+xlabel(['Depth (km) from ',cat1.name],'FontSize',15)
 title('Depths for Matching Events','FontSize',15)
 axis tight
 box on

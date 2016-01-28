@@ -79,7 +79,7 @@ if ~isempty(missing.events1)
     % Figure Formatting
     %
     ylabel('Count','FontSize',14)
-    xlabel('Magnitude','FontSize',14)
+    xlabel(['Magnitude from ',cat1.name],'FontSize',14)
     title(['Events in ',cat1.name,' that are NOT in ',cat2.name],'FontSize',12)
     axis tight
     box on
@@ -95,7 +95,7 @@ if ~isempty(missing.events1)
     %
     % Figure Formatting
     %
-    xlabel('Depth (km)','FontSize',14)
+    xlabel(['Depth (km) from ',cat1.name],'FontSize',14)
     ylabel('Count','FontSize',14)
     title(['Events in ',cat1.name,' that are NOT in ',cat2.name],'FontSize',12)
     axis tight
@@ -161,7 +161,7 @@ if ~isempty(missing.events2)
     %
     % Figure Formatting
     %
-    xlabel('Magnitude','FontSize',14)
+    xlabel(['Magnitude from ',cat2.name],'FontSize',14)
     ylabel('Count','FontSize',14)
     title(['Events in ',cat2.name,' that are NOT in ',cat1.name],'FontSize',12)
     axis tight
@@ -178,7 +178,7 @@ if ~isempty(missing.events2)
     %
     % Figure Formatting
     %
-    xlabel('Depth (km)','FontSize',14)
+    xlabel(['Depth (km) from ',cat1.name],'FontSize',14)
     ylabel('Count','FontSize',14)
     title(['Events in ',cat2.name,' that are NOT in ',cat1.name],'FontSize',12)
     axis tight
