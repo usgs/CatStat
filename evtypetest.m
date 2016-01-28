@@ -6,6 +6,7 @@ function evtypetest(catalog,sizenum)
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types 
+% TEST
 % Output: None
 
 types = unique(catalog.evtype);
