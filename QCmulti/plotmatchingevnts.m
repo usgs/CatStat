@@ -84,15 +84,22 @@ figure
 hold on
 h1 = scatter(matching.data2(:,5),matching.data(:,5));
 h2 = plot(matching.data2(:,5),P,'r-');
+h3 = plot([0 9],[0 9],'k-');
+%
+% Bounds
+%
+Mins = min([min(matching.data2(:,5)),min(matching.data(:,5))]);
+Maxs = max([max(matching.data2(:,5)),max(matching.data(:,5))]);
 %
 %Figure formatting
 %
 ylabel([cat1.name,' Magnitude'],'FontSize',15)
 xlabel([cat2.name,' Magnitude'],'FontSize',15)
 title('Magnitude Comparison','FontSize',15)
-legend(h2,['R^2 = ',num2str(R)],'Location','NorthWest')
-axis([min(matching.data2(:,5)) max(matching.data2(:,5)) min(matching.data(:,5)) max(matching.data(:,5))])
-axis equal
+legend([h2,h3],['R^2 = ',num2str(R)],['B = 1'],'Location','NorthWest')
+axis square
+set(gca,'DataAspectRatio',[1,1,1])
+axis([Mins Maxs Mins Maxs])
 box on
 hold off
 drawnow
@@ -125,15 +132,23 @@ figure
 hold on
 h1 = scatter(matching.data2(:,4),matching.data(:,4));
 h2 = plot(matching.data2(:,4),P,'r-');
+B = polyval([1 0],matching.data2(:,4));
+h3 = plot(matching.data2(:,4),B,'k-');
+%
+% Bounds
+%
+Mins = min([min(matching.data2(:,4)),min(matching.data(:,4))]);
+Maxs = max([max(matching.data2(:,4)),max(matching.data(:,4))]);
 %
 %Figure formatting
 %
 ylabel([cat1.name,' Depth'],'FontSize',15)
 xlabel([cat2.name,' Depth'],'FontSize',15)
 title('Depth Comparison','FontSize',15)
-legend(h2,['R^2 = ',num2str(R)],'Location','NorthWest')
-axis([min(matching.data2(:,4)) max(matching.data2(:,4)) min(matching.data(:,4)) max(matching.data(:,4))])
-axis equal
+legend([h2,h3],['R^2 = ',num2str(R)],['B = 1'],'Location','NorthWest')
+axis([Mins Maxs Mins Maxs])
+axis square
+set(gca,'DataAspectRatio',[1,1,1])
 box on
 hold off
 drawnow

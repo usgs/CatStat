@@ -39,6 +39,10 @@ minlat = min(catalog.data(:,2));
 midlat = (maxlat + minlat)/2;
 maxlon = max(catalog.data(:,3));
 minlon = min(catalog.data(:,3));
+if minlon < -170 & maxlon > 170
+    maxlon = -1*min(abs(catalog.data(:,3)));
+    minlon = -180;
+end
 %
 % Format Options
 %

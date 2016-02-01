@@ -18,6 +18,16 @@ plottrimcats(cat1,cat2, reg);
 %Parsing matching and missing events
 [missing, dist, dep, mags, both, matching] = ...
    compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+%% *Time Series Summary of Catalog Events*
+% This plot shows the data availabilty of the catalogs through time.
+% Those time series with the label corresponding to the catalog name show
+% the data available in that catalog.  Between those time series and the
+% matching events are events in the respective catalog missing from the
+% other catalog.  For example, if an X appears along the time line under
+% the time series for the first catalog, that event is IN the first catalog
+% but missing from the second catalog.  The middle time series shows the
+% matching events.
+plottimeseries(cat1, cat2, matching, missing)
 %% *Matching events*
 % The following <./MatchingEvents.html events> were determined to be 'matching' based on the thresholds
 % defined in initMkQCmulti.dat.

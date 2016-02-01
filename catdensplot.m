@@ -23,6 +23,10 @@ else
 end
 maxlon = max(catalog.data(:,3));
 minlon = min(catalog.data(:,3));
+if minlon < 0 & maxlon > 0
+    maxlon = -1*min(abs(catalog.data(:,3)));
+    minlon = -180;
+end
 %
 % Density Plot and Log Density Plot
 %
