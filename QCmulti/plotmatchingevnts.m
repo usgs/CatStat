@@ -43,7 +43,7 @@ maxlat = max(poly(:,2))+1.0;
 % Plot formatting
 %
 axis([minlon maxlon minlat maxlat])
-midlat = (maxlat-minlat)/2;
+midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 xlabel('Longitude','FontSize',14)
 ylabel('Latitude','FontSize',15)
@@ -171,7 +171,7 @@ box on
 hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
+%%
 % Location (Distance Residuals)
 %
 figure
@@ -188,12 +188,12 @@ box on
 hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
+%%
 % Magnitude Residuals
 %
 figure
 hold on
-histogram(matching.data(:,8))
+histogram(matching.data(:,8),[-1:0.1:1]);
 %
 % Figure formatting
 %
@@ -205,8 +205,8 @@ box on
 hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Depth Distribution
+%%
+% Depth Residuals
 %
 figure
 hold on
