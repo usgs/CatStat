@@ -44,6 +44,7 @@ if sizenum == 1
     %
     set(gca,'fontsize',15)
     title('Yearly Median Magnitude');
+    delete(findobj('marker','*'))
     ylabel('Magnitude');
     xlabel('Year');
     axis tight

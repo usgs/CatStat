@@ -47,7 +47,7 @@ maxlat = max(poly(:,2))+1.0;
 %
 legend([h1,h2,h3],['N=',num2str(size(both.events1,1))],cat1.name,cat2.name)
 axis([minlon maxlon minlat maxlat])
-midlat = (maxlat-minlat)/2;
+midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 xlabel('Longitude','FontSize',14)
 ylabel('Latitude','FontSize',15)
