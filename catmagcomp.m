@@ -1,8 +1,9 @@
-function catmagcomp(yrmageqcsv)
+function catmagcomp(yrmageqcsv,name)
 % This function plots and compares the magnitude completeness. 
 % Input:
 %   yrmageqcsv - Magnitudes of earthquakes with year only in the time
 %   column
+%   name - catalog name
 %
 % Output: None
 %
@@ -24,7 +25,7 @@ disp([' ']);
 minmag = floor(min(yrmageqcsv(:,5)));
 maxmag = ceil(max(yrmageqcsv(:,5)));
 mags = minmag:0.1:maxmag;
-cdf = zeros(length(mags));
+cdf = zeros(length(mags),1);
 %
 % Calculate cumulative magnitude distribution
 %
@@ -55,10 +56,10 @@ hh2 = semilogy(xx,idf,'ro','linewidth',1.5);
 % Figure Options
 %
 axis([minmag maxmag 10^0 10^6])
-legend('Cumulative','Incremental')
+legend([hh1,hh2],['Cumulative'],['Incremental'])
 xlabel('Magnitude','fontsize',18)
 ylabel('Number of Events','fontsize',18)
-title('Magnitude Distributions','fontsize',18)
+title(sprintf(['Magnitude Distributions for \n',name]),'fontsize',15)
 set(gca,'linewidth',1.5)
 set(gca,'fontsize',15)
 set(gca,'box','on')

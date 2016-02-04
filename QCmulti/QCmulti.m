@@ -5,8 +5,15 @@ close all
 %% _Catalog 1_
 basiccatsum(cat1);
 %
+% Magnitude Completeness
+%
+catmagcomp(cat1.data,cat1.name)
 %% _Catalog 2_
 basiccatsum(cat2);
+%
+% Magnitude Completeness
+%
+catmagcomp(cat2.data,cat2.name)
 %% *Comparison Criteria*
 %Trim the catalog according to the input file
 %
@@ -14,6 +21,7 @@ basiccatsum(cat2);
 %% *Map of Events*
 % Map of all events in the overlapping time period that match the comparison criteria
 plottrimcats(cat1,cat2, reg);
+catmagmulti(cat1,cat2);
 %% *Summary of Matching Events*
 %Parsing matching and missing events
 [missing, dist, dep, mags, both, matching] = ...

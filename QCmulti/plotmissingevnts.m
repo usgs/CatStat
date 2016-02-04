@@ -135,7 +135,7 @@ if ~isempty(missing.events2)
     %
     legend([h1,h2],['N=',num2str(size(missing.events2,1))],cat2.name)
     axis([minlon maxlon minlat maxlat])
-    midlat = (maxlat-minlat)/2;
+    midlat = (maxlat+minlat)/2;
     set(gca,'DataAspectRatio',[1,cosd(midlat),1])
     xlabel('Longitude','FontSize',14)
     ylabel('Latitude','FontSize',15)
