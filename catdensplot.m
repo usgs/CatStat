@@ -23,7 +23,7 @@ else
 end
 maxlon = max(catalog.data(:,3));
 minlon = min(catalog.data(:,3));
-if minlon < 0 & maxlon > 0
+if minlon < -170 & maxlon > 170 & maxlat < 79 & minlat > -60
     maxlon = -1*min(abs(catalog.data(:,3)));
     minlon = -180;
 end

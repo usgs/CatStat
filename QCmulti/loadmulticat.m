@@ -18,7 +18,7 @@ function [cat1, cat2] = loadmulticat(cat1, cat2)
 %
 fid1 = fopen(cat1.file, 'rt');
 if(cat1.format == 1); % ComCat format
-  Tref = textscan(fid1,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
+  Tref = textscan(fid1,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
   time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS.FFF');
   [cat1.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
   cat1.id = Tref{12}(ii);
@@ -44,7 +44,7 @@ fclose(fid1);
 %
 fid2 = fopen(cat2.file, 'rt');
 if(cat2.format == 1); % ComCat format
-  Tref = textscan(fid2,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
+  Tref = textscan(fid2,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
   time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS.FFF');
   [cat2.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
   cat2.id = Tref{12}(ii);

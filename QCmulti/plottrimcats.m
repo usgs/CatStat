@@ -43,12 +43,14 @@ minlon = min(poly(:,1))-0.5;
 maxlon = max(poly(:,1))+0.5;
 minlat = min(poly(:,2))-0.5;
 maxlat = max(poly(:,2))+1.0;
+%if strcmpi(reg,'all')
+%    minlon = -
 %
 % Plot formatting
 %
 legend([h1 h2],[cat1.name,'--',num2str(size(cat1.data,1))],[cat2.name,'--',num2str(size(cat2.data,1))])
 axis([minlon maxlon minlat maxlat])
-midlat = (maxlat-minlat)/2;
+midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 xlabel('Longitude','FontSize',14)
 ylabel('Latitude','FontSize',15)
