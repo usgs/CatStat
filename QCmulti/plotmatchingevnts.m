@@ -193,7 +193,7 @@ drawnow
 %
 figure
 hold on
-histogram(matching.data(:,8))
+histogram(matching.data(:,8),[-1:0.1:1]);
 %
 % Figure formatting
 %
