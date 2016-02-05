@@ -43,7 +43,7 @@ end
 % Write .csv file if there are duplicates
 %
 if D~=0
-    OriginTime = catalog.data(ind,1);
+    OriginTime = datestr(catalog.data(ind,1),'yyyy-mm-dd HH:MM:SS.FFF');
     EventID = catalog.id(ind,1);
     Lat = catalog.data(ind,2);
     Lon = catalog.data(ind,3);
