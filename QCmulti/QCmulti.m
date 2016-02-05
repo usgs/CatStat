@@ -40,6 +40,7 @@ plottimeseries(cat1, cat2, matching, missing)
 % The following <./MatchingEvents.html events> were determined to be 'matching' based on the thresholds
 % defined in initMkQCmulti.dat.
 if ~isempty(matching.data)
+    plotmatchingres(matching, cat1.name, cat2.name);
     plotmatchingevnts(cat1, cat2, matching,reg);
 else
     disp('No matching events.')
