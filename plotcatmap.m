@@ -56,6 +56,7 @@ xlabel('Longitude')
 axis([minlon maxlon minlat maxlat]);
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 set(gca,'fontsize',15)
+box on
 hold off
 drawnow
 %

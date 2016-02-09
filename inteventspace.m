@@ -30,8 +30,8 @@ maxsep = sorttime(M-1,1);
 %
 % Print out
 %
-disp(['The Median Time Between Events: ',num2str(mediansep)])
-disp(['The Maximum Time Between Events: ',num2str(maxsep)])
+disp(['The Median Time Between Events: ',num2str(mediansep),' s.'])
+disp(['The Maximum Time Between Events: ',num2str(maxsep),' s.'])
 %
 % Initialize Figure
 %
@@ -91,7 +91,7 @@ if sizenum == 1
     title('Maximum Event Separation by Year','fontsize',18)
     ylabel('Length of Time Separation (Days)','fontsize',18)
     xlabel('Year','fontsize',18);
-    set(gca,'XTick',min(years):2:max(years))
+    %set(gca,'XTick',min(years):2:max(years))
     axis tight;
     hold off
     %
@@ -106,7 +106,7 @@ if sizenum == 1
     set(gca,'fontsize',15)
     title('Median Event Separation by Year','fontsize',18)
     xlabel('Year','fontsize',18);
-    set(gca,'XTick',min(years):2:max(years))
+    %set(gca,'XTick',min(years):2:max(years))
     axis tight;
     hold off
 elseif sizenum == 3
@@ -128,7 +128,7 @@ elseif sizenum == 3
     %
     subplot(3,1,2)
     hold on
-    bar(dailydatenum,maxsepday,'hist')
+    bar(dailydatenum(1:end-1,1),maxsepday,'hist')
     %
     % Subplot 2 Format Options
     %
@@ -144,7 +144,7 @@ elseif sizenum == 3
     %
     subplot(3,1,3)
     hold on
-    bar(dailydatenum,medsepday,'hist')
+    bar(dailydatenum(1:end-1,1),medsepday,'hist')
     %
     % Subplot 3 Format Options
     %

@@ -42,11 +42,13 @@ if ii == 2;
     xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n1,1));
     yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n1,1));
     pcolor(xb,yb,n1);
+    title('Log_{10} Density Plot')
 else
     n(n == 0) = NaN;
     xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
     yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n,1));
     pcolor(xb,yb,n);
+    title('Density Plot')
 end
 %
 % Format Options
@@ -58,7 +60,6 @@ colorbar
 set(gca,'fontsize',15)
 xlabel('Longitude');
 ylabel('Latitude');
-title('Density Plot');
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 set(gca,'fontsize',15)
 plotworld

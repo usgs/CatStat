@@ -54,6 +54,7 @@ title('Event Types Through Time & Event Count','fontsize',18)
 subplot(2,1,2)
 hist(fullref(:,6),1:1:length(types))
 set(gca,'fontsize',15)
+%set(gca,'XTickLabel',[{types{1,:}};{types{2,:}};{types{3,:}};{types{4,:}}])
 xlabel('Event Type by Number','fontsize',18)
 ylabel('Number of Events','fontsize',18)
     
