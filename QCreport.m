@@ -16,6 +16,8 @@ basiccatsum(catalog);
 %
 %% Seismicity Density Plot
 %
+% All event types are considered in these density plots.
+%
 catdensplot(catalog);
 
 %% Depth Distribution

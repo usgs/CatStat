@@ -24,7 +24,7 @@ maxmag = ceil(max(yrmageqcsv(:,5)));
 %
 % Initialize Figure
 %
-figure
+figure('Position',[500 500 650 700])
 hold on
 %
 % Go through bin
@@ -47,11 +47,13 @@ for mm = 1:maxmag
         ylabel([num2str(mm-1),'-',num2str(mm)])
         set(gca,'linewidth',1.5)
         set(gca,'fontsize',12)
-        set(gca,'XTick',xtick)
+        axis tight
+        box on
         hold off
         count = count +1;
     end
 end
+box on
 hold off
 %
 % End of function

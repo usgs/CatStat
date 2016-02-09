@@ -7,11 +7,18 @@ function catmaghist(eqevents)
 %
 disp(['Magnitude distribution of earthquake events only. All other event types ignored.']);
 %
+% Get bins
+%
+Mn = min(eqevents(:,5))-0.05;
+Mx = max(eqevents(:,5))+0.05;
+step = 0.1;
+bins = Mn:step:Mx;
+%
 % Figure
 %
 figure
 hold on
-histogram(eqevents(:,5),min(eqevents(:,5)):0.1:max(eqevents(:,5)))
+histogram(eqevents(:,5),bins)
 %
 % Format Options
 %
