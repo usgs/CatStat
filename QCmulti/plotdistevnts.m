@@ -22,13 +22,9 @@ FormatSpec1 = '%-10s %-20s %-8s %-9s %-7s %-3s %-7s \n';
 figure
 hold on
 %
-% Plot world map and region
+% Plot world map
 %
 plotworld
-load('regions.mat');
-ind = find(strcmp(region,reg));
-poly = coord{ind,1};
-plot(poly(:,1),poly(:,2),'Color',[1 1 1]*0.25,'LineWidth',2);
 %
 % Plot the corresponding events on the map with a dashed line connecting
 % the end points.
@@ -39,8 +35,23 @@ for ii = 1 : size(dist.events1,1)
     h3 = plot(dist.events2(ii,3),dist.events2(ii,2),'b.','MarkerSize',12);
 end
 %
+% Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
+load('regions.mat')
+if strcmpi(reg,'all')
+    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
+    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
+    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
+    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+else
+    ind = find(strcmp(region,reg));
+    poly = coord{ind,1};
+    %
+    % Plot region
+    %
+    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+end
 minlon = min(poly(:,1))-0.5;
 maxlon = max(poly(:,1))+0.5;
 minlat = min(poly(:,2))-0.5;

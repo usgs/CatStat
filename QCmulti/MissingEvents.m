@@ -4,6 +4,7 @@
 % followed by the events in catalog 2 missing from catalog 1.
 FormatSpec1 = '%-10s %-20s %-8s %-9s %-7s %-3s %-7s \n';
 FormatSpec2 = '%-10s %-20s %-8s %-9s %-7s %-3s \n';
+FormatSpec3 = '%-10s %-20s %-8s %-9s %-7s %-3s %-s \n';
 %% Catalog 1
 % Summary of Missing Events
 if ~isempty(missing.events1)
@@ -13,10 +14,16 @@ if ~isempty(missing.events1)
 	disp(['from the ',num2str(size(cat2.data,1)),' events in ',cat2.name]);
 	disp('---------------------------------------------------')
 	disp(' ')
+    P1 = {'http://earthquake.usgs.gov/earthquakes/eventpage/'};
+    P2 = {'#general_region'};
 % List of Missing Events
-	fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lat.','Lon.','Dep(km)', 'Mag')
+	fprintf(FormatSpec3,'Event ID', 'Origin Time', 'Lat.','Lon.','Dep(km)', 'Mag','Link')
 	for ii = 1 : size(missing.events1,1)
-		fprintf(FormatSpec2, missing.ids1{ii,1}, datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)))
+		fprintf(FormatSpec3, missing.ids1{ii,1}, ...
+            datestr(missing.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),...
+            num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),...
+            num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)),...
+            strcat(P1{1},missing.ids1{ii,:},P2{1}));
 	end
 else
 	disp(' ')
@@ -33,9 +40,13 @@ if ~isempty(missing.events2)
 	disp('---------------------------------------------------')
 	disp(' ')
 % List of Missing Events
-	fprintf(FormatSpec2,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag')
+	fprintf(FormatSpec3,'Event ID', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag','Link')
 	for ii = 1 : size(missing.events2,1)
-		fprintf(FormatSpec2, missing.ids2{ii,1}, datestr(missing.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)))
+		fprintf(FormatSpec3, missing.ids2{ii,1}, ...
+            datestr(missing.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),...
+            num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),...
+            num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)),...
+            strcat(P1{1},missing.ids2{ii,:},P2{1}))
 	end
 else
 	disp(' ')

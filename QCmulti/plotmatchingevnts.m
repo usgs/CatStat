@@ -18,13 +18,9 @@ function plotmatchingevnts(cat1, cat2, matching, reg)
 figure
 hold on
 %
-% Plot world map and region
+% Plot world map
 %
 plotworld
-load('regions.mat');
-ind = find(strcmp(region,reg));
-poly = coord{ind,1};
-plot(poly(:,1),poly(:,2),'k--','LineWidth',2);
 %
 % Plot matching events from catalog 1 and 2
 % Ghost plot for information in legend
@@ -33,8 +29,23 @@ h1 = plot(matching.data(:,3),matching.data(:,2),'Color',[1 1 1]);
 h2 = plot(matching.data(:,3),matching.data(:,2),'r.');
 h3 = plot(matching.data2(:,3),matching.data2(:,2),'b.');
 %
+% Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
+load('regions.mat')
+if strcmpi(reg,'all')
+    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
+    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
+    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
+    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+else
+    ind = find(strcmp(region,reg));
+    poly = coord{ind,1};
+    %
+    % Plot region
+    %
+    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+end
 minlon = min(poly(:,1))-0.5;
 maxlon = max(poly(:,1))+0.5;
 minlat = min(poly(:,2))-0.5;
@@ -47,6 +58,7 @@ midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 xlabel('Longitude','FontSize',14)
 ylabel('Latitude','FontSize',15)
+title('MatchingEvents')
 set(gca,'FontSize',15)
 legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
 box on
@@ -58,12 +70,16 @@ plotmatchingrose(matching,cat1.name,cat2.name)
 %
 % Histograms
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Mn = min(matching.data(:,5))-0.05;
+Mx = max(matching.data(:,5))+0.05;
+step = 0.1;
+bins = Mn:step:Mx;
 %
 % Magnitude Distribution
 %
 figure
 hold on
-histogram(matching.data(:,5))
+histogram(matching.data(:,5),bins)
 %
 %Figure formatting
 %
@@ -159,9 +175,13 @@ drawnow
 %
 % Time Residuals [86400 seconds in 1 day]
 %
+min_delT = min(matching.data(:,9))-0.5;
+max_delT = max(matching.data(:,9))+0.5;
+step = 0.1;
+bins = min_delT:step:max_delT;
 figure
 hold on
-histogram(matching.data(:,9)*86400)
+histogram(matching.data(:,9)*86400,bins)
 %
 % Figure formatting
 %
@@ -176,9 +196,13 @@ drawnow
 %%
 % Location (Distance Residuals)
 %
+min_delD = min(matching.data(:,6))-0.5;
+max_delD = max(matching.data(:,6))+0.5;
+step = 0.1;
+bins = min_delD:step:max_delD;
 figure
 hold on
-histogram(matching.data(:,6))
+histogram(matching.data(:,6),bins)
 %
 % Figure formatting
 %
@@ -210,9 +234,13 @@ drawnow
 %%
 % Depth Residuals
 %
+min_delDp = min(matching.data(:,7))-0.5;
+max_delDp = max(matching.data(:,7))+0.5;
+step = 0.1;
+bins = min_delDp:step:max_delDp;
 figure
 hold on
-histogram(matching.data(:,7))
+histogram(matching.data(:,7),bins)
 %
 % Figure formatting
 %

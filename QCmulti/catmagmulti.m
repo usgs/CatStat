@@ -70,11 +70,11 @@ estcomp2 = mags2(jj) + 0.3;
 % Plot Results
 %
 figure
-hh1 = semilogy(mags1,cdf1,'r+','linewidth',1.5);
+hh1 = semilogy(mags1,cdf1,'r+','MarkerSize',12,'LineWidth',1.5);
 hold on
-hh2 = semilogy(xx1,idf1,'ro','linewidth',1.5);
-hh3 = semilogy(mags2,cdf2,'b+','linewidth',1.5);
-hh4 = semilogy(xx2,idf2,'bo','linewidth',1.5);
+hh2 = semilogy(xx1,idf1,'ro','MarkerSize',12,'LineWidth',1.5);
+hh3 = semilogy(mags2,cdf2,'b+','MarkerSize',8,'LineWidth',1.5);
+hh4 = semilogy(xx2,idf2,'bo','MarkerSize',5,'LineWidth',1.5);
 %
 % Figure Options
 %

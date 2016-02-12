@@ -10,11 +10,6 @@ function plottrimcats(cat1, cat2, reg)
 % Outputs - None 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Restrict to Region of interest
-%
-load('regions.mat')
-ind = find(strcmp(region,reg));
-poly = coord{ind,1};
 %
 % Initiate Figure
 %
@@ -33,18 +28,27 @@ h1 = plot(cat1.data(:,3),cat1.data(:,2),'r.');
 %
 h2 = plot(cat2.data(:,3),cat2.data(:,2),'b.');
 %
-% Plot region
-%
-plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
-%
+% Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
+load('regions.mat')
+if strcmpi(reg,'all')
+    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
+    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
+    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
+    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+else
+    ind = find(strcmp(region,reg));
+    poly = coord{ind,1};
+    %
+    % Plot region
+    %
+    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+end
 minlon = min(poly(:,1))-0.5;
 maxlon = max(poly(:,1))+0.5;
 minlat = min(poly(:,2))-0.5;
 maxlat = max(poly(:,2))+1.0;
-%if strcmpi(reg,'all')
-%    minlon = -
 %
 % Plot formatting
 %
