@@ -22,10 +22,16 @@ Tmx = max(matching.data(:,9))*86400;
 Tmax = max([abs(Tmin),Tmx]);
 % Location Residuals
 DistMax = max(matching.data(:,6));
+if DistMax == 0
+    DistMax = 1;
+end
 % Depth Residuals
 Depmin = min(matching.data(:,7));
 Depmx = max(matching.data(:,7));
 Depmax = max([abs(Depmin),Depmx]);
+if Depmax == 0;
+    Depmax = 1;
+end
 % Magnitude Residuals
 Magmin = min(matching.data(:,8));
 Magmx = max(matching.data(:,8));
@@ -44,7 +50,11 @@ plot(matching.data(:,1), matching.data(:,9)*86400,'k.')
 %
 datetick('x','yyyy-mm-dd')
 title(sprintf([cat1name,' - ',cat2name,'\nOrigin Time Residuals']))
-axis([Dmin Dmax -1*Tmax Tmax])
+if Tmax == 0
+    axis([Dmin Dmax -1 1])
+else
+    axis([Dmin Dmax -1*Tmax Tmax])
+end
 set(gca,'FontSize',14)
 %
 % Subplot 2: Location Residuals
@@ -79,7 +89,12 @@ plot(matching.data(:,1), matching.data(:,8),'k.')
 % Formatting
 %
 datetick('x','yyyy-mm-dd')
-axis([Dmin Dmax -1*MagMax MagMax])
+if MagMax == 0
+    axis([Dmin Dmax -1 1])
+else
+    axis([Dmin Dmax -1*MagMax MagMax])
+end
+    
 title('Magnitude Residuals')
 set(gca,'FontSize',14)
 %

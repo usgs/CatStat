@@ -1,27 +1,27 @@
 % First catalog data file name
-/Users/mrperry/Desktop/ok_ks_ismp_catalogs/A/USHY/ushy_20150422-20151022_catalog_qa_hydra.txt
+/Users/mrperry/Documents/CATALOGS/LibComCat/ComCat_author_CI/ComCat_auth_CI.csv
 % Human readable catalog description
-NEIC
+ComCat 
 % Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-1
+2
 % Second catalog Data file name
-/Users/mrperry/Desktop/ok_ks_ismp_catalogs/A/ISMP/ismp_20150422-20151022_catalog_qa_hydra.txt
+/Users/mrperry/Documents/CATALOGS/CI/12FEb/CI.csv
 % Human readable catalog description
-ISMP
+CI Catalog
 % Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-1
+2
 % Time Window
-5
+2 
 % Distance Range
-15
+10
 % Region
-KS
+CI
 % Set Mag Limit
-0
+-10
 % Set Mag Difference Max
-999
+0.1
 % Set Depth difference tolerance
-999
+10 
 % Diretory to put report in
 Report
 % File format for report
@@ -29,4 +29,6 @@ html
 % show code in report (true/false)
 false
 % Display event list
+yes
+% Compared Authoritative IDs
 yes

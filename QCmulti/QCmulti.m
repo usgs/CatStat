@@ -21,15 +21,23 @@ catmagcomp(cat2.data,cat2.name)
 %% *Map of Events*
 % Map of all events in the overlapping time period that match the comparison criteria
 plottrimcats(cat1,cat2, reg);
+%%
 catmagmulti(cat1,cat2);
 %% *Summary of Matching Events*
 %Parsing matching and missing events
 [missing, dist, dep, mags, both, matching] = ...
    compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+%% _Authoritative Events Check_
+if strcmpi(AT,'yes')
+    %publish('AuthoritativeEvents',pubopts)
+    [auth,orphan] = author_check(matching);
+else
+    disp('Authoritative Event check not selected')
+end
 %% *Time Series Summary of Catalog Events*
 % This plot shows the data availabilty of the catalogs through time.
 % Those time series with the label corresponding to the catalog name show
-% the data available in that catalog.  Between those time series and the
+% the data available in that catalog.  Between those time ser94ies and the
 % matching events are events in the respective catalog missing from the
 % other catalog.  For example, if an X appears along the time line under
 % the time series for the first catalog, that event is IN the first catalog
@@ -102,6 +110,3 @@ if ~isempty(both.events1)
 else
     disp('No events')
 end
-%Event Type Differences
-
-

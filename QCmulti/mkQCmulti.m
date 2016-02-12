@@ -60,6 +60,8 @@ if exist(initfile,'file')
     % Will determine if missing events are printed.
     % 
     EL = char(initdat{1}{32});
+    % Compared authoritative events IDS?
+    AT = char(initdat{1}{34});
     fclose(fid);
 else
     % The files are not in the working directory, the
@@ -73,16 +75,17 @@ end
 % document
 %
 publish('QCmulti',pubopts)
-% 
+%%
 % 
 %
 % Create additional page to list missing events
 %
 if strcmpi(EL,'yes')
-	if ~isempty(matching.data)
+	if ~isempty(matching.data) && size(matching.data,1)<=1000
 		publish('MatchingEvents',pubopts)
-	end
-	if ~isempty(missing.events1) || ~isempty(missing.events2)
+    end
+    %%
+	if ~isempty(missing.events1) || ~isempty(missing.events2) || ~isempty(dist.events1)
 		publish('MissingEvents',pubopts)
     end
     if ~isempty(mags.events1) || ~isempty(dep.events1) || ~isempty(both.events1)

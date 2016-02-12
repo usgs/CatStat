@@ -33,13 +33,15 @@ function [missing, dist, dep, mags, both, matching] ...
 %
 % Begin function
 %
-% Use variables
+% Useful variables
 %
 sec_per_day = 86400;
 %
 % Convert Time window
 %
 tmax = tmax/sec_per_day;
+time_window =1*24*60*60; %1 day time window
+time_window = time_window/sec_per_day;
 %
 % Empty matrices
 %
@@ -67,104 +69,84 @@ P = 0; % Duplicate events
 %
 for ii = 1 : length(cat1.data)
     %
-    % Search for origin time matches (within tolerance)
+    % Find those events within 15 minutes
     %
-    tdif = abs(cat1.data(ii,1)-cat2.data(:,1));
-    tm_ind = find(tdif <= tmax);
-    timematch = cat2.data(tdif <= tmax,:);
+    cat2_ind = find(abs((cat1.data(ii,1)-cat2.data(:,1)))<=time_window);
     %
+    clear C;
+    C(:,1) = (cat1.data(ii,1)-cat2.data(cat2_ind,1))./tmax;
+    C(:,2) = distance_hvrsn(cat1.data(ii,2),cat1.data(ii,3),cat2.data(cat2_ind,2),cat2.data(cat2_ind,3))./delmax;
+    C(:,3) = (cat1.data(ii,4) - cat2.data(cat2_ind,4))./depdelmax;
+    C(:,4) = (cat1.data(ii,5) - cat2.data(cat2_ind,5))./magdelmax;
     %
-    % If no event is found with a similar origin time, the evnet is marked
-    % as missing from catalog 2
+    % Minimize L2 norm of each row
     %
-    if isempty(timematch)
-        m=m+1; % Update counter
-        missing.ids1{m,1} = char(cat1.id{ii,1});
+    [~,ind] = min(sqrt(sum(abs(C).^2,2)));
+    %
+    % Event of Interest row index in catalog 2
+    %
+    EOI = cat2_ind(ind);
+    %
+    % Check to make sure C(ind,1)
+    %
+    if isempty(C)
+        m=m+1;
         missing.events1(m,:) = cat1.data(ii,:);
-        %missing.type1 = [missing.type1;char(cat1.evtype(ii,:))];
-        %
-        % If time match isn't empty, calculate the distance between
-        % locations
-        %
+        missing.ids1{m,1} = char(cat1.id{ii,1});
+    elseif abs(C(ind,1)) > 1
+        m=m+1;
+        missing.events1(m,:) = cat1.data(ii,:);
+        missing.ids1{m,1} = char(cat1.id{ii,1});
+    %
+    % If time match, check distance
+    %
+    elseif abs(C(ind,1)) <= 1 && C(ind,2) > 1
+        d=d+1;
+        dist.events1(d,:) = [cat1.data(ii,:),C(ind,2)*delmax];
+        dist.events2(d,:) = cat2.data(EOI,:);
+        dist.ids1{d,1} = char(cat1.id{ii,:});
+        dist.ids1{d,2} = char(cat2.id{EOI,:});
     else
+    %
+    % If both time and distance are within tolerance, we have a match
+    %
+        M=M+1;
+        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,C(ind,4)*magdelmax,C(ind,1)*tmax*sec_per_day];
+        matching.data(M,:) = row;
+        matching.data2(M,:) = cat2.data(EOI,:);
+        matching.ids{M,1} = char(cat1.id{ii,1});
+        matching.ids{M,2} = char(cat2.id{EOI,1});
         %
-        % Get the index to the minimum distance timematch
+        % Now check matching events for differences in depth and
+        % magnitude
         %
-        [mindist, ind] = min(distance_hvrsn(cat1.data(ii,2), cat1.data(ii,3),timematch(:,2),timematch(:,3)));
-        %
-        % Find the ACTUAL index from the catalog and set timematch to the
-        % minimum
-        %
-        cat_ind = tm_ind(ind); %This should be 1 number!
-        timematch = timematch(ind,:); 
-        if length(cat_ind) > 1 || size(timematch,1) > 1% Remove after debug
-            pause
-        end
-        %
-        % Now check to see if minimum distance is within tolerance
-        %
-        if mindist > delmax
-            d=d+1;
-            dist.events1(d,:) = [cat1.data(ii,:),mindist];
-            dist.events2(d,:) = cat2.data(cat_ind,:);
-            dist.ids1{d,1} = char(cat1.id{ii,:});
-            dist.ids1{d,2} = char(cat2.id{cat_ind,:});
-            %dist.type1 = [dist.type1;char(cat1.evtype(ii,:))];
-        else
+        if abs(C(ind, 3)) > 1 & abs(C(ind,4)) <= 1
+            D=D+1;
+            dep.events1(D,:) = [cat1.data(ii,:),C(ind,3)*depdelmax];
+            dep.events2(D,:) = cat2.data(EOI,:);
+            dep.ids{D,1} = char(cat1.id{ii,:});
+            dep.ids{D,2} = char(cat2.id{EOI});
+            %dep.type = [dep.type; char(cat1.evtype(ii,:))];
+        elseif abs(C(ind, 3)) <= 1 && abs(C(ind,4)) > 1
             %
-            % If both time and distance are within tolerance, we have a
-            % match
+            % If magnitude residual is too great, but dep red in tolerance
             %
-            M=M+1;
+            G=G+1;
+            mags.events1(G,:) = [cat1.data(ii,:),C(ind,4)*magdelmax];
+            mags.events2(G,:) = cat2.data(EOI,:);
+            mags.ids{G,1} = char(cat1.id{ii,1});
+            mags.ids{G,2} = char(cat2.id{EOI,1});
+            %mags.type = [mags.type; char(cat1.evtype(ii,:))];
+        elseif abs(C(ind, 3)) > 1 && abs(C(ind, 4)) > 1
             %
-            % Calculate the depth and magnitude differences
+            % If both mag res and dep res out of tolerance
             %
-            depdif = cat1.data(ii,4) - timematch(1,4);
-            magdif = cat1.data(ii,5) - timematch(1,5);
-            timdif = cat1.data(ii,1) - timematch(1,1);
-            row = [cat1.data(ii,:),mindist,depdif,magdif,timdif];
-            %
-            % Save matching events
-            %
-            matching.data(M,:) = row;
-            matching.data2(M,:) = cat2.data(cat_ind,:);
-            matching.ids{M,1} = char(cat1.id{ii,1});
-            matching.ids{M,2} = char(cat2.id{cat_ind,1});
-            %
-            % Now check matching events for differences in depth and
-            % magnitude
-            %
-            if abs(depdif) > depdelmax && abs(magdif) <= magdelmax
-                %
-                % If depth residual is too great
-                %
-                D=D+1;
-                dep.events1(D,:) = [cat1.data(ii,:),depdif];
-                dep.events2(D,:) = cat2.data(ind,:);
-                dep.ids{D,1} = char(cat1.id{ii,:});
-                dep.ids{D,2} = char(cat2.id{cat_ind});
-                %dep.type = [dep.type; char(cat1.evtype(ii,:))];
-            elseif abs(magdif) > magdelmax && abs(depdif)<=depdelmax
-                %
-                % If magnitude residual is too great, but dep red in tolerance
-                %
-                G=G+1;
-                mags.events1(G,:) = [cat1.data(ii,:),magdif];
-                mags.events2(G,:) = cat2.data(cat_ind,:);
-                mags.ids{G,1} = char(cat1.id{ii,1});
-                mags.ids{G,2} = char(cat2.id{cat_ind,1});
-                %mags.type = [mags.type; char(cat1.evtype(ii,:))];
-            elseif abs(magdif) > magdelmax && abs(depdif) > depdelmax
-                    %
-                    % If both mag res and dep res out of tolerance
-                    %
-                    B=B+1;
-                    both.events1(B,:) = [cat1.data(ii,:),depdif,magdif];
-                    both.events2(B,:) = (cat2.data(cat_ind,:));
-                    both.ids{B,1} = char(cat1.id{ii,1});
-                    both.ids{B,2} = char(cat2.id{cat_ind,1});
-                    %both.type = [both.type; char(cat1.evtype(ii,:))];
-            end
+            B=B+1;
+            both.events1(B,:) = [cat1.data(ii,:),C(ind,3)*depdelmax,C(ind,4)*magdelmax];
+            both.events2(B,:) = (cat2.data(EOI,:));
+            both.ids{B,1} = char(cat1.id{ii,1});
+            both.ids{B,2} = char(cat2.id{EOI,1});
+            %both.type = [both.type; char(cat1.evtype(ii,:))];
         end
     end
 end
@@ -178,23 +160,40 @@ end
 %
 m1=m; % Save number of missing and restart counter
 m = 0;
+C = [];
 %
 % Compare catalog 2 events with catalog 1 events
 %
-for ii = 1:size(cat2.data,1)
+for ii = 1 : length(cat2.data)
     %
-    % Search for origin time matches (within tolerance)
+    % Find those events within 15 minutes
     %
-    tdif = abs(cat2.data(ii,1)-cat1.data(:,1));
-    timematch = cat1.data(tdif <= tmax);
-    if isempty(timematch)
-        %
-        % If there is no time match, record missing event
-        %
+    cat1_ind = find(abs((cat2.data(ii,1)-cat1.data(:,1)))<=time_window);
+    %
+    clear C;
+    C(:,1) = (cat2.data(ii,1)-cat1.data(cat1_ind,1))./tmax;
+    C(:,2) = distance_hvrsn(cat1.data(cat1_ind,2),cat1.data(cat1_ind,3),cat2.data(ii,2),cat2.data(ii,3))./delmax;
+    C(:,3) = (cat2.data(ii,4) - cat1.data(cat1_ind,4))./depdelmax;
+    C(:,4) = (cat2.data(ii,5) - cat1.data(cat1_ind,5))./magdelmax;
+    %
+    % Minimize L2 norm of each row
+    %
+    [~,ind] = min(sqrt(sum(abs(C).^2,2)));
+    %
+    % Event of Interest row index in catalog 2
+    %
+    EOI = cat1_ind(ind);
+    %
+    % Check to make sure C(ind,1)
+    %
+    if isempty(C)
         m=m+1;
-        missing.events2(m,:) = cat2.data(ii,:);
+        missing.events1(m,:) = cat2.data(ii,:);
         missing.ids2{m,1} = char(cat2.id{ii,1});
-%        missing.type2 = [missing.type2; char(cat2.evtype(ii,:))];
+    elseif abs(C(ind,1)) > 1
+        m=m+1;
+        missing.events1(m,:) = cat2.data(ii,:);
+        missing.ids2{m,1} = char(cat2.id{ii,1});
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -273,4 +272,3 @@ end
 %End of function
 %
 end
-                    

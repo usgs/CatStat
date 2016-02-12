@@ -3,8 +3,8 @@
 %
 FormatSpec1 = '%-20s %-20s %-8s %-9s %-7s %-7s %-7s %-7s %-7s %-7s\n';
 FormatSpec2 = '%-20s %-20s %-8s %-9s %-7s %-7s \n';
-%% _Summary of Matching Events_
-disp(['----- Matching Events -----'])
+%% _Summary_
+disp('----- Matching Events -----')
 disp(' ')
 disp([num2str(size(matching.data,1)),' ',cat1.name,' and ',cat2.name, ' meet matching criteria.'])
 disp(' ')
