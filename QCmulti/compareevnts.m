@@ -188,11 +188,11 @@ for ii = 1 : length(cat2.data)
     %
     if isempty(C)
         m=m+1;
-        missing.events1(m,:) = cat2.data(ii,:);
+        missing.events2(m,:) = cat2.data(ii,:);
         missing.ids2{m,1} = char(cat2.id{ii,1});
     elseif abs(C(ind,1)) > 1
         m=m+1;
-        missing.events1(m,:) = cat2.data(ii,:);
+        missing.events2(m,:) = cat2.data(ii,:);
         missing.ids2{m,1} = char(cat2.id{ii,1});
     end
 end
