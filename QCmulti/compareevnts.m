@@ -263,10 +263,63 @@ disp(' ')
 %
 %Possible Duplicate Events
 %
+FormatSpec1 = '%-20s %-20s %-8s %-9s %-7s %-7s %-7s %-7s %-7s %-7s\n';
+FormatSpec2 = '%-20s %-20s %-8s %-9s %-7s %-7s \n';
 if length(cat1.data(:,1)) < m1+d+M || length(cat2.data(:,1)) < m+d+M
-    disp('   ----------------- POSSIBLE DUPLICATE EVENTS ----------------')
-    disp('POSSIBLE DUPLICATE EVENTS')
-    disp([' '])
+    disp('--------MULTIPLE EVENT MATCHES-----------')
+    disp('')
+    %
+    % Check for unique IDs in catalog 1
+    %
+    [~,uniqueIdx1] = unique(matching.ids(:,1));
+    dups1 = matching.ids(:,1);
+    dups1(uniqueIdx1) = [];
+    dups1 = unique(dups1);
+    if ~isempty(dups1)
+        disp(['Multiple matches in ',cat1.name,' with events in ',cat2.name,'--------'])
+        fprintf(FormatSpec1,'Event ID', 'Origin Time','Lat.','Lon.','Dep(km)','Mag','LocRes','DepRes','magRes','TimeRes')
+        for ii = 1 : size(dups1,1)
+            dups_idx1 = find(strcmpi(dups1(ii,1),matching.ids(:,1)));
+            %
+            % Only print the duplicate event once
+            %
+            fprintf(FormatSpec2,matching.ids{dups_idx1(1),1}, datestr(matching.data(dups_idx1(1),1),'yyyy/mm/dd HH:MM:SS'),num2str(matching.data(dups_idx1(1),2)),num2str(matching.data(dups_idx1(1),3)),num2str(matching.data(dups_idx1(1),4)),num2str(matching.data(dups_idx1(1),5)));
+            disp('**')
+            for jj = 1 : size(dups_idx1)
+                %
+                % Print the events from catalog 2
+                %
+                fprintf(FormatSpec1,matching.ids{dups_idx1(jj),2}, datestr(matching.data2(dups_idx1(jj),1),'yyyy/mm/dd HH:MM:SS'),num2str(matching.data2(dups_idx1(jj),2)),num2str(matching.data2(dups_idx1(jj),3)),num2str(matching.data2(dups_idx1(jj),4)),num2str(matching.data2(dups_idx1(jj),5)),num2str(matching.data(dups_idx1(jj),6)),num2str(matching.data(dups_idx1(jj),7)),num2str(matching.data(dups_idx1(jj),8)),num2str(matching.data(dups_idx1(jj),9)));
+            end
+            disp('--')
+        end
+    end
+    %
+    % Repeat for catalog 2 events
+    %
+    [~,uniqueIdx2] = unique(matching.ids(:,2));
+    dups2 = matching.ids(:,1);
+    dups2(uniqueIdx2) = [];
+    dups2 = unique(dups2);
+    if ~isempty(dups2)
+        disp(['Multiple matches in ',cat2.name,' with events in ',cat1.name,'--------'])
+        fprintf(FormatSpec1,'Event ID', 'Origin Time','Lat.','Lon.','Dep(km)','Mag','LocRes','DepRes','magRes','TimeRes')
+        for ii = 1 : size(dups2,1)
+            dups_idx2 = find(strcmpi(dups2(ii,1),matching.ids(:,2)));
+            %
+            % Only print the duplicate event once
+            %
+            fprintf(FormatSpec2,matching.ids{dups_idx2(1),2}, datestr(matching.data2(dups_idx2(1),1),'yyyy/mm/dd HH:MM:SS'),num2str(matching.data2(dups_idx2(1),2)),num2str(matching.data2(dups_idx2(1),3)),num2str(matching.data2(dups_idx2(1),4)),num2str(matching.data2(dups_idx2(1),5)));
+            disp('***')
+            for jj = 1 : size(dups_idx2)
+                %
+                % Print the events from catalog 2
+                %
+                fprintf(FormatSpec1,matching.ids{dups_idx2(jj),1}, datestr(matching.data(dups_idx2(jj),1),'yyyy/mm/dd HH:MM:SS'),num2str(matching.data(dups_idx2(jj),2)),num2str(matching.data(dups_idx2(jj),3)),num2str(matching.data(dups_idx2(jj),4)),num2str(matching.data(dups_idx2(jj),5)),num2str(matching.data(dups_idx2(jj),6)),num2str(matching.data(dups_idx2(jj),7)),num2str(matching.data(dups_idx2(jj),8)),num2str(matching.data(dups_idx2(jj),9)));
+            end
+            disp('--')
+        end
+    end      
 end
 %
 %End of function
