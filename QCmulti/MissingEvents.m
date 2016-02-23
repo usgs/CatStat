@@ -24,6 +24,19 @@ if ~isempty(missing.events1)
             num2str(missing.events1(ii,2)),num2str(missing.events1(ii,3)),...
             num2str(missing.events1(ii,4)),num2str(missing.events1(ii,5)),...
             strcat(P1{1},missing.ids1{ii,:},P2{1}));
+        disp('**')
+        %Get closest three events
+        close=[abs(missing.events1(ii,1)-cat2.data(:,1)),cat2.data(:,2:end)];
+        [close,sort_ind]=sortrows(close,1); % Will sort in ascending order according to column 1 (time diff)
+        close_id = cat2.id(sort_ind,:);
+        for jj = 1 : 3 % Print closest 3 events
+            fprintf(FormatSpec2,close_id{jj,1},num2str(close(jj,1)*86400),...
+                num2str(missing.events1(ii,2)-close(jj,2)),...
+                num2str(missing.events1(ii,3)-close(jj,3)),...
+                num2str(missing.events1(ii,4)-close(jj,4)),...
+                num2str(missing.events1(ii,5)-close(jj,5)));
+        end
+        disp('--')
 	end
 else
 	disp(' ')
@@ -47,6 +60,19 @@ if ~isempty(missing.events2)
             num2str(missing.events2(ii,2)),num2str(missing.events2(ii,3)),...
             num2str(missing.events2(ii,4)),num2str(missing.events2(ii,5)),...
             strcat(P1{1},missing.ids2{ii,:},P2{1}))
+        disp('**')
+        %Get closest three events
+        close=[abs(missing.events2(ii,1)-cat1.data(:,1)),cat1.data(:,2:end)];
+        [close,sort_ind]=sortrows(close,1); % Will sort in ascending order according to column 1 (time diff)
+        close_id = cat1.id(sort_ind,:);
+        for jj = 1 : 3 % Print closest 3 events
+            fprintf(FormatSpec2,close_id{jj,1},num2str(close(jj,1)*86400),...
+                num2str(missing.events2(ii,2)-close(jj,2)),...
+                num2str(missing.events2(ii,3)-close(jj,3)),...
+                num2str(missing.events2(ii,4)-close(jj,4)),...
+                num2str(missing.events2(ii,5)-close(jj,5)));
+        end
+        disp('--')
 	end
 else
 	disp(' ')
