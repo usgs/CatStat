@@ -4,16 +4,8 @@ close all
 [cat1,cat2] = loadmulticat(cat1,cat2);
 %% _Catalog 1_
 basiccatsum(cat1);
-%
-% Magnitude Completeness
-%
-catmagcomp(cat1.data,cat1.name)
 %% _Catalog 2_
 basiccatsum(cat2);
-%
-% Magnitude Completeness
-%
-catmagcomp(cat2.data,cat2.name)
 %% *Comparison Criteria*
 %Trim the catalog according to the input file
 %
@@ -25,12 +17,20 @@ plottrimcats(cat1,cat2, reg);
 catmagmulti(cat1,cat2);
 %% *Summary of Matching Events*
 %Parsing matching and missing events
-[missing, dist, dep, mags, both, matching] = ...
-   compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+if strcmpi(AT,'yes')
+    tic
+    [missing, dist, dep, mags, both, matching, auth_cat1, non_auth_cat1,...
+        nonauth_matching,nonauth_missing] = compareevnts_auth(cat1,cat2,...
+        timewindow,distwindow,magdelmax, depdelmax,reg);
+    toc
+else
+    [missing, dist, dep, mags, both, matching] = ...
+        compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+end
 %% _Authoritative Events Check_
 if strcmpi(AT,'yes')
-    %publish('AuthoritativeEvents',pubopts)
-    [auth,orphan] = author_check(matching);
+    author_check(cat1, auth_cat1, non_auth_cat1,nonauth_matching,...
+        nonauth_missing,matching,timewindow,distwindow)
 else
     disp('Authoritative Event check not selected')
 end
