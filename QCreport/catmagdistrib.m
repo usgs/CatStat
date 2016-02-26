@@ -58,6 +58,7 @@ elseif sizenum == 2
 else
     datetick('x','mm-dd-yy')
 end
+set(gca,'XTickLabelRotation',45)
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog');
 ylabel('Magnitude');

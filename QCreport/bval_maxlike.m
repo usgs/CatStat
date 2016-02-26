@@ -1,0 +1,10 @@
+function [bvalue,avalue,std_dev,std_err,L]=bval_maxlike(Mags,Mc_bins)
+neq = length(Mags);
+mean_mag = mean(Mags);
+min_mag = min(Mags);
+max_mag = max(Mags);
+bvalue = (1/(mean_mag-min_mag))*log10(exp(1));
+avalue = log10(neq) + bvalue*min_mag;
+std_dev = (sum((Mags-mean_mag).^2))/(neq*(neq-1));
+std_err = 2.30 * sqrt(std_dev) * bvalue^2;
+L = 10.^(avalue-bvalue.*Mc_bins);

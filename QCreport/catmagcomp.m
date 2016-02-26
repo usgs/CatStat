@@ -8,6 +8,8 @@ function catmagcomp(yrmageqcsv,name)
 % Output: None
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+MagBin = 0.01;
+McCorr = 0.2;
 %
 % Display
 %
@@ -23,6 +25,9 @@ disp([' ']);
 % Determine Magnitude Range
 %
 minmag = floor(min(yrmageqcsv(:,5)));
+if minmag > 0
+    minmag = 0;
+end
 maxmag = ceil(max(yrmageqcsv(:,5)));
 mags = minmag:0.1:maxmag;
 cdf = zeros(length(mags),1);
@@ -38,6 +43,16 @@ end
 [idf, xx] = hist(yrmageqcsv(:,5),mags);
 [~,ii] = max(idf);
 %
+% Estimate Magnitude of Completion
+%
+[Mc,Mc_Mag,Mc_bins] = Mc_maxcurve(yrmageqcsv(:,5),MagBin,McCorr);
+
+%
+% Estimate B-value
+%
+[bvalue,~,~,~,L]=bval_maxlike(Mc_Mag,Mc_bins);
+[bvalue2,~,~,~,L2] = bval_lstsq(Mc_Mag,MagBin,Mc_bins);
+%
 % Maximum incremental step
 %
 maxincremcomp = mags(ii);
@@ -52,11 +67,13 @@ figure
 hh1 = semilogy(mags,cdf,'k+','linewidth',1.5);
 hold on
 hh2 = semilogy(xx,idf,'ro','linewidth',1.5);
+hh3 = semilogy(Mc_bins,L,'k--','LineWidth',1.5);
+hh4 = semilogy(Mc_bins,L2,'b--','LineWidth',1.5);
 %
 % Figure Options
 %
 axis([minmag maxmag 10^0 10^6])
-legend([hh1,hh2],['Cumulative'],['Incremental'])
+legend([hh1,hh2,hh3,hh4],['Cumulative'],['Incremental'],['B-value(MaxLike)=',num2str(bvalue)],['B-value(LsSq)=',num2str(bvalue2)]);
 xlabel('Magnitude','fontsize',18)
 ylabel('Number of Events','fontsize',18)
 title(sprintf(['Magnitude Distributions for \n',name]),'fontsize',15)
@@ -68,7 +85,7 @@ hold off
 % Print out
 %
 disp(['Max Incremental: ',num2str(maxincremcomp)]);
-disp(['Estimated Completeness: ',num2str(estcomp)]);
+disp(['Estimated Completeness (Maximum Likelihood): ',num2str(Mc)]);
 disp([' ']);
 %
 % End of Function
