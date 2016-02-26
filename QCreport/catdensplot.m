@@ -1,4 +1,4 @@
-function catdensplot(catalog)
+function catdensplot(catalog,reg)
 % This function creates a seismicity density map for the catalog
 %
 % Input: a structure containing catalog data
@@ -14,26 +14,34 @@ function catdensplot(catalog)
 %
 % Boundaries
 %
-maxlat = max(catalog.data(:,2)); 
-minlat = min(catalog.data(:,2));
-if sign(minlat) == -1
-    midlat = (maxlat + minlat) / 2;
+if strcmpi(reg,'all')
+    X = 0;
+    poly(1,1) = min(catalog.data(:,3));
+    poly(2,1) = max(catalog.data(:,3)); 
+    poly(1,2) = min(catalog.data(:,2));
+    poly(2,2) = max(catalog.data(:,2));
 else
-    midlat = (maxlat - minlat)/2;
+    X = 1;
+    load('regions.mat')
+    ind = find(strcmpi(region,reg));
+    poly = coord{ind,1};
 end
-maxlon = max(catalog.data(:,3));
-minlon = min(catalog.data(:,3));
+minlon = min(poly(:,1))-0.5;
+maxlon = max(poly(:,1))+0.5;
+minlat = min(poly(:,2))-0.5;
+maxlat = max(poly(:,2))+1.0;
 if minlon < -170 & maxlon > 170 & maxlat < 79 & minlat > -60
     maxlon = -1*min(abs(catalog.data(:,3)));
     minlon = -180;
 end
+midlat = (maxlat + minlat)/2;
 %
 % Density Plot and Log Density Plot
 %
 for ii = 1 : 2    
 figure('Color','w')
 hold on
-n = hist2d(catalog.data(:,2),catalog.data(:,3),50)';
+n = hist2d(catalog.data(:,2),catalog.data(:,3),100)';
 if ii == 2;
     n1 = log(n);
     mask = ~logical(filter2(ones(3),n1));
@@ -63,6 +71,12 @@ ylabel('Latitude');
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
 set(gca,'fontsize',15)
 plotworld
+if X == 1
+    %
+    % Plot region
+    %
+    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+end
 axis([minlon maxlon minlat maxlat]);
 box on
 hold off

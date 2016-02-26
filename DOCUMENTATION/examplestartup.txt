@@ -1,0 +1,2 @@
+% User defined paths
+addpath(genpath('/Users/mrperry/Documents/MATLAB/'))

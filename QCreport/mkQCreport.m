@@ -22,10 +22,11 @@ catalog.file = [initpath,char(initdat{1}{2})];
 catalog.name = char(initdat{1}{4}); 
 catalog.format = str2num(initdat{1}{6}); 
 catalog.timeoffset= str2num(initdat{1}{8}); 
-catalog.timezone =  char(initdat{1}{10}); 
-pubopts.outputDir = char(initdat{1}{12});
-pubopts.format = char(initdat{1}{14}); 
-pubopts.showCode = char(initdat{1}{16}); 
+catalog.timezone =  char(initdat{1}{10});
+reg = char(initdat{1}{12});
+pubopts.outputDir = char(initdat{1}{14});
+pubopts.format = char(initdat{1}{16}); 
+pubopts.showCode = char(initdat{1}{18}); 
 if(strcmp(pubopts.showCode,'true'))
   pubopts.showCode = true;
 else

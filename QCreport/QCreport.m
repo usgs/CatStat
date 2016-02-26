@@ -3,6 +3,12 @@
 close all
 % Load catalog data
 catalog = loadcat(catalog);
+% Trim the catalog if region is selected
+if strcmpi(reg,'all');
+    catalog = catalog;
+else
+    catalog = trimcatalog(catalog,reg);
+end
 % 
 basiccatsum(catalog);
 %
@@ -12,13 +18,13 @@ basiccatsum(catalog);
 %
 %% Seismicity Map
 %
-[eqevents] = plotcatmap(catalog); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
+[eqevents] = plotcatmap(catalog,reg); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
 %
 %% Seismicity Density Plot
 %
 % All event types are considered in these density plots.
 %
-catdensplot(catalog);
+catdensplot(catalog,reg);
 
 %% Depth Distribution
 
@@ -68,6 +74,7 @@ catmagcomp(yrmageqcsv,catalog.name);
 
 if sizenum == 1
     catmagcomphist(eqevents,yrmageqcsv);
+    catstatsthroughtime(eqevents);
 end
 
 %% Event Type Frequency

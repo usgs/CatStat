@@ -83,8 +83,7 @@ set(gca,'fontsize',15)
 xlabel('Event Type Through Time','fontsize',18)
 ylabel('Cumulative Number of Events','fontsize',18)
 legend(types,'Location','NorthWest')
-
-
+set(gca,'XTickLabelRotation',45)
 count = 1;
 for ii = 1:length(types)
     disp(['Event Type ',num2str(count),': ',types{count,1},' ',num2str(e(count).jj(length(e(count).jj(:,1)),8))]);

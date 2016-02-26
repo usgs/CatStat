@@ -1,4 +1,4 @@
-function [eqevents] = plotcatmap(catalog)
+function [eqevents] = plotcatmap(catalog,reg)
 % This function creates a seismicity map for the catalog, including bounds 
 % Input: a structure containing catalog data
 %         cat.name   name of catalog
@@ -34,15 +34,29 @@ h2 = plot(noneq(:,3),noneq(:,2),'b.');
 %
 % Boundaries
 %
-maxlat = max(catalog.data(:,2)); 
-minlat = min(catalog.data(:,2));
-midlat = (maxlat + minlat)/2;
-maxlon = max(catalog.data(:,3));
-minlon = min(catalog.data(:,3));
+if strcmpi(reg,'all')
+    poly(1,1) = min(catalog.data(:,3));
+    poly(2,1) = max(catalog.data(:,3)); 
+    poly(1,2) = min(catalog.data(:,2));
+    poly(2,2) = max(catalog.data(:,2));
+else
+    load('regions.mat')
+    ind = find(strcmpi(region,reg));
+    poly = coord{ind,1};
+    %
+    % Plot region
+    %
+    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+end
+minlon = min(poly(:,1))-0.5;
+maxlon = max(poly(:,1))+0.5;
+minlat = min(poly(:,2))-0.5;
+maxlat = max(poly(:,2))+1.0;
 if minlon < -170 & maxlon > 170 & maxlat < 79 & minlat > -60
     maxlon = -1*min(abs(catalog.data(:,3)));
     minlon = -180;
 end
+midlat = (maxlat + minlat)/2;
 %
 % Format Options
 %
