@@ -1,16 +1,18 @@
 % Catalog Data file name
-Data/exampleKansasComCat.csv
+/Users/mrperry/Documents/CATALOGS/CI/23Feb/CI.csv
 % Human readable catalog description
-example Kansas ISMP catalog
+California Institute of Technology
 % Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-1
+2
 % UTC offset [hours]
--6
+-8
 % Time Zone 
-Central Time Zone UTC-6 
+Pacific Standard Time UTC-8  
+% Authoritative Region, if none put all
+all
 % Diretory to put report in
 Report
 % File format for report
-pdf
+html
 % show code in report (true/false)
 false
