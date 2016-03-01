@@ -18,11 +18,10 @@ catmagmulti(cat1,cat2);
 %% *Summary of Matching Events*
 %Parsing matching and missing events
 if strcmpi(AT,'yes')
-    tic
     [missing, dist, dep, mags, both, matching, auth_cat1, non_auth_cat1,...
         nonauth_matching,nonauth_missing] = compareevnts_auth(cat1,cat2,...
         timewindow,distwindow,magdelmax, depdelmax,reg);
-    toc
+
 else
     [missing, dist, dep, mags, both, matching] = ...
         compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);

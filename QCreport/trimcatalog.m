@@ -18,7 +18,7 @@ function cat = trimcatalog(cat,reg)
 % Restrict catalog to region of interest
 %
 load('regions.mat')
-ind = find(strcmp(region, reg));
+ind = find(strcmpi(region, reg));
 poly = coord{ind,1};
 ind1 = inpolygon(cat.data(:,3),cat.data(:,2),poly(:,1), poly(:,2));
 cat.data = cat.data(ind1,:);

@@ -15,11 +15,11 @@ disp(['Map of recorded catalog activity distinguished between earthquakes (red) 
 %
 % Finds indices where evtype is earthquake
 %
-eqevents = catalog.data(strcmp('earthquake',catalog.evtype),:);
+eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
 %
 % Finds indices where evtype is not earthquake
 %
-noneq = catalog.data(~strcmp('earthquake',catalog.evtype),:);
+noneq = catalog.data(~strncmpi('earthquake',catalog.evtype,10),:);
 %
 % Initialize Figure
 %
