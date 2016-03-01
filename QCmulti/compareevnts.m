@@ -113,7 +113,7 @@ for ii = 1 : length(cat1.data)
     % If both time and distance are within tolerance, we have a match
     %
         M=M+1;
-        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,C(ind,4)*magdelmax,C(ind,1)*tmax*sec_per_day];
+        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,C(ind,4)*magdelmax,C(ind,1)*tmax];
         matching.data(M,:) = row;
         matching.data2(M,:) = cat2.data(EOI,:);
         matching.ids{M,1} = char(cat1.id{ii,1});
