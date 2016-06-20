@@ -1,4 +1,4 @@
-function [eqevents,eqevents_ids] = plotcatmap(catalog,reg)
+function [eqevents,eqevents_ids]=plotdeepevents(eqevents,eqevents_ids,reg,DP)
 % This function creates a seismicity map for the catalog, including bounds 
 % Input: a structure containing catalog data
 %         cat.name   name of catalog
@@ -11,12 +11,17 @@ function [eqevents,eqevents_ids] = plotcatmap(catalog,reg)
 % Output: eqevents  A matrix of ONLY earthquakes from the original catalog
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-disp(['Map of recorded catalog activity distinguished between earthquakes (red) and overlaying non earthquakes (blue).']);
+sprintf('Map of Earthquakes with depths greater than %.0f km.',DP);
 %
 % Find min and max longitude of catalog events
 %
-maxlon = max(catalog.data(:,3));
-minlon = min(catalog.data(:,3));
+eqevents = eqevents(eqevents(:,4) >= DP,:);
+eqevents_ids = eqevents_ids(eqevents(:,4) >= DP,:);
+%
+%
+%
+maxlon = max(eqevents(:,3));
+minlon = min(eqevents(:,3));
 %
 % Check to see if range goes over Pacific Transition Zone
 %
@@ -24,9 +29,9 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust event locations
     %
-    for ii = 1:length(catalog.data(:,3))
-        if catalog.data(ii,3) < 0
-            catalog.data(ii,3) = catalog.data(ii,3)+360;
+    for ii = 1:length(eqevents(:,3))
+        if eqevents(ii,3) < 0
+            eqevents(ii,3) = eqevents(ii,3)+360;
         end
     end
     %
@@ -63,11 +68,11 @@ if minlon < -170 && maxlon > 170
     %
     % Get Boundaries
     %
-    maxlat = max(catalog.data(:,2)); 
-    minlat = min(catalog.data(:,2));
+    maxlat = max(eqevents(:,2)); 
+    minlat = min(eqevents(:,2));
     midlat = (maxlat+minlat)/2;
-    maxlon = max(catalog.data(:,3));
-    minlon = min(catalog.data(:,3));
+    maxlon = max(eqevents(:,3));
+    minlon = min(eqevents(:,3));
     latbuf = 0.1*(maxlat-minlat);
     lonbuf = 0.1*(maxlon-minlon);
     mapminlon = max(minlon-lonbuf,0);
@@ -84,9 +89,7 @@ if minlon < -170 && maxlon > 170
     %
     % Separate Events
     %
-    eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
-    eqevents_ids = catalog.id(strncmpi('earthquake',catalog.evtype,10),:);
-    noneq = catalog.data(~strncmpi('earthquake',catalog.evtype,10),:);
+    eqevents = eqevents(strncmpi('earthquake',eqevents.evtype,10),:);
     %
     % Initialize Figure
     %
@@ -108,7 +111,6 @@ if minlon < -170 && maxlon > 170
     % Plot adjusted events
     %
     h1 = plot(eqevents(:,3),eqevents(:,2),'r.');
-    h2 = plot(noneq(:,3),noneq(:,2),'b.');
     %
     % Plot Format
     %
@@ -119,18 +121,10 @@ if minlon < -170 && maxlon > 170
     set(gca,'XTickLabel',X_label);
     xlabel('Longitude')
     ylabel('Latitude')
-    title(catalog.name);
-    if isempty(h2)
+    title(eqevents.name);
     legend(h1,'Earthquakes','Location','NorthOutside')
-    else
-    legend([h1, h2],'Earthquakes','Other Events','Location','NorthOutside')
-    end
     hold off
 else
-    eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
-    eqevents_ids = catalog.id(strncmpi('earthquake',catalog.evtype,10),:);
-    noneq = catalog.data(~strncmpi('earthquake',catalog.evtype,10),:);
-    %
     % Initialize Figure
     %
     figure
@@ -140,15 +134,14 @@ else
     % Plot earthquakes (red) and non-earthquake events (blue)
     %
     h1 = plot(eqevents(:,3),eqevents(:,2),'r.');
-    h2 = plot(noneq(:,3),noneq(:,2),'b.');
     %
     % Boundaries
     %
     if strcmpi(reg,'all')
-        poly(1,1) = min(catalog.data(:,3));
-        poly(2,1) = max(catalog.data(:,3)); 
-        poly(1,2) = min(catalog.data(:,2));
-        poly(2,2) = max(catalog.data(:,2));
+        poly(1,1) = min(eqevents(:,3));
+        poly(2,1) = max(eqevents(:,3)); 
+        poly(1,2) = min(eqevents(:,2));
+        poly(2,2) = max(eqevents(:,2));
     else
         load('regions.mat')
         ind = find(strcmpi(region,reg));
@@ -166,11 +159,7 @@ else
     %
     % Format Options
     %
-    if isempty(h2)
-        legend(h1,'Earthquakes','Location','NorthOutside')
-    else
-        legend([h1, h2],'Earthquakes','Other Events','Location','NorthOutside')
-    end
+    legend(h1,sprintf('Earthquakes > %.0f km depth',DP)','Location','NorthOutside')
     ylabel('Latitude')
     xlabel('Longitude')
     axis([minlon maxlon minlat maxlat]);
@@ -180,6 +169,7 @@ else
     hold off
     drawnow
 end
+
 %
 % End of function
 %

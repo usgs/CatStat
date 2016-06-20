@@ -13,9 +13,16 @@ function inteventspace(catalog,sizenum)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% Analyze just the earthquake events
+%
+ind = find(strcmpi('earthquake',catalog.evtype));
+catalog.data = catalog.data(ind,:);
+catalog.evtype = catalog.evtype(ind,:);
+catalog.id = catalog.id(ind,:);
+%
 % Get catalog length
 %
-M = length(catalog.data);
+M = length(catalog.data(strcmpi('earthquake',catalog.evtype)));
 %
 % Determine the amount of time between events in the catalog
 %
@@ -30,8 +37,8 @@ maxsep = sorttime(M-1,1);
 %
 % Print out
 %
-disp(['The Median Time Between Events: ',num2str(mediansep),' s.'])
-disp(['The Maximum Time Between Events: ',num2str(maxsep),' s.'])
+disp(['The Median Time Between Earthquakes: ',num2str(mediansep),' s.'])
+disp(['The Maximum Time Between Earthquakes: ',num2str(maxsep),' s.'])
 %
 % Initialize Figure
 %
@@ -47,7 +54,7 @@ stem(datetimesep(:,1),datetimesep(:,2),'Marker','none')
 % Subplot 1 Format Options
 %
 set(gca,'fontsize',15)
-title('Time Separation Between Events','fontsize',18)
+title('Time Separation Between Earthquakes','fontsize',18)
 if sizenum == 1
     datetick('x','yyyy');
 elseif sizenum == 2
@@ -88,7 +95,7 @@ if sizenum == 1
     % Subplot 2 Format Options
     %
     set(gca,'fontsize',15)
-    title('Maximum Event Separation by Year','fontsize',18)
+    title('Maximum Earthquake Separation by Year','fontsize',18)
     ylabel('Length of Time Separation (Days)','fontsize',18)
     xlabel('Year','fontsize',18);
     %set(gca,'XTick',min(years):2:max(years))
@@ -104,7 +111,7 @@ if sizenum == 1
     % Subplot 3 Format Options
     %
     set(gca,'fontsize',15)
-    title('Median Event Separation by Year','fontsize',18)
+    title('Median Earthquake Separation by Year','fontsize',18)
     xlabel('Year','fontsize',18);
     %set(gca,'XTick',min(years):2:max(years))
     axis tight;
@@ -128,12 +135,12 @@ elseif sizenum == 3
     %
     subplot(3,1,2)
     hold on
-    bar(dailydatenum(1:end-1,1),maxsepday,'hist')
+    bar(dailydatenum(:,1),maxsepday,'hist')
     %
     % Subplot 2 Format Options
     %
     datetick('x','mm-dd-yy')
-    title('Maximum Event Separation by Day')
+    title('Maximum Earthquake Separation by Day')
     ylabel('Length of Time Separation (Days)')
     set(gca,'fontsize',15)
     delete(findobj('marker','*'))
@@ -144,13 +151,13 @@ elseif sizenum == 3
     %
     subplot(3,1,3)
     hold on
-    bar(dailydatenum(1:end-1,1),medsepday,'hist')
+    bar(dailydatenum(:,1),medsepday,'hist')
     %
     % Subplot 3 Format Options
     %
     datetick('x','mm-dd-yy')
     set(gca,'fontsize',15)
-    title('Median Event Separation by Day','fontsize',16)
+    title('Median Earthquake Separation by Day','fontsize',16)
     delete(findobj('marker','*'))
     axis tight
     hold off
@@ -172,14 +179,14 @@ else
     % Subplot 2
     %
     subplot(3,1,2)
-    bar(monthlydatenum,maxsepmth,'hist')
+    bar(monthlydatenum(1:end-1),maxsepmth,'hist')
     hold on
     %
     % Subplot 2 Format Options
     %
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
-    title('Maximum Event Separation by Month')
+    title('Maximum Earthquake Separation by Month')
     ylabel('Length of Time Separation (Days)')
     delete(findobj('marker','*'))
     axis tight
@@ -189,13 +196,13 @@ else
     %
     subplot(3,1,3)
     hold on
-    bar(monthlydatenum,medsepmth,'hist')
+    bar(monthlydatenum(1:end-1),medsepmth,'hist')
     %
     % Subplot 3 Format Options
     %
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
-    title('Median Event Separation by Month')
+    title('Median Earthquake Separation by Month')
     delete(findobj('marker','*'))
     axis tight
     hold off

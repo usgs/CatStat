@@ -1,4 +1,4 @@
-function plotmatchingevnts(cat1, cat2, matching, reg)
+function plotmatchingevnts_new(cat1, cat2, matching, reg)
 % This function produces figures related to the matching events.  They
 % include a map and histograms of the magnitude and depth distributions as
 % well as of the magnitude, depth, time, and location residuals.
@@ -13,57 +13,168 @@ function plotmatchingevnts(cat1, cat2, matching, reg)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Initiate figure
+% Find min and max longitude of matching data
 %
-figure
-hold on
+maxlon = max(matching.data(:,3));
+minlon = min(matching.data(:,3));
 %
-% Plot world map
+% Check the range
 %
-plotworld
-%
-% Plot matching events from catalog 1 and 2
-% Ghost plot for information in legend
-% 
-h1 = plot(matching.data(:,3),matching.data(:,2),'Color',[1 1 1]);
-h2 = plot(matching.data(:,3),matching.data(:,2),'r.');
-h3 = plot(matching.data2(:,3),matching.data2(:,2),'b.');
-%
-% Restrict to Region of interest
-% Get minimum and maximum values for restricted axes
-%
-load('regions.mat')
-if strcmpi(reg,'all')
-    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+if minlon<-170 && maxlon > 170
+    %
+    % Adjust event locations
+    %
+    for ii = 1 : length(matching.data(:,3))
+        if matching.data(ii,3) < 0 
+            matching_lon(ii) = matching.data(ii,3) + 360;
+        else
+            matching_lon(ii) = matching.data(ii,3);
+        end
+        if matching.data2(ii,3) < 0
+            matching_lon2(ii) = matching.data2(ii,3)+360;
+        else
+            matching_lon2(ii) = matching.data2(ii,3);
+        end
+    end
+    %
+    % Adjust World Map
+    %
+    load('Countries.mat');
+    L = length(places);
+    for ii = 1 : L
+        clon=lon{ii,1};
+        for jj = 1 : length(clon)
+            if clon(jj) < 0
+                clon(jj) = clon(jj) + 360;
+            end
+        end
+        clon(abs(diff(clon))>359) = NaN;
+        lon{ii,1}=clon;
+    end
+    %
+    % Adjust Region
+    %
+    if strcmpi(reg,'all')
+        poly = [];
+    else
+        load('regions.mat')
+        ind = find(strcmpi(region,reg));
+        poly = coord{ind,1};
+        for ii = 1 : length(poly);
+            if poly(ii,1) < 0
+                poly(ii,1) = poly(ii,1)+360;
+            end
+        end
+        poly(abs(diff(poly(:,1)))>359,1) = NaN;
+    end
+    %
+    % Get Boundaries
+    %
+    maxlat = max(matching.data(:,2)); 
+    minlat = min(matching.data(:,2));
+    midlat = (maxlat+minlat)/2;
+    maxlon = max(matching_lon);
+    minlon = min(matching_lon);
+    latbuf = 0.1*(maxlat-minlat);
+    lonbuf = 0.1*(maxlon-minlon);
+    mapminlon = max(minlon-lonbuf,0);
+    mapmaxlon = min(maxlon+lonbuf,360);
+    mapminlat = max(minlat-latbuf,-90);
+    mapmaxlat = min(maxlat+latbuf,90); 
+    %
+    % Get XTickLabel
+    %
+    X = round(linspace(minlon,maxlon,10));
+    X_Tick = X;
+    X(X>180) = X(X>180)-360;
+    X_label = num2str(X');
+    %
+    figure
+    hold on
+    %
+    % Plot Adjusted World Map
+    %
+    for ii = 1 : L
+        plot(lon{ii,1},lat{ii,1},'k')
+    end
+    %
+    % Plot Adjusted Region
+    %
+    if ~isempty(poly);
+        plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+    end
+    h1 = plot(matching_lon,matching.data(:,2),'.','Color',[1 1 1]);
+    h2 = plot(matching_lon,matching.data(:,2),'r.');
+    h3 = plot(matching_lon2,matching.data2(:,2),'b.');
+    %
+    % Plot Format
+    %
+    set(gca,'DataAspectRatio',[1,cosd(midlat),1])
+    set(gca,'fontsize',15)
+    axis([mapminlon mapmaxlon mapminlat mapmaxlat]);
+    set(gca,'XTick',X_Tick);
+    set(gca,'XTickLabel',X_label);
+    xlabel('Longitude')
+    ylabel('Latitude')
+    title('MatchingEvents')
+    legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
+    box on
+    hold off
+    drawnow
 else
-    ind = find(strcmp(region,reg));
-    poly = coord{ind,1};
     %
-    % Plot region
+    % Initiate figure
     %
-    plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+    figure
+    hold on
+    %
+    % Plot world map
+    %
+    plotworld
+    %
+    % Plot matching events from catalog 1 and 2
+    % Ghost plot for information in legend
+    % 
+    h1 = plot(matching.data(:,3),matching.data(:,2),'.','Color',[1 1 1]);
+    h2 = plot(matching.data(:,3),matching.data(:,2),'r.');
+    h3 = plot(matching.data2(:,3),matching.data2(:,2),'b.');
+    %
+    % Restrict to Region of interest
+    % Get minimum and maximum values for restricted axes
+    %
+    load('regions.mat')
+    if strcmpi(reg,'all')
+        poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
+        poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
+        poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
+        poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+    else
+        ind = find(strcmpi(region,reg));
+        poly = coord{ind,1};
+        %
+        % Plot region
+        %
+        plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
+    end
+    minlon = min(poly(:,1))-0.5;
+    maxlon = max(poly(:,1))+0.5;
+    minlat = min(poly(:,2))-0.5;
+    maxlat = max(poly(:,2))+1.0;
+    %
+    % Plot formatting
+    %
+    axis([minlon maxlon minlat maxlat])
+    midlat = (maxlat+minlat)/2;
+    set(gca,'DataAspectRatio',[1,cosd(midlat),1])
+    xlabel('Longitude','FontSize',14)
+    ylabel('Latitude','FontSize',15)
+    title('MatchingEvents')
+    set(gca,'FontSize',15)
+    legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
+    box on
+    hold off
+    drawnow
 end
-minlon = min(poly(:,1))-0.5;
-maxlon = max(poly(:,1))+0.5;
-minlat = min(poly(:,2))-0.5;
-maxlat = max(poly(:,2))+1.0;
-%
-% Plot formatting
-%
-axis([minlon maxlon minlat maxlat])
-midlat = (maxlat+minlat)/2;
-set(gca,'DataAspectRatio',[1,cosd(midlat),1])
-xlabel('Longitude','FontSize',14)
-ylabel('Latitude','FontSize',15)
-title('MatchingEvents')
-set(gca,'FontSize',15)
-legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
-box on
-hold off
-drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 catdensplot(matching,reg)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,7 +203,7 @@ axis tight
 box on
 hold off
 drawnow
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % Magnitude Comparison
 %
@@ -177,8 +288,9 @@ drawnow
 %
 % Time Residuals [86400 seconds in 1 day]
 %
-min_delT = min(matching.data(:,9))-0.5;
-max_delT = max(matching.data(:,9))+0.5;
+Time_convert = matching.data(:,9)*86400; %Seconds
+min_delT = min(Time_convert)-1.5;
+max_delT = max(Time_convert)+1.5;
 step = 0.1;
 bins = min_delT:step:max_delT;
 figure

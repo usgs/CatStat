@@ -10,21 +10,28 @@ basiccatsum(cat2);
 %Trim the catalog according to the input file
 %
 [cat1, cat2] = trimcats(cat1,cat2, reg, maglim, timewindow,distwindow,magdelmax,depdelmax);
+%Will only remove events with the same event ID, not spatiotemporal "duplicates"
+%Remove duplicate event ids
+cat1 = removeduplicates(cat1);
+cat2 = removeduplicates(cat2);
 %% *Map of Events*
 % Map of all events in the overlapping time period that match the comparison criteria
 plottrimcats(cat1,cat2, reg);
-%%
-catmagmulti(cat1,cat2);
 %% *Summary of Matching Events*
 %Parsing matching and missing events
 if strcmpi(AT,'yes')
     [missing, dist, dep, mags, both, matching, auth_cat1, non_auth_cat1,...
         nonauth_matching,nonauth_missing] = compareevnts_auth(cat1,cat2,...
         timewindow,distwindow,magdelmax, depdelmax,reg);
+%     [missing2, dist2, dep2, mags2, both2, matching2, auth_cat12, non_auth_cat12,...
+%         nonauth_matching2,nonauth_missing2] = compareevnts_mp(cat1,cat2,...
+%         timewindow,distwindow,magdelmax, depdelmax,reg);
 
 else
     [missing, dist, dep, mags, both, matching] = ...
         compareevnts(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
+%     [missing_t, dist_t, dep_t, mags_t, both_t, matching_t] = ...
+%         compareevnts_tst(cat1,cat2,timewindow,distwindow,magdelmax,depdelmax);
 end
 %% _Authoritative Events Check_
 if strcmpi(AT,'yes')

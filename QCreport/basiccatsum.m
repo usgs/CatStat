@@ -36,19 +36,20 @@ ZERO = sum(catalog.data(:,5)==0);
 U = unique(catalog.evtype);
 U_count = zeros(size(U,1),1);
 for ii = 1 : size(U,1)
-    U_count(ii) = sum(strcmpi(catalog.evtype,U(ii)));
+   U_count(ii) = sum(strcmpi(catalog.evtype,U(ii)));
 end
 %
 % Print Summary
 %
 fprintf(['Catalog Name:\t',catalog.name,'\n'])
+fprintf(['File Name:\t',catalog.file,'\n'])
 fprintf(['\n']);
 fprintf(['First Date in Catalog:\t',begdate,'\n'])
 fprintf(['Last Date in Catalog:\t',enddate,'\n'])
 fprintf(['\n']);
 fprintf(['Total Number of Events:\t',int2str(size(catalog.data,1)),'\n'])
 for ii = 1 : size(U,1)
-    fprintf(['\t',U{ii},':\t',int2str(U_count(ii)),'\n'])
+   fprintf(['\t',U{ii},':\t',int2str(U_count(ii)),'\n'])
 end
 fprintf(['\n']);
 fprintf(['Minimum Latitude:\t',num2str(minlat),'\n'])

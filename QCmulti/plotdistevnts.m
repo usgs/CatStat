@@ -45,7 +45,7 @@ if strcmpi(reg,'all')
     poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
     poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
 else
-    ind = find(strcmp(region,reg));
+    ind = find(strcmpi(region,reg));
     poly = coord{ind,1};
     %
     % Plot region

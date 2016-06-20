@@ -28,7 +28,7 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(mags.events1(:,3),mags.events1(:,2),'Color',[1 1 1]);
+h1 = plot(mags.events1(:,3),mags.events1(:,2),'.','Color',[1 1 1]);
 h2 = plot(mags.events1(:,3),mags.events1(:,2),'r.');
 h3 = plot(mags.events2(:,3),mags.events2(:,2),'b.');
 %
@@ -42,7 +42,7 @@ if strcmpi(reg,'all')
     poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
     poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
 else
-    ind = find(strcmp(region,reg));
+    ind = find(strcmpi(region,reg));
     poly = coord{ind,1};
     %
     % Plot region

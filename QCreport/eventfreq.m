@@ -10,6 +10,10 @@ function eventfreq(eqevents,sizenum)
 %
 disp(['Frequency of EARTHQUAKE EVENTS ONLY. All other event types ignored.']);
 %
+% Remove NaN Earthquake Mags
+%
+eqevents(isnan(eqevents(:,5)),:) = [];
+%
 % Initialize Figure
 %
 figure
@@ -19,7 +23,7 @@ histogram(eqevents(:,1),eqevents(1,1)-0.5:1:max(eqevents(:,1))-0.5)
 % Format Options
 % 
 set(gca,'fontsize',15)
-title('Events per Day','fontsize',18)
+title(sprintf('Events per Day\nNaN Mags removed'),'fontsize',18)
 ylabel('Number of Events','fontsize',18)
 if sizenum == 1
     datetick

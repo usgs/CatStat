@@ -1,4 +1,4 @@
-function [Mc,Mc_Mags,bins] = Mc_maxlike(Mags,MagBin,McCorr)
+function [Mc] = Mc_maxlike(Mags,MagBin,McCorr)
 MaxMag = max(Mags);
 MinMag = min(Mags);
 if MinMag > 0;
@@ -11,4 +11,3 @@ if isempty(Mc)
     Mc = nan;
 end
 Mc = Mc + McCorr;
-Mc_Mags = Mags(Mags>=Mc);
