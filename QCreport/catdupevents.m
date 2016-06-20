@@ -1,4 +1,4 @@
-function [dups] = catdupevents(catalog)
+function [dups] = catdupevents(catalog,secondsMax,kmMax,magthres)
 % This function finds and lists all the possible duplicate events within x seconds and x kilometers.
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -8,9 +8,6 @@ function [dups] = catdupevents(catalog)
 %         cat.evtype character cell array of event types 
 % Output: None
 dups = [];
-secondsMax = 2;
-kmMax = 2;
-magthres = -10;
 disp(['List of event pairs within ', num2str(secondsMax),' seconds and ', num2str(kmMax) ' kilometers'] )
 disp(' ')
 D = 0;

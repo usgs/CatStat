@@ -1,27 +1,27 @@
-% First catalog data file name
-/Users/mrperry/Documents/CATALOGS/LibComCat/ComCat_author_CI/ComCat_auth_CI.csv
-% Human readable catalog description
-ComCat 
-% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-2
-% Second catalog Data file name
-/Users/mrperry/Documents/CATALOGS/CI/12FEb/CI.csv
+% NCrst catalog data file name
+/Users/mrperry/Documents/CATALOGS/CI/CI_Complete.csv
 % Human readable catalog description
 CI Catalog
 % Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
+1
+% Second catalog Data file name
+/Users/mrperry/Documents/CATALOGS/NC/14Mar/NC_preupload_RF.csv
+% Human readable catalog description
+NC Catalog
+% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
 2
 % Time Window
-2 
+16
 % Distance Range
-10
+100
 % Region
-CI
+NC
 % Set Mag Limit
 -10
 % Set Mag Difference Max
-0.1
+9999
 % Set Depth difference tolerance
-10 
+9999
 % Diretory to put report in
 Report
 % File format for report
@@ -31,4 +31,4 @@ false
 % Display event list
 yes
 % Compared Authoritative IDs
-yes
+no

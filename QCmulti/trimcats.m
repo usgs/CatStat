@@ -35,29 +35,29 @@ enddate = min(cat2.data(length(cat2.data),1),cat1.data(length(cat1.data),1))+tma
 %
 %Trim catalog 1 for overlapping time
 %
-time_ind1 = find(cat1.data(:,1) >= startdate & cat1.data(:,1) < enddate);
+time_ind1 = find(cat1.data(:,1) >= startdate & cat1.data(:,1) <= enddate);
 cat1.data = cat1.data(time_ind1,:);
 cat1.id = cat1.id(time_ind1,:);
 cat1.evtype = cat1.evtype(time_ind1,:);
 %
 %Trim catalog 2 for overlapping time
 %
-time_ind2 = find(cat2.data(:,1) >= startdate & cat2.data(:,1) < enddate);
+time_ind2 = find(cat2.data(:,1) >= startdate & cat2.data(:,1) <= enddate);
 cat2.data = cat2.data(time_ind2,:);
 cat2.id = cat2.id(time_ind2,:);
 cat2.evtype = cat2.evtype(time_ind2,:);
 %
-%Eliminate Magitudes below threshold
+%Eliminate Magitudes below threshold and keep NaN magnitudes
 %
 %Catalog 1
-mag_ind1 = find(cat1.data(:,5) >= maglim);
+mag_ind1 = find(cat1.data(:,5) >= maglim | isnan(cat1.data(:,5)));
 cat1.data = cat1.data(mag_ind1,:);
 cat1.id = cat1.id(mag_ind1,:);
 cat1.evtype = cat1.evtype(mag_ind1,:);
 %
 %Catalog 2
 %
-mag_ind2 = find(cat2.data(:,5) >= maglim);
+mag_ind2 = find(cat2.data(:,5) >= maglim | isnan(cat2.data(:,5)));
 cat2.data = cat2.data(mag_ind2,:);
 cat2.id = cat2.id(mag_ind2,:);
 cat2.evtype = cat2.evtype(mag_ind2,:);
@@ -65,7 +65,7 @@ cat2.evtype = cat2.evtype(mag_ind2,:);
 %Restrict catalog to region of interest
 %
 load('regions.mat')
-ind = find(strcmp(region,reg));
+ind = find(strcmpi(region,reg));
 poly = coord{ind,1};
 %
 %Catalog 1

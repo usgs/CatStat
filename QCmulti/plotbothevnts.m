@@ -28,7 +28,7 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(both.events1(:,3),both.events1(:,2),'Color',[1 1 1]);
+h1 = plot(both.events1(:,3),both.events1(:,2),'.','Color',[1 1 1]);
 h2 = plot(both.events1(:,3),both.events1(:,2),'r.');
 h3 = plot(both.events2(:,3),both.events2(:,2),'b.');
 %
@@ -72,12 +72,12 @@ drawnow
 % Print Results
 %
 disp(['There are ',num2str(size(both.events1,1)),' events with different depths'])
-fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'DepRes','MagRes')
-for ii = 1 : size(both.events1,1)
-    fprintf(FormatSpec1,both.ids{ii,1},datestr(both.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events1(ii,2)),num2str(both.events1(ii,3)),num2str(both.events1(ii,4)),num2str(both.events1(ii,5)),num2str(both.events1(ii,6)), num2str(both.events1(ii,7)))
-    fprintf(FormatSpec2,both.ids{ii,2},datestr(both.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events2(ii,2)),num2str(both.events2(ii,3)),num2str(both.events2(ii,4)),num2str(both.events2(ii,5)));
-    disp('--')
-end
+% fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'DepRes','MagRes')
+% for ii = 1 : size(both.events1,1)
+%     fprintf(FormatSpec1,both.ids{ii,1},datestr(both.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events1(ii,2)),num2str(both.events1(ii,3)),num2str(both.events1(ii,4)),num2str(both.events1(ii,5)),num2str(both.events1(ii,6)), num2str(both.events1(ii,7)))
+%     fprintf(FormatSpec2,both.ids{ii,2},datestr(both.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events2(ii,2)),num2str(both.events2(ii,3)),num2str(both.events2(ii,4)),num2str(both.events2(ii,5)));
+%     disp('--')
+% end
 disp('----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

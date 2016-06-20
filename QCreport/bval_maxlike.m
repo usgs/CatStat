@@ -1,10 +1,26 @@
-function [bvalue,avalue,std_dev,std_err,L]=bval_maxlike(Mags,Mc_bins)
+function [bvalue,avalue,L,Mag_bins,std_dev]=bval_maxlike(Mc,Mags,bin_size)
+%
+% Make sure only those events with magnitudes above Mc are used
+%
+Mags = Mags(Mags >= Mc,:);
 neq = length(Mags);
+%
+% Get maximum magnitude, and construct vector
+%
 mean_mag = mean(Mags);
-min_mag = min(Mags);
 max_mag = max(Mags);
-bvalue = (1/(mean_mag-min_mag))*log10(exp(1));
-avalue = log10(neq) + bvalue*min_mag;
-std_dev = (sum((Mags-mean_mag).^2))/(neq*(neq-1));
-std_err = 2.30 * sqrt(std_dev) * bvalue^2;
-L = 10.^(avalue-bvalue.*Mc_bins);
+Mag_bins = Mc:bin_size:max_mag;
+%
+% Get new CDF for A-value calculation
+%
+cdf = zeros(length(Mag_bins),1);
+for ii = 1 : length(cdf)
+    cdf(ii) = sum(round(Mags,1,'decimals')>=round(Mag_bins(ii),1,'decimals'));
+end
+%
+% Calculate b-value and std using equations 3.1 and 3.4 Marzocchi and Sandri (2003)
+%
+bvalue = log10(exp(1))/(mean_mag-(Mc-(bin_size/2)));
+std_dev = bvalue/sqrt(neq);
+avalue = log10(cdf(1)) + bvalue*Mc;
+L = 10.^(avalue-bvalue.*Mag_bins);

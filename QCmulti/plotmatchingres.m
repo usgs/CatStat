@@ -55,6 +55,7 @@ if Tmax == 0
 else
     axis([Dmin Dmax -1*Tmax Tmax])
 end
+ylabel('Time (s)')
 set(gca,'FontSize',14)
 %
 % Subplot 2: Location Residuals
@@ -67,6 +68,7 @@ plot(matching.data(:,1), matching.data(:,6),'k.')
 datetick('x','yyyy-mm-dd')
 title('Location Residuals')
 axis([Dmin Dmax 0 DistMax])
+ylabel('Distance (km)')
 set(gca,'FontSize',14)
 %
 % Subplot 3: Depth Residuals
@@ -79,6 +81,7 @@ plot(matching.data(:,1), matching.data(:,7),'k.')
 datetick('x','yyyy-mm-dd')
 axis([Dmin Dmax -1*Depmax Depmax])
 title('Depth Residuals')
+ylabel('Depth (km)')
 set(gca,'FontSize',14)
 %
 % Subplot 4: Magnitude Residuals
@@ -96,6 +99,8 @@ else
 end
     
 title('Magnitude Residuals')
+ylabel('Magnitude')
+xlabel('Date')
 set(gca,'FontSize',14)
 %
 % End of Function

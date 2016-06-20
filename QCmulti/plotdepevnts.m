@@ -29,7 +29,7 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(dep.events1(:,3),dep.events1(:,2),'Color',[1 1 1]);
+h1 = plot(dep.events1(:,3),dep.events1(:,2),'.','Color',[1 1 1]);
 h2 = plot(dep.events1(:,3),dep.events1(:,2),'r.');
 h3 = plot(dep.events2(:,3),dep.events2(:,2),'b.');
 %

@@ -80,8 +80,9 @@ publish('QCmulti',pubopts)
 %
 % Create additional page to list missing events
 %
+EventThres = 5000;
 if strcmpi(EL,'yes')
-	if ~isempty(matching.data) && size(matching.data,1)<=1000
+	if ~isempty(matching.data) && size(matching.data,1)<=EventThres
 		publish('MatchingEvents',pubopts)
     end
     %%
@@ -93,7 +94,6 @@ if strcmpi(EL,'yes')
 	end
 end
 close all
-
+%
 % End of Script
 %
-

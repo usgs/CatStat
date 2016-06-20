@@ -7,7 +7,9 @@ load('Countries.mat');
 L = length(places);
 hold on
 for ii = 1 : L
-    plot(lon{ii,1}(:), lat{ii,1}(:),'k')
+    Lon = lon{ii,1};
+    Lat = lat{ii,1};
+    plot(Lon, Lat,'k')
 end
 end
     

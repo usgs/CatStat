@@ -8,8 +8,8 @@ function catmagcomp(yrmageqcsv,name)
 % Output: None
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-MagBin = 0.01;
-McCorr = 0.2;
+MagBin = 0.1;
+McCorr = 0.3;
 %
 % Display
 %
@@ -18,9 +18,11 @@ disp([' ']);
 disp(['Cumulative and incremental distributions provide an indication of ']);
 disp(['catalog completeness. The max of the incremental distribution is ']);
 disp(['generally 0.2 or 0.3 magnitude units smaller than the catalog ']);
-disp(['completness. This completeness estimation is not valid for catalogs ']);
+disp(['completeness. This completeness estimation is not valid for catalogs ']);
 disp(['whose completeness varies in time.']);
 disp([' ']);
+disp(['Methods for Determining Magnitude of Completeness and B-Value are the '])
+disp(['Maximum curvature and maximum likelihood methods, respectively.'])
 %
 % Determine Magnitude Range
 %
@@ -45,13 +47,11 @@ end
 %
 % Estimate Magnitude of Completion
 %
-[Mc,Mc_Mag,Mc_bins] = Mc_maxcurve(yrmageqcsv(:,5),MagBin,McCorr);
-
+Mc = Mc_maxcurve(yrmageqcsv(:,5),MagBin,McCorr);
 %
 % Estimate B-value
 %
-[bvalue,~,~,~,L]=bval_maxlike(Mc_Mag,Mc_bins);
-[bvalue2,~,~,~,L2] = bval_lstsq(Mc_Mag,MagBin,Mc_bins);
+[bvalue,~,L,Mc_bins,std_dev]=bval_maxlike(Mc,yrmageqcsv(yrmageqcsv(:,5)>=Mc,5),MagBin);
 %
 % Maximum incremental step
 %
@@ -59,7 +59,7 @@ maxincremcomp = mags(ii);
 %
 % Estimate magnitude of completeness??
 %
-estcomp = mags(ii) + 0.3;
+estcomp = Mc;
 %
 % Plot Results
 %
@@ -68,12 +68,11 @@ hh1 = semilogy(mags,cdf,'k+','linewidth',1.5);
 hold on
 hh2 = semilogy(xx,idf,'ro','linewidth',1.5);
 hh3 = semilogy(Mc_bins,L,'k--','LineWidth',1.5);
-hh4 = semilogy(Mc_bins,L2,'b--','LineWidth',1.5);
 %
 % Figure Options
 %
 axis([minmag maxmag 10^0 10^6])
-legend([hh1,hh2,hh3,hh4],['Cumulative'],['Incremental'],['B-value(MaxLike)=',num2str(bvalue)],['B-value(LsSq)=',num2str(bvalue2)]);
+legend([hh1,hh2,hh3],['Cumulative'],['Incremental'],sprintf('B-value = %2.3f +- %2.3f',bvalue,std_dev));
 xlabel('Magnitude','fontsize',18)
 ylabel('Number of Events','fontsize',18)
 title(sprintf(['Magnitude Distributions for \n',name]),'fontsize',15)

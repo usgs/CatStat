@@ -6,65 +6,98 @@ eqevents(isnan(eqevents(:,5)),:) = [];
 %
 % Required variables
 %
-MagBin = 0.01;
+MagBin = 0.1;
 McCorr = 0.3;
 %
 % Time Span of the catalog
 %
 begYear = str2double(datestr(eqevents(1,1),'yyyy'));
 endYear = str2double(datestr(eqevents(end,1),'yyyy'));
-timeSpan = endYear - begYear;
-%
-% Yearly Bins
-%
-timeBins = linspace(begYear,endYear,timeSpan);
-%
-% Get M_c and B-value
-%
-for ii = 1 : length(timeBins)-1
-    tmpBegYear = datenum(num2str(timeBins(ii)),'yyyy');
-    tmpEndYear = datenum(num2str(timeBins(ii+1)),'yyyy');
-    ind = find(eqevents(:,1) >= tmpBegYear & eqevents(:,1) < tmpEndYear);
-    if isempty(ind)
-        pause
-    end
+timeSpan = (endYear - begYear)*2;
+tmpBegYear = datenum([num2str(begYear),'-01-01'],'yyyy-mm-dd');
+tmpEndYear = tmpBegYear + 365*5; %Jump a year
+binYearCount = 0;
+while tmpEndYear <= datenum([num2str(endYear),'-12-31'],'yyyy-mm-dd');
+    Mags = [];
+    Mags_evolve = [];
+    binYearCount = binYearCount+1;
+    timeBins(binYearCount) = tmpBegYear;
+    %
+    % Get yearly B-value
+    %
+    ind = find(eqevents(:,1) >= tmpBegYear & eqevents(:,1) <= tmpEndYear);
     Mags = eqevents(ind,5);
-    [Mc(ii),magVec,bins] = Mc_maxcurve(Mags,MagBin,McCorr);
-    [bvalue(ii),~,~,std_err(ii),~] = bval_maxlike(magVec,bins);
-    [bvalue2(ii),~,~,std_err2(ii),~] = bval_lstsq(magVec,MagBin,bins);
+    Mc(binYearCount) = Mc_maxcurve(Mags,MagBin,McCorr);
+    Mags = Mags(Mags >= Mc(binYearCount),:);
+    [bvalue(binYearCount),~,~,~,std_dev(binYearCount)] = bval_maxlike(Mc(binYearCount),Mags,MagBin);
+    %
+    % Get evolving b-value
+    %
+    ind_evolve = find(eqevents(:,1) >= timeBins(1) & eqevents(:,1) <= tmpEndYear);
+    Mags_evolve = eqevents(ind_evolve,5);
+    Mc_evolve(binYearCount) = Mc_maxcurve(Mags_evolve,MagBin,McCorr);
+    [bvalue_evolve(binYearCount),~,~,~,std_dev_evolve(binYearCount)] = ...
+        bval_maxlike(Mc_evolve(binYearCount),Mags_evolve,MagBin);
+    tmpBegYear = tmpBegYear + 182.5; % Half a year step
+    tmpEndYear = tmpBegYear + 365*5; % jump a year
 end
 %
-% Figure
+% Initialize figures
 %
 figure;clf
-subplot(3,1,1)
-plot(timeBins(1:end-1),Mc,'-')
+%
+% Mc through time
+%
+subplot(2,2,1)
+plot(timeBins,Mc,'k-')
 hold on
-axis([timeBins(1), timeBins(end-1), 0.5, 5])
-title('M_{c} through time')
+datetick('x','yyyy')
+axis([timeBins(1), timeBins(end), 0.5, 10])
+title('M_{c} through time -- 5 year bins')
 ylabel('Magnitude of Completion')
 hold off
 set(gca,'FontSize',14)
-subplot(3,1,2)
-plot(timeBins(1:end-1),bvalue,'-')
+%
+% Mc evolution through time
+%
+subplot(2,2,2)
+plot(timeBins,Mc_evolve,'k-')
 hold on
-plot(timeBins(1:end-1),bvalue+std_err,'k--')
-plot(timeBins(1:end-1),bvalue-std_err,'k--')
-plot(timeBins(1:end-1),ones(1,length(timeBins)-1),'r')
-axis([timeBins(1), timeBins(end-1),0,2])
-title('B-value through time -- Maximum Likelihood (1 year bins)')
+datetick('x','yyyy')
+axis([timeBins(1), timeBins(end), 0.5, 10])
+title('M_{c} evolution through time')
+ylabel('Magnitude of Completion')
+hold off
+set(gca,'FontSize',14)
+%
+% B-value through time
+%
+subplot(2,2,3)
+plot(timeBins,bvalue,'-')
+hold on
+plot(timeBins,bvalue+std_dev,'k--')
+plot(timeBins,bvalue-std_dev,'k--')
+plot(timeBins,ones(1,length(timeBins)),'r')
+datetick('x','yyyy')
+axis([timeBins(1), timeBins(end),0,2])
+title('B-value through time -- 5 year bins')
 ylabel('B-value')
 xlabel('Date (year)')
 set(gca,'FontSize',14)
 hold off
-subplot(3,1,3)
-plot(timeBins(1:end-1),bvalue2,'-')
+drawnow
+%
+% B-value evolution through time
+%
+subplot(2,2,4)
+plot(timeBins,bvalue_evolve,'-')
 hold on
-plot(timeBins(1:end-1),bvalue2+std_err2,'k--')
-plot(timeBins(1:end-1),bvalue2-std_err2,'k--')
-plot(timeBins(1:end-1),ones(1,length(timeBins)-1),'r')
-axis([timeBins(1), timeBins(end-1),0,2])
-title('B-value through time -- Least Squares (1 year bins)')
+plot(timeBins,bvalue_evolve+std_dev_evolve,'k--')
+plot(timeBins,bvalue_evolve-std_dev_evolve,'k--')
+plot(timeBins,ones(1,length(timeBins)),'r')
+datetick('x','yyyy')
+axis([timeBins(1), timeBins(end),0,2])
+title('B-value Evolution')
 ylabel('B-value')
 xlabel('Date (year)')
 set(gca,'FontSize',14)

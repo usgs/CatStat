@@ -11,6 +11,10 @@ function hreventfreq(eqevents,catalog)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['Distribution of earthquake events throughout the hours of the day. All other event types ignored.']);
 %
+% Remove NaN
+%
+eqevents(isnan(eqevents(:,5)),:) = [];
+%
 % find hour of the day in particular time zone
 %
 hour = mod(eqevents(:,1)*24+catalog.timeoffset,24);
