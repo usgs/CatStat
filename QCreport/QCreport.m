@@ -71,7 +71,7 @@ catmagcomp(eqevents,catalog.name);
 % end
 
 %% Magnitude Distribution: Completeness Through Time
-
+% 
 if sizenum == 1
    catmagcomphist(eqevents,yrmageqcsv);
    catstatsthroughtime(eqevents);
@@ -95,7 +95,7 @@ catdupsearch(catalog);
 %% Possible Duplicate Events
 maxSeconds = 2;
 maxKm = 2;
-magthres = 3;
+magthres = -10;
 dups=catdupevents(catalog,maxSeconds,maxKm,magthres);
 
 % Yearly Event Count List

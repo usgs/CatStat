@@ -77,7 +77,7 @@ for ii = 1 : length(cat1.data)
     C(:,1) = (cat1.data(ii,1)-cat2.data(cat2_ind,1))./tmax;
     C(:,2) = distance_hvrsn(cat1.data(ii,2),cat1.data(ii,3),cat2.data(cat2_ind,2),cat2.data(cat2_ind,3))./delmax;
     C(:,3) = (cat1.data(ii,4) - cat2.data(cat2_ind,4))./depdelmax;
-    C(:,4) = (cat1.data(ii,5) - cat2.data(cat2_ind,5))./magdelmax;
+%    C(:,4) = (cat1.data(ii,5) - cat2.data(cat2_ind,5))./magdelmax;
     %
     % Minimize L2 norm of each row
     %
@@ -113,7 +113,8 @@ for ii = 1 : length(cat1.data)
     % If both time and distance are within tolerance, we have a match
     %
         M=M+1;
-        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,C(ind,4)*magdelmax,C(ind,1)*tmax];
+%        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,C(ind,4)*magdelmax,C(ind,1)*tmax];
+        row = [cat1.data(ii,:),C(ind,2)*delmax,C(ind,3)*depdelmax,0,C(ind,1)*tmax];
         matching.data(M,:) = row;
         matching.data2(M,:) = cat2.data(EOI,:);
         matching.ids{M,1} = char(cat1.id{ii,1});
@@ -122,34 +123,34 @@ for ii = 1 : length(cat1.data)
         % Now check matching events for differences in depth and
         % magnitude
         %
-        if abs(C(ind, 3)) > 1 & abs(C(ind,4)) <= 1
-            D=D+1;
-            dep.events1(D,:) = [cat1.data(ii,:),C(ind,3)*depdelmax];
-            dep.events2(D,:) = cat2.data(EOI,:);
-            dep.ids{D,1} = char(cat1.id{ii,:});
-            dep.ids{D,2} = char(cat2.id{EOI});
-            %dep.type = [dep.type; char(cat1.evtype(ii,:))];
-        elseif abs(C(ind, 3)) <= 1 && abs(C(ind,4)) > 1
-            %
-            % If magnitude residual is too great, but dep red in tolerance
-            %
-            G=G+1;
-            mags.events1(G,:) = [cat1.data(ii,:),C(ind,4)*magdelmax];
-            mags.events2(G,:) = cat2.data(EOI,:);
-            mags.ids{G,1} = char(cat1.id{ii,1});
-            mags.ids{G,2} = char(cat2.id{EOI,1});
-            %mags.type = [mags.type; char(cat1.evtype(ii,:))];
-        elseif abs(C(ind, 3)) > 1 && abs(C(ind, 4)) > 1
-            %
-            % If both mag res and dep res out of tolerance
-            %
-            B=B+1;
-            both.events1(B,:) = [cat1.data(ii,:),C(ind,3)*depdelmax,C(ind,4)*magdelmax];
-            both.events2(B,:) = (cat2.data(EOI,:));
-            both.ids{B,1} = char(cat1.id{ii,1});
-            both.ids{B,2} = char(cat2.id{EOI,1});
+%        if abs(C(ind, 3)) > 1 & abs(C(ind,4)) <= 1
+%            D=D+1;
+%            dep.events1(D,:) = [cat1.data(ii,:),C(ind,3)*depdelmax];
+%            dep.events2(D,:) = cat2.data(EOI,:);
+%            dep.ids{D,1} = char(cat1.id{ii,:});
+%            dep.ids{D,2} = char(cat2.id{EOI});
+%            %dep.type = [dep.type; char(cat1.evtype(ii,:))];
+%        elseif abs(C(ind, 3)) <= 1 && abs(C(ind,4)) > 1
+%            %
+%            % If magnitude residual is too great, but dep red in tolerance
+%            %
+%            G=G+1;
+%            mags.events1(G,:) = [cat1.data(ii,:),C(ind,4)*magdelmax];
+%            mags.events2(G,:) = cat2.data(EOI,:);
+%            mags.ids{G,1} = char(cat1.id{ii,1});
+%            mags.ids{G,2} = char(cat2.id{EOI,1});
+%            %mags.type = [mags.type; char(cat1.evtype(ii,:))];
+%        elseif abs(C(ind, 3)) > 1 && abs(C(ind, 4)) > 1
+%            %
+%            % If both mag res and dep res out of tolerance
+%            %
+%            B=B+1;
+%            both.events1(B,:) = [cat1.data(ii,:),C(ind,3)*depdelmax,C(ind,4)*magdelmax];
+%            both.events2(B,:) = (cat2.data(EOI,:));
+%            both.ids{B,1} = char(cat1.id{ii,1});
+%            both.ids{B,2} = char(cat2.id{EOI,1});
             %both.type = [both.type; char(cat1.evtype(ii,:))];
-        end
+%        end
     end
 end
 %
@@ -176,7 +177,7 @@ for ii = 1 : length(cat2.data)
     C(:,1) = (cat2.data(ii,1)-cat1.data(cat1_ind,1))./tmax;
     C(:,2) = distance_hvrsn(cat1.data(cat1_ind,2),cat1.data(cat1_ind,3),cat2.data(ii,2),cat2.data(ii,3))./delmax;
     C(:,3) = (cat2.data(ii,4) - cat1.data(cat1_ind,4))./depdelmax;
-    C(:,4) = (cat2.data(ii,5) - cat1.data(cat1_ind,5))./magdelmax;
+%    C(:,4) = (cat2.data(ii,5) - cat1.data(cat1_ind,5))./magdelmax;
     %
     % Minimize L2 norm of each row
     %
