@@ -1,4 +1,4 @@
-function plotmatchingevnts_new(cat1, cat2, matching, reg)
+function plotmatchingevnts(cat1, cat2, matching, reg)
 % This function produces figures related to the matching events.  They
 % include a map and histograms of the magnitude and depth distributions as
 % well as of the magnitude, depth, time, and location residuals.

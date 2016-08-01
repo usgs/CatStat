@@ -45,6 +45,7 @@ function [missing, dist, dep, mags, both, matching, auth_cat1, non_auth_cat1,...
 %
 sec_per_day = 86400;
 N = length(reg);
+reg='uw';
 %
 % Convert Time window
 %
