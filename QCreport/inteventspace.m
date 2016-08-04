@@ -37,8 +37,8 @@ maxsep = sorttime(M-1,1);
 %
 % Print out
 %
-disp(['The Median Time Between Earthquakes: ',num2str(mediansep),' s.'])
-disp(['The Maximum Time Between Earthquakes: ',num2str(maxsep),' s.'])
+disp(['The Median Time Between Earthquakes: ',num2str(mediansep),' days'])
+disp(['The Maximum Time Between Earthquakes: ',num2str(maxsep),' days'])
 %
 % Initialize Figure
 %

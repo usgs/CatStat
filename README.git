@@ -1,4 +1,21 @@
-# CatStat: Earthquake Catalog and Bulletin Quality Control Package
+CatStat: Earthquake Catalog and Bulletin Quality Control Package
+
+Purpose:
+   To provide users with a baseline set of statistics and graphs in order to quickly
+assess the quality of data in an earthquake bulletin or catalog.  This is not intended to be
+a complete investigation of the given catalog, but as a general, and preliminary look into the
+completeness and overall quality of data contained with a bulletin/catalog.
+
+
+  There are two main programs: QCReport and QCmulti.
+------------------------------------------------------------------------------------------------
+QCReport: Preliminary QC Analysis of a single catalog/bulletin
+QCmulti: Preliminary QC comparison between two catalogs/bulletins
+------------------------------------------------------------------------------------------------
+For in-depth documentation, references, and detailed explanation of the algorithms used refer to
+the documents in the DOCUMENTATION folder
+------------------------------------------------------------------------------------------------
+
 Download this code
 git clone https://github.com/ekmyers/CatStat.git
 

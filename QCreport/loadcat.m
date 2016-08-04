@@ -19,13 +19,20 @@ fid = fopen(cat.file, 'rt');
 %
 if(cat.format == 1);
   Tref = textscan(fid,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
+  % Need to remove T and Z characters from DateTime string
+  Tref{1} = strrep(Tref{1},'T',' ');
+  Tref{1} = strrep(Tref{1},'Z','');
   try
-      time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS.FFF');
+      time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
   catch
         try
-            time = datenum(Tref{1},'yyyy-mm-ddTHH:MM:SS');
+            time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS');
         catch
-            time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
+            try
+                time = datenum(Tref{1},'yyyy-mm-dd HH:MM') ;
+            catch
+                disp('Time Format Not Recognized')
+            end
         end
   end
   [cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
@@ -36,16 +43,27 @@ if(cat.format == 1);
 %
 elseif(cat.format == 2); % libcomcat format
   S = textscan(fid,'%s %s %f %f %f %f %s','HeaderLines',1,'Delimiter',','); 
+  % Need to remove T and Z characters from DateTime string
+  S{2} = strrep(S{2},'T',' ');
+  S{2} = strrep(S{2},'Z','');
       try
           time = datenum(S{2},'yyyy-mm-dd HH:MM:SS.FFF');
       catch
-          time = datenum(S{2},'yyyy-mm-dd HH:MM:SS');
+          try
+              time = datenum(S{2},'yyyy-mm-dd HH:MM:SS');
+          catch
+              try
+                  time = datenum(S{2},'yyyy-mm-dd HH:MM');
+              catch
+                  disp('Time Format Not Recognized')
+              end
+          end 
       end
   [cat.data,ii] = sortrows(horzcat(time,S{3:6}),1);
   cat.id = S{1}(ii);
   cat.evtype = S{7}(ii);
 else
-    disp('unknown catalog type')
+    disp('Catalog Type Unknown')
 end
 %
 % Close the file
