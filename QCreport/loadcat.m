@@ -62,6 +62,21 @@ elseif(cat.format == 2); % libcomcat format
   [cat.data,ii] = sortrows(horzcat(time,S{3:6}),1);
   cat.id = S{1}(ii);
   cat.evtype = S{7}(ii);
+%
+% iscgem catalog
+%
+elseif(cat.format == 3 ); 
+    T = textscan(fid,'%s %f %f %f %f %f %s %f %f %s %f %f %s %s %f %f %s %f %f %f %f %f %f %s','HeaderLines',59,'Delimiter',',');
+    % ISC-GEM date format yyyy-mm-dd HH:MM:SS.FF; need to append '0' to end
+    T{1} = strcat(T{1},'0');
+    % Now convert to datenum
+    time = datenum(T{1},'yyyy-mm-dd HH:MM:SS.FFF');
+    [cat.data,ii] = sortrows(horzcat(time,T{2},T{3},T{8},T{11}),1);
+    cat.id = T{24}(ii);
+    cat.evtype = cell(size(cat.data,1),1);
+    for ii = 1 : size(cat.evtype,1)
+        cat.evtype{ii} = 'earthquake';
+    end
 else
     disp('Catalog Type Unknown')
 end
