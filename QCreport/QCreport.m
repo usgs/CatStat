@@ -74,7 +74,7 @@ catmagcomp(eqevents,catalog.name);
 % 
 if sizenum == 1
    catmagcomphist(eqevents,yrmageqcsv);
-   catstatsthroughtime(eqevents);
+%    catstatsthroughtime(eqevents);
 end
 
 %% Cumulative Moment Release
