@@ -6,7 +6,6 @@ function [eqevents,eqevents_ids] = plotcatmap(catalog,reg)
 %         cat.data   real array of origin-time, lat, lon, depth, mag 
 %         cat.id     character cell array of event IDs
 %         cat.evtype character cell array of event types 
-%         ** Hoping to add polygon for catalog as well
 %
 % Output: eqevents  A matrix of ONLY earthquakes from the original catalog
 %
