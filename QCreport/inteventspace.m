@@ -179,7 +179,7 @@ else
     % Subplot 2
     %
     subplot(3,1,2)
-    bar(monthlydatenum(1:end-1),maxsepmth,'hist')
+    bar(monthlydatenum,maxsepmth,'hist')
     hold on
     %
     % Subplot 2 Format Options
@@ -196,7 +196,7 @@ else
     %
     subplot(3,1,3)
     hold on
-    bar(monthlydatenum(1:end-1),medsepmth,'hist')
+    bar(monthlydatenum,medsepmth,'hist')
     %
     % Subplot 3 Format Options
     %
