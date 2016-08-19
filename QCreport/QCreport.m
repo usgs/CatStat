@@ -25,7 +25,11 @@ basiccatsum(catalog);
 % All event types are considered in these density plots.
 %
 catdensplot(catalog,reg);
-
+%% Median Magnitude Map
+%
+% Only Earthquakes are considered in this plot
+%
+catmedplot(eqevents,50,4,reg)
 %% Depth Distribution
 
 plotcatdeps(eqevents,reg);
