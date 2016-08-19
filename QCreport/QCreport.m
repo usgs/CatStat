@@ -61,8 +61,7 @@ end
 plotyrmedmag(eqevents,sizenum);
 
 %% Magnitude Distribution: Overall Completeness
-
-catmagcomp(eqevents,catalog.name);
+catmagcomp(catalog,0.1,0.0);
 
 % Magnitude Distribution: 5 Year Completeness
 
