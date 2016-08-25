@@ -29,7 +29,8 @@ catdensplot(catalog,reg);
 %
 % Only Earthquakes are considered in this plot
 %
-catmedplot(eqevents,50,4,reg)
+catmedplot(eqevents,25,1,reg)
+
 %% Depth Distribution
 
 plotcatdeps(eqevents,reg);
@@ -46,13 +47,16 @@ hreventfreq(eqevents,catalog);
 
 inteventspace(catalog,sizenum);
 
+%% Magnitude Distribution: Overall Completeness
+[Mc] = catmagcomp(catalog,0.1,0.0);
+
 %% Magnitude Distribution: All Magnitudes
 
 [yrmageqcsv] = catmagdistrib(eqevents,sizenum);
 
 %% Magnitude Distribution: All Magnitudes Histogram
 
-catmaghist(eqevents)
+catmaghist(eqevents,Mc)
 
 %% Magnitude & Event Count
 
@@ -61,24 +65,23 @@ if sizenum == 1
 end
 
 %% Magnitude Distribution: Median Magnitudes
- 
 plotyrmedmag(eqevents,sizenum);
 
-%% Magnitude Distribution: Overall Completeness
-catmagcomp(catalog,0.1,0.0);
-
-% Magnitude Distribution: 5 Year Completeness
-
-% if sizenum == 1
-%    catmagyrcomp(yrmageqcsv,s);
-% end
-
 %% Magnitude Distribution: Completeness Through Time
-% 
+
 if sizenum == 1
    catmagcomphist(eqevents,yrmageqcsv);
 %    catstatsthroughtime(eqevents);
 end
+%% Cluster Identification
+%
+% Only Earthquakes are considered in this algorithm.  Bimodal distribution
+% indicates clusters (i.e. foreshocks and aftershocks) are present in the
+% data.  Unimodal distribution would indicate a declustered catalog.  This
+% analysis is based off nearest-neighbor earthquake distances, which
+% accounts for space, time, and magnitude distance of earthquakes (Zaliapin
+% and Ben-Zion, 2013).
+Cluster_Detection(eqevents, Mc)
 
 %% Cumulative Moment Release
 CumulMomentRelease(eqevents,catalog.name,1)

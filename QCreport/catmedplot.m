@@ -1,4 +1,8 @@
 function [] = catmedplot(eqevents,ppa, min_count,reg)
+% ppa=50;
+% load('/Users/mrperry/Documents/MATLAB/Projects/Misc_Data/EQEVENTS.mat')
+% min_count=4;
+% reg = 'all';
 %
 % Remove NaN Magnitudes
 %
@@ -13,7 +17,7 @@ minlon = min(eqevents(:,3));
 %
 % Check to see if range goes over Pacific Transition Zone
 %
-if minlon < -170 && maxlon > 170
+if minlon < -170 & maxlon > 170
     %
     % Adjust event locations
     %
@@ -169,6 +173,7 @@ else
     interval_y = [lower_y:inc_y:higher_y]';
     interval_x = [lower_x:inc_x:higher_x]';
     Median = zeros(size(interval_y,1),size(interval_x,1));
+%     Median = ones(size(interval_y,1),size(interval_x,1)).*NaN;
     for ii = 1 : length(interval_y)-1
         for jj = 1 : length(interval_x)-1
             Events = eqevents(eqevents(:,3) >= interval_x(jj) & ...
@@ -177,12 +182,14 @@ else
                 eqevents(:,2) <= interval_y(ii+1),5);
             if size(Events,1) >= min_count
                 Median(ii,jj) = median(Events);
+%                     Median(ii,jj) = length(Events);
             else
                 Median(ii,jj) = NaN;
+%                 Median(ii,jj) = 0;
             end
         end
     end
-    Median(Median == 0) = NaN;
+%     Median(Median == 0) = NaN;
     figure; clf
     hold on
     pcolor(interval_x,interval_y,Median)

@@ -26,7 +26,7 @@ M = length(catalog.data(strcmpi('earthquake',catalog.evtype)));
 %
 % Determine the amount of time between events in the catalog
 %
-timesep = diff(catalog.data,1);
+timesep = diff(catalog.data,1)*1440;
 datetimesep = horzcat(catalog.data(1:(M-1),1),timesep(:,1));
 %
 % Sort the inter-event spacing and get the median and max separation times
@@ -37,8 +37,8 @@ maxsep = sorttime(M-1,1);
 %
 % Print out
 %
-disp(['The Median Time Between Earthquakes: ',num2str(mediansep),' days'])
-disp(['The Maximum Time Between Earthquakes: ',num2str(maxsep),' days'])
+disp(['The Median Time Between Earthquakes: ',num2str(mediansep),' minutes'])
+disp(['The Maximum Time Between Earthquakes: ',num2str(maxsep),' minutes'])
 %
 % Initialize Figure
 %
@@ -55,13 +55,14 @@ stem(datetimesep(:,1),datetimesep(:,2),'Marker','none')
 %
 set(gca,'fontsize',15)
 title('Time Separation Between Earthquakes','fontsize',18)
-if sizenum == 1
-    datetick('x','yyyy');
-elseif sizenum == 2
-    datetick('x','mmmyy');
-else
-    datetick('x','mm-dd-yy');
-end
+datetick('x')
+% if sizenum == 1
+%     datetick('x','yyyy');
+% elseif sizenum == 2
+%     datetick('x','mmmyy');
+% else
+%     datetick('x','mm-dd-yy');
+% end
 axis tight
 %
 % Case specific subplots
@@ -96,9 +97,10 @@ if sizenum == 1
     %
     set(gca,'fontsize',15)
     title('Maximum Earthquake Separation by Year','fontsize',18)
-    ylabel('Length of Time Separation (Days)','fontsize',18)
+    ylabel('Length of Time Separation (Minutes)','fontsize',18)
     xlabel('Year','fontsize',18);
-    %set(gca,'XTick',min(years):2:max(years))
+    set(gca,'XTick',min(years):2:max(years))
+    set(gca,'XTickLabelRotation',45)
     axis tight;
     hold off
     %
@@ -113,7 +115,8 @@ if sizenum == 1
     set(gca,'fontsize',15)
     title('Median Earthquake Separation by Year','fontsize',18)
     xlabel('Year','fontsize',18);
-    %set(gca,'XTick',min(years):2:max(years))
+    set(gca,'XTick',min(years):2:max(years))
+    set(gca,'XTickLabelRotation',45)
     axis tight;
     hold off
 elseif sizenum == 3
@@ -141,8 +144,9 @@ elseif sizenum == 3
     %
     datetick('x','mm-dd-yy')
     title('Maximum Earthquake Separation by Day')
-    ylabel('Length of Time Separation (Days)')
+    ylabel('Length of Time Separation (Minutes)')
     set(gca,'fontsize',15)
+    set(gca,'XTickLabelRotation',45)
     delete(findobj('marker','*'))
     axis tight
     hold off
@@ -157,6 +161,7 @@ elseif sizenum == 3
     %
     datetick('x','mm-dd-yy')
     set(gca,'fontsize',15)
+    set(gca,'XTickLabelRotation',45)
     title('Median Earthquake Separation by Day','fontsize',16)
     delete(findobj('marker','*'))
     axis tight
@@ -186,8 +191,9 @@ else
     %
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
+    set(gca,'XTickLabelRotation',45)
     title('Maximum Earthquake Separation by Month')
-    ylabel('Length of Time Separation (Days)')
+    ylabel('Length of Time Separation (Minutes)')
     delete(findobj('marker','*'))
     axis tight
     hold off
@@ -202,6 +208,7 @@ else
     %
     datetick('x','mmmyy')
     set(gca,'fontsize',15)
+    set(gca,'XTickLabelRotation',45)
     title('Median Earthquake Separation by Month')
     delete(findobj('marker','*'))
     axis tight

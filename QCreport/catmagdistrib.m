@@ -51,13 +51,14 @@ plot(datenum(eqevents(:,1)),eqevents(:,5),'.');
 %
 % Format Options
 %
-if sizenum == 1
-    datetick('x','yyyy')
-elseif sizenum == 2
-    datetick('x','mmmyy')
-else
-    datetick('x','mm-dd-yy')
-end
+datetick('x')
+% if sizenum == 1
+%     datetick('x','yyyy')
+% elseif sizenum == 2
+%     datetick('x','mmmyy')
+% else
+%     datetick('x','mm-dd-yy')
+% end
 set(gca,'XTickLabelRotation',45)
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog');
