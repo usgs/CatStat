@@ -1,4 +1,4 @@
-function catmaghist(eqevents)
+function catmaghist(eqevents, Mc)
 % This function plots and compares the magnitude completeness. 
 % Input: A matrix of all the catalog.data for earthquake-type events only.
 % Output: None
@@ -18,13 +18,15 @@ bins = Mn:step:Mx;
 %
 figure
 hold on
-histogram(eqevents(:,5),bins)
+h = histogram(eqevents(:,5),bins);
+h1 = plot([Mc Mc],[min(h.Values), max(h.Values)],'r--');
 %
 % Format Options
 %
 title('Earthquake Magnitude Histogram')
 xlabel('Magnitude')
 ylabel('Number of Events')
+legend([h1],'Mc')
 set(gca,'fontsize',15)
 hold off
 drawnow
