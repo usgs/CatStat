@@ -100,7 +100,7 @@ catdupsearch(catalog);
 
 %% Possible Duplicate Events
 maxSeconds = 2;
-maxKm = 2;
+maxKm = 5;
 magthres = -10;
 dups=catdupevents(catalog,maxSeconds,maxKm,magthres);
 
