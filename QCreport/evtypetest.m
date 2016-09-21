@@ -28,9 +28,6 @@ for ii = 1:length(typecount)
     catalog.evtype(strcmp(typecount(ii,1),catalog.evtype)) = {num2str(count)};
     count = count + 1;
 end
-
-%matrix = cell2mat(catalog.evtype);
-%numeqtype = str2num(matrix(:,1));
 numeqtype = str2double(catalog.evtype);
 onecol = ones(length(numeqtype),1);
 
