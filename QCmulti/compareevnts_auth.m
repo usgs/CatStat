@@ -45,7 +45,7 @@ function [missing, dist, dep, mags, both, matching, auth_cat1, non_auth_cat1,...
 %
 sec_per_day = 86400;
 N = length(reg);
-reg='uw';
+% reg='gcmt';
 %
 % Convert Time window
 %
@@ -87,7 +87,8 @@ for ii = 1 : length(cat1.data)
     %
     % Check for matching ids
     %
-    cat2match_ind = find(strcmpi(cat1.id(ii,1),cat2.id(cat2_ind,:)));
+%     cat2match_ind = find(strcmpi(cat1.id(ii,1),cat2.id(cat2_ind,:)));
+    cat2match_ind = find(strcmp(cat1.id(ii,1),cat2.id(cat2_ind,:)));
     cat2match_ind = cat2_ind(cat2match_ind);
     if ~isempty(cat2match_ind) && ~isempty(cat2_ind)
         M=M+1;
@@ -203,7 +204,8 @@ for ii = 1 : length(cat2.data)
     
     cat1_ind = find(abs((cat2.data(ii,1)-cat1.data(:,1)))<=time_window);
     %
-    cat1match_ind = find(strcmpi(cat2.id(ii,1),cat1.id(cat1_ind,:)));
+%     cat1match_ind = find(strcmpi(cat2.id(ii,1),cat1.id(cat1_ind,:)));
+    cat1match_ind = find(strcmp(cat2.id(ii,1),cat1.id(cat1_ind,:)));
     cat1match_ind = cat1_ind(cat1match_ind);
     if ~isempty(cat1match_ind) && ~isempty(cat1_ind)
         % Match already found

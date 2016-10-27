@@ -31,7 +31,8 @@ if(cat1.format == 1); % ComCat format
             try
                 time = datenum(Tref{1},'yyyy-mm-dd HH:MM') ;
             catch
-                disp('Time Format Not Recognized')
+                time = str2double(Tref{1});
+                time = epoch_to_matlab(time);
             end
       end
   end
@@ -50,9 +51,10 @@ elseif(cat1.format == 2); % libcomcat format
               time = datenum(S{2},'yyyy-mm-dd HH:MM:SS');
           catch
               try
-                  time = datenum(S{2},'yyyy-mm-dd HH:MM');
+                  time = datenum(S{2},'yyyy/mm/dd HH:MM:SS');
               catch
-                  disp('Time Format Not Recognized')
+                time = str2double(S{2});
+                time = epoch_to_matlab(time);
               end
           end 
       end

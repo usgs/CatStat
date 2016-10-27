@@ -37,8 +37,9 @@ if trig==1
     datetick('x','yyyy')
     ylabel('Cumulative Moment Release (N*m)')
     xlabel('Year')
-    title(sprintf('Cumulative Moment Release \n as Recorded by the %s catalog',name))
+    title(sprintf('Cumulative Moment Release \n as Recorded by the %s catalog\n',name))
     set(gca,'FontSize',14)
+    set(gca,'XTickLabelRotation',45)
     %legend(hh1,[datestr(eqevents_sort(1,1),'yyyy-mm-dd'),' M',num2str(eqevents_sort(1,5))])
     drawnow
 end
