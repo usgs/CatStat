@@ -99,7 +99,7 @@ if sizenum == 1
     title('Maximum Earthquake Separation by Year','fontsize',18)
     ylabel('Length of Time Separation (Minutes)','fontsize',18)
     xlabel('Year','fontsize',18);
-    set(gca,'XTick',min(years):2:max(years))
+%   set(gca,'XTick',min(years):2:max(years))
     set(gca,'XTickLabelRotation',45)
     axis tight;
     hold off
@@ -115,7 +115,7 @@ if sizenum == 1
     set(gca,'fontsize',15)
     title('Median Earthquake Separation by Year','fontsize',18)
     xlabel('Year','fontsize',18);
-    set(gca,'XTick',min(years):2:max(years))
+%   set(gca,'XTick',min(years):2:max(years))
     set(gca,'XTickLabelRotation',45)
     axis tight;
     hold off

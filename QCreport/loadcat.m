@@ -13,7 +13,11 @@ function [cat] = loadcat(cat)
 %
 % Open file for reading
 %
-fid = fopen(cat.file, 'rt');
+if cat.format ~= 4
+    fid = fopen(cat.file, 'rt');
+else
+    url = cat.file;
+end
 %
 % ComCat format
 %
@@ -29,9 +33,10 @@ if(cat.format == 1);
             time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS');
         catch
             try
-                time = datenum(Tref{1},'yyyy-mm-dd HH:MM') ;
+                time = datenum(Tref{1},'yyyy/mm/dd HH:MM:SS') ;
             catch
-                disp('Time Format Not Recognized')
+                time = str2double(Tref{1});
+                time = epoch_to_matlab(time);
             end
         end
   end
@@ -53,9 +58,10 @@ elseif(cat.format == 2); % libcomcat format
               time = datenum(S{2},'yyyy-mm-dd HH:MM:SS');
           catch
               try
-                  time = datenum(S{2},'yyyy-mm-dd HH:MM');
+                  time = datenum(S{2},'yyyy/mm/dd HH:MM:SS');
               catch
-                  disp('Time Format Not Recognized')
+                time = str2double(S{2});
+                time = epoch_to_matlab(time);
               end
           end 
       end
@@ -77,13 +83,43 @@ elseif(cat.format == 3 );
     for ii = 1 : size(cat.evtype,1)
         cat.evtype{ii} = 'earthquake';
     end
-else
+elseif(cat.format == 4);
+    block = urlread(url);
+    %
+    % Try catch block in here; try to dl everything...if it fails get
+    % starttime and endtime, break them up into months and concatenate
+    % results...mimics getdata.csv
+    %
+    Tref = textscan(block,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
+    % Need to remove T and Z characters from DateTime string
+    Tref{1} = strrep(Tref{1},'T',' ');
+    Tref{1} = strrep(Tref{1},'Z','');
+    try
+        time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
+    catch
+    try
+        time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS');
+    catch
+        try
+            time = datenum(Tref{1},'yyyy/mm/dd HH:MM:SS') ;
+        catch
+            time = str2double(Tref{1});
+            time = epoch_to_matlab(time);
+        end
+    end
+    end
+    [cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
+    cat.id = Tref{12}(ii);
+    cat.evtype = Tref{15}(ii);
+%
     disp('Catalog Type Unknown')
 end
 %
 % Close the file
 %
-fclose(fid);
+if cat.format ~= 4
+    fclose(fid);
+end
 %
 % End of function
 %

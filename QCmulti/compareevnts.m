@@ -67,7 +67,7 @@ P = 0; % Duplicate events
 %
 % Compare catalog 1 events with catalog 2 events
 %
-for ii = 1 : length(cat1.data)
+for ii = 1 : size(cat1.data,1)
     %
     % Find those events within 15 minutes
     %
@@ -167,7 +167,7 @@ C = [];
 %
 % Compare catalog 2 events with catalog 1 events
 %
-for ii = 1 : length(cat2.data)
+for ii = 1 : size(cat2.data,1)
     %
     % Find those events within 15 minutes
     %

@@ -48,6 +48,7 @@ xlabel('Date','fontsize',14)
 ylabel('Latitude','fontsize',14)
 title('Event Latitude by Date: M>2.0 Plotted','fontsize',18)
 set(gca,'fontsize',14)
+set(gca,'XTickLabelRotation',45)
 axis tight
  axis square
 %
