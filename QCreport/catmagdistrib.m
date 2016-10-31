@@ -1,4 +1,4 @@
-function [yrmageqcsv] = catmagdistrib(eqevents,sizenum)
+function [] = catmagdistrib(EQEvents)
 % This function plots and compares the distribution of magnitude. 
 %
 % Input: eqevents - Earthquake events from the original catalog
@@ -13,26 +13,23 @@ function [yrmageqcsv] = catmagdistrib(eqevents,sizenum)
 %
 disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.')
 %
-% Convert Time column to Years
-%
-time = datestr(eqevents(:,1),'yyyy');
-time = str2num(time);
-yrmageqcsv = horzcat(time,eqevents(:,2:5));
-%
 % Convert -9.9 mags to NaN
 %
-yrmageqcsv(yrmageqcsv(:,5)==-9.9,5) = NaN;
+EQEvents.Mag(EQEvents.Mag == -9.9) = NaN;
 %
 % Get data statistics
 %
-maxmag = max(eqevents(:,5));
-minmag = min(eqevents(:,5));
-zerocount = sum(eqevents(:,5) == 0);
-nancount = sum(isnan(eqevents(:,5)));
+maxmag = max(EQEvents.Mag);
+minmag = min(EQEvents.Mag);
+zerocount = sum(EQEvents.Mag == 0);
+nancount = sum(isnan(EQEvents.Mag));
 %
 % Remove NaN rows
 %
-yrmageqcsv(isnan(yrmageqcsv(:,5)),:) = [];
+ind = find(isnan(EQEvents.Mag));
+if ~isempty(ind);
+    EQEvents(ind,:) = [];
+end
 %
 % Print Out
 %
@@ -47,18 +44,11 @@ disp([' ']);
 %
 figure
 hold on
-plot(datenum(eqevents(:,1)),eqevents(:,5),'.');
+plot(datenum(EQEvents.OriginTime),EQEvents.Mag,'.');
 %
 % Format Options
 %
 datetick('x')
-% if sizenum == 1
-%     datetick('x','yyyy')
-% elseif sizenum == 2
-%     datetick('x','mmmyy')
-% else
-%     datetick('x','mm-dd-yy')
-% end
 set(gca,'XTickLabelRotation',45)
 set(gca,'fontsize',15)
 title('All Magnitudes Through Catalog');

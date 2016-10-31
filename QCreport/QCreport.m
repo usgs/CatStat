@@ -1,6 +1,5 @@
 %% Basic Catalog Summary
 %
-close all
 % Load catalog data
 catalog = loadcat(catalog);
 % Trim the catalog if region is selected
@@ -10,68 +9,61 @@ else
     catalog = trimcatalog(catalog,reg);
 end
 % 
-basiccatsum(catalog);
-%
-%Used to determine if plots should be made by year or month or day based on catalog size
-%
-[sizenum] = catalogsize(catalog); 
-%
+sizenum = basiccatsum(catalog);
 %% Seismicity Map
 %
-[eqevents,eqevents_ids] = plotcatmap(catalog,reg); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
+[EQEvents, nonEQEvents] = plotcatmap(catalog,reg); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
 %
 %% Seismicity Density Plot
 %
-% All event types are considered in these density plots.
+% Earthquakes only considered in these density plots.
 %
-catdensplot(catalog,reg);
+catdensplot(EQEvents,reg);
 %% Median Magnitude Map
 %
 % Only Earthquakes are considered in this plot
 %
-catmedplot(eqevents,25,1,reg)
+catmedplot(EQEvents,25,reg)
 
 %% Depth Distribution
 
-plotcatdeps(eqevents,reg);
+plotcatdeps(EQEvents,reg,catalog.name);
 
 %% Event Frequency
 
-eventfreq(eqevents,sizenum);
+eventfreq(EQEvents,sizenum);
 
 %% Hourly Event Frequency
 
-hreventfreq(eqevents,catalog);
+hreventfreq(EQEvents,catalog);
 
 %% Inter-Event Temporal Spacing -- 
 
-inteventspace(catalog,sizenum);
+inteventspace(EQEvents,sizenum);
 
 %% Magnitude Distribution: Overall Completeness
-[Mc] = catmagcomp(catalog,0.1,0.0);
+[Mc] = catmagcomp(EQEvents,catalog.name,0.1,0.0);
 
 %% Magnitude Distribution: All Magnitudes
 
-[yrmageqcsv] = catmagdistrib(eqevents,sizenum);
+catmagdistrib(EQEvents);
 
 %% Magnitude Distribution: All Magnitudes Histogram
 
-catmaghist(eqevents,Mc)
+catmaghist(EQEvents,Mc)
 
 %% Magnitude & Event Count
 
 if sizenum == 1
-    magspecs(yrmageqcsv);
+    magspecs(EQEvents);
 end
 
 %% Magnitude Distribution: Median Magnitudes
-plotyrmedmag(eqevents,sizenum);
+plotyrmedmag(EQEvents,sizenum);
 
 %% Magnitude Distribution: Completeness Through Time
-
 if sizenum == 1
-   catmagcomphist(eqevents,yrmageqcsv);
-%    catstatsthroughtime(eqevents);
+   catmagcomphist(EQEvents);
 end
 %% Cluster Identification
 %
@@ -81,18 +73,18 @@ end
 % analysis is based off nearest-neighbor earthquake distances, which
 % accounts for space, time, and magnitude distance of earthquakes (Zaliapin
 % and Ben-Zion, 2013).
-Cluster_Detection(eqevents, Mc)
+Cluster_Detection(EQEvents, Mc)
 
 %% Cumulative Moment Release
-CumulMomentRelease(eqevents,catalog.name,1)
-
-%% Event Type Frequency
-
-evtypetest(catalog,sizenum)
+CumulMomentRelease(EQEvents,catalog.name)
 
 %% Largest Events
 
 lrgcatevnts(catalog)
+
+%% Event Type Frequency - last figure needs fixed
+
+evtypetest(catalog,sizenum)
 
 %% Searching for Duplicate Events
 

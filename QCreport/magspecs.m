@@ -1,4 +1,4 @@
-function magspecs(yrmageqcsv)
+function magspecs(EQEvents)
 % This function plots and compares the number of events of a specific magnitude. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -12,15 +12,19 @@ function magspecs(yrmageqcsv)
 %
 %
 %
+time = datestr(EQEvents.OriginTime,'yyyy');
+time = str2num(time);
+Years = table(time);
+yrmageqcsv = [Years,EQEvents];
 count = 1;
-M = length(yrmageqcsv(:,1));
+M = size(yrmageqcsv.time,1);
 disp('Magnitude statistics and distribution of earthquake events throughout the catalog. All other event types ignored.');
 %
 % Get catalog statistics
 %
-begyear = yrmageqcsv(1,1);
-endyear = yrmageqcsv(M,1);
-maxmag = ceil(max(yrmageqcsv(:,5)));
+begyear = yrmageqcsv.time(1);
+endyear = yrmageqcsv.time(M);
+maxmag = ceil(max(yrmageqcsv.Mag));
 %
 % Initialize Figure
 %
@@ -31,7 +35,7 @@ hold on
 %
 xtick = begyear:1:endyear;
 for mm = 1:maxmag
-    index = find(yrmageqcsv(:,5) > (mm-1) & yrmageqcsv(:,5) <= mm);
+    index = find(yrmageqcsv.Mag > (mm-1) & yrmageqcsv.Mag <= mm);
     if size(index,1) > 0
         %
         % Subplot
@@ -39,7 +43,7 @@ for mm = 1:maxmag
         subplot(maxmag,1,count)
         hold on
         plotmag = yrmageqcsv(index(:,1),:);
-        [nn,xx] = hist(plotmag(:,1),xtick);
+        [nn,xx] = hist(plotmag.time,xtick);
         bar(xx,nn)
         %
         % Format Options

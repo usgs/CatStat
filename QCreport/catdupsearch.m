@@ -15,9 +15,11 @@ function catdupsearch(catalog)
 % time. It does not compare each event to every other event in the catalog.
 
 
-nquakes = length(catalog.data);
-tdifsec = abs(diff(catalog.data(:,1)))*24*60*60;
-[ddelkm] = distance_hvrsn(catalog.data(1:(nquakes-1),2), catalog.data(1:(nquakes-1),3), catalog.data(2:nquakes,2), catalog.data(2:nquakes,3));
+nquakes = size(catalog.data,1);
+tdifsec = abs(diff(catalog.data.OriginTime))*24*60*60;
+[ddelkm] = distance_hvrsn(catalog.data.Latitude(1:(nquakes-1)), ...
+    catalog.data.Longitude(1:(nquakes-1)), ...
+    catalog.data.Latitude(2:nquakes), catalog.data.Longitude(2:nquakes));
 nn = []; xx = [];
 kmLimits = [1,2,4,8,16,32,64,128];
 tmax = 5;
@@ -31,7 +33,6 @@ totMatch = cumsum(nn');
 figure
 plot(xx(1,:)+dt/2,totMatch)
 hold on
-%plot(xx(1,:)+0.5,totMatch,'o')
 title('Cumulative number of events withing X seconds and Z km (Z specified in legend)')
 xlabel('Seconds')
 ylabel('Total Number of Events')

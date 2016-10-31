@@ -9,33 +9,33 @@ function evtypetest(catalog,sizenum)
 % TEST
 % Output: None
 
-types = unique(catalog.evtype);
+types = unique(catalog.data.Type);
 
-if length(types) == 1
+if size(types,1) == 1
     disp(['Every event in the catalog falls within the same event class: ',types{1,1}])
 
 else
 typecount = [];
 for ii = 1:length(types)
     name = types(ii,1);
-    row = length(find(strcmp(types(ii,1),catalog.evtype)));
+    row = length(find(strcmp(types(ii,1),catalog.data.Type)));
     fullrow = horzcat(name,row);
     typecount = [typecount;fullrow];
 end
 
 count = 1;
 for ii = 1:length(typecount)
-    catalog.evtype(strcmp(typecount(ii,1),catalog.evtype)) = {num2str(count)};
+    catalog.data.Type(strcmp(typecount(ii,1),catalog.data.Type)) = {num2str(count)};
     count = count + 1;
 end
-numeqtype = str2double(catalog.evtype);
+numeqtype = str2double(catalog.data.Type);
 onecol = ones(length(numeqtype),1);
 
-fullref = horzcat(catalog.data(:,1:5),numeqtype,onecol);
+% fullref = horzcat(catalog.data(:,1:5),numeqtype,onecol);
 
 figure
 subplot(2,1,1)
-plot(fullref(:,1),fullref(:,6),'.')
+plot(catalog.data.OriginTime,numeqtype,'.')
 if sizenum == 1
     datetick('x','yyyy','keepticks')
 elseif sizenum == 2
@@ -44,47 +44,47 @@ else
     datetick('x','mm-dd-yy')
 end
 set(gca,'fontsize',15)
-axis([fullref(1,1) fullref(length(fullref(:,1))) 0 (length(types)+1)]) 
+axis([min(catalog.data.OriginTime) max(catalog.data.OriginTime) 0 (length(types)+1)]) 
 ylabel('Event Type by Number','fontsize',18)
 title('Event Types Through Time & Event Count','fontsize',18)
 
 subplot(2,1,2)
-hist(fullref(:,6),1:1:length(types))
+hist(numeqtype,1:1:length(types))
 set(gca,'fontsize',15)
-%set(gca,'XTickLabel',[{types{1,:}};{types{2,:}};{types{3,:}};{types{4,:}}])
+% set(gca,'XTickLabel',[{types{1,:}};{types{2,:}};{types{3,:}};{types{4,:}}])
 xlabel('Event Type by Number','fontsize',18)
 ylabel('Number of Events','fontsize',18)
     
-
-e = struct([]);
-for count = 1:length(types) % Create structure divided by event type
-        kk = find(fullref(:,6) == count);
-        e(count).jj = fullref(kk,:);
-        e(count).jj(:,8) = cumsum(e(count).jj(:,7));
-end
-
-
-figure
-for count = 1:length(e)
-    semilogy(e(count).jj(:,1),e(count).jj(:,8));
-    hold on
-end
-if sizenum == 1
-    datetick('x','yyyy')
-elseif sizenum == 2
-    datetick('x','mm-yy')
-else
-    datetick('x','mm-dd-yy')
-end
-set(gca,'fontsize',15)
-xlabel('Event Type Through Time','fontsize',18)
-ylabel('Cumulative Number of Events','fontsize',18)
-legend(types,'Location','NorthWest')
-set(gca,'XTickLabelRotation',45)
-count = 1;
-for ii = 1:length(types)
-    disp(['Event Type ',num2str(count),': ',types{count,1},' ',num2str(e(count).jj(length(e(count).jj(:,1)),8))]);
-    count = count + 1;
-end
+%% Need to fix below here
+% e1 = struct([]);
+% for count = 1:length(types) % Create structure divided by event type
+%         kk = find(numeqtype == count);
+%         e1(count).jj = onecol;
+%         e1(count).jj(:,2) = cumsum(e1(count).jj(:,1));
+% end
+% 
+% 
+% figure
+% for count = 1:length(e1)
+%     semilogy(catalog.data.OriginTime,e1(count).jj(:,2));
+%     hold on
+% end
+% if sizenum == 1
+%     datetick('x','yyyy')
+% elseif sizenum == 2
+%     datetick('x','mm-yy')
+% else
+%     datetick('x','mm-dd-yy')
+% end
+% set(gca,'fontsize',15)
+% xlabel('Event Type Through Time','fontsize',18)
+% ylabel('Cumulative Number of Events','fontsize',18)
+% legend(types,'Location','NorthWest')
+% set(gca,'XTickLabelRotation',45)
+% count = 1;
+% for ii = 1:length(types)
+%     disp(['Event Type ',num2str(count),': ',types{count,1},' ',num2str(e1(count).jj(length(e1(count).jj(:,1)),2))]);
+%     count = count + 1;
+% end
 
 end

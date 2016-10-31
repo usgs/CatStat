@@ -20,10 +20,8 @@ function cat = trimcatalog(cat,reg)
 load('regions.mat')
 ind = find(strcmpi(region, reg));
 poly = coord{ind,1};
-ind1 = inpolygon(cat.data(:,3),cat.data(:,2),poly(:,1), poly(:,2));
+ind1 = inpolygon(cat.data.Longitude,cat.data.Latitude,poly(:,1), poly(:,2));
 cat.data = cat.data(ind1,:);
-cat.id = cat.id(ind1,:);
-cat.evtype = cat.evtype(ind1,:);
 %
 % End of function
 %

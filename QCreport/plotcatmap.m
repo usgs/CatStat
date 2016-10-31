@@ -1,4 +1,4 @@
-function [eqevents,eqevents_ids] = plotcatmap(catalog,reg)
+function [EQEvents, nonEQEvents] = plotcatmap(catalog,reg,auth)
 % This function creates a seismicity map for the catalog, including bounds 
 % Input: a structure containing catalog data
 %         cat.name   name of catalog
@@ -14,8 +14,12 @@ disp(['Map of recorded catalog activity distinguished between earthquakes (red) 
 %
 % Find min and max longitude of catalog events
 %
-maxlon = max(catalog.data(:,3));
-minlon = min(catalog.data(:,3));
+coord = [];
+region = [];
+lat = [];
+lon = [];
+places = [];
+[minlon,maxlon] = findMinMax(catalog.data.Longitude);
 %
 % Check to see if range goes over Pacific Transition Zone
 %
@@ -23,9 +27,9 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust event locations
     %
-    for ii = 1:length(catalog.data(:,3))
-        if catalog.data(ii,3) < 0
-            catalog.data(ii,3) = catalog.data(ii,3)+360;
+    for ii = 1:length(catalog.data.Longitude)
+        if catalog.data.Longitude(ii) < 0
+            catalog.data.Longitude(ii) = catalog.data.Longitude(ii)+360;
         end
     end
     %
@@ -62,11 +66,9 @@ if minlon < -170 && maxlon > 170
     %
     % Get Boundaries
     %
-    maxlat = max(catalog.data(:,2)); 
-    minlat = min(catalog.data(:,2));
+    [minlat, maxlat] = findMinMax(catalog.data.Latitude);
     midlat = (maxlat+minlat)/2;
-    maxlon = max(catalog.data(:,3));
-    minlon = min(catalog.data(:,3));
+    [minlon, maxlon] = findMinMax(catalog.data.Longitude);
     latbuf = 0.1*(maxlat-minlat);
     lonbuf = 0.1*(maxlon-minlon);
     mapminlon = max(minlon-lonbuf,0);
@@ -83,9 +85,7 @@ if minlon < -170 && maxlon > 170
     %
     % Separate Events
     %
-    eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
-    eqevents_ids = catalog.id(strncmpi('earthquake',catalog.evtype,10),:);
-    noneq = catalog.data(~strncmpi('earthquake',catalog.evtype,10),:);
+    [EQEvents, nonEQEvents] = getEQ(catalog.data);    
     %
     % Initialize Figure
     %
@@ -106,8 +106,8 @@ if minlon < -170 && maxlon > 170
     %
     % Plot adjusted events
     %
-    h1 = plot(eqevents(:,3),eqevents(:,2),'r.');
-    h2 = plot(noneq(:,3),noneq(:,2),'b.');
+    h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'r.');
+    h2 = plot(nonEQEvents.Longitude,nonEQEvents.Latitude,'b.');
     %
     % Plot Format
     %
@@ -120,15 +120,13 @@ if minlon < -170 && maxlon > 170
     ylabel('Latitude')
     title(catalog.name);
     if isempty(h2)
-    legend(h1,'Earthquakes','Location','NorthOutside')
+        legend(h1,'Earthquakes','Location','NorthOutside')
     else
-    legend([h1, h2],'Earthquakes','Other Events','Location','NorthOutside')
+        legend([h1, h2],'Earthquakes','Other Events','Location','NorthOutside')
     end
     hold off
 else
-    eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
-    eqevents_ids = catalog.id(strncmpi('earthquake',catalog.evtype,10),:);
-    noneq = catalog.data(~strncmpi('earthquake',catalog.evtype,10),:);
+    [EQEvents, nonEQEvents] = getEQ(catalog.data);
     %
     % Initialize Figure
     %
@@ -138,16 +136,14 @@ else
     %
     % Plot earthquakes (red) and non-earthquake events (blue)
     %
-    h1 = plot(eqevents(:,3),eqevents(:,2),'r.');
-    h2 = plot(noneq(:,3),noneq(:,2),'b.');
+    h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'r.');
+    h2 = plot(nonEQEvents.Longitude,nonEQEvents.Latitude,'b.');
     %
     % Boundaries
     %
     if strcmpi(reg,'all')
-        poly(1,1) = min(catalog.data(:,3));
-        poly(2,1) = max(catalog.data(:,3)); 
-        poly(1,2) = min(catalog.data(:,2));
-        poly(2,2) = max(catalog.data(:,2));
+        [poly(1,1), poly(2,1)] = findMinMax(catalog.data.Longitude);
+        [poly(1,2), poly(2,2)] = findMinMax(catalog.data.Latitude);
     else
         load('regions.mat')
         ind = find(strcmpi(region,reg));
@@ -179,6 +175,20 @@ else
     hold off
     drawnow
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Internal Functions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    function [min_data, max_data] = findMinMax(data)
+        min_data = min(data);
+        max_data = max(data);
+    end
+
+    function [EQEvents, nonEQEvents] = getEQ(data)
+        EQEvents = data(strncmpi('earthquake',data.Type,10),:);
+        nonEQEvents = data(~strncmpi('earthquake',data.Type,10),:);
+    end
 %
 % End of function
 %

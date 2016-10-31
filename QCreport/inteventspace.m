@@ -1,4 +1,4 @@
-function inteventspace(catalog,sizenum)
+function inteventspace(EQEvents,sizenum)
 % This function plots and compares the time between events (inter-temporal event spacing). 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -13,21 +13,14 @@ function inteventspace(catalog,sizenum)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Analyze just the earthquake events
-%
-ind = find(strcmpi('earthquake',catalog.evtype));
-catalog.data = catalog.data(ind,:);
-catalog.evtype = catalog.evtype(ind,:);
-catalog.id = catalog.id(ind,:);
-%
 % Get catalog length
 %
-M = length(catalog.data(strcmpi('earthquake',catalog.evtype)));
+M = size(EQEvents,1);
 %
 % Determine the amount of time between events in the catalog
 %
-timesep = diff(catalog.data,1)*1440;
-datetimesep = horzcat(catalog.data(1:(M-1),1),timesep(:,1));
+timesep = diff(EQEvents.OriginTime,1)*1440;
+datetimesep = horzcat(EQEvents.OriginTime(1:(M-1)),timesep(:,1));
 %
 % Sort the inter-event spacing and get the median and max separation times
 %
@@ -72,8 +65,8 @@ if sizenum == 1
     %
     % Time Separation Year Specific Statistics
     %
-    timedif = diff(catalog.data(:,1));
-    dateV = datevec(catalog.data(:,1));
+    timedif = diff(EQEvents.OriginTime);
+    dateV = datevec(EQEvents.OriginTime);
     years = dateV(:,1);
     years(1) = []; % make years same size as difference vector
     XX = min(years):max(years);
@@ -123,8 +116,8 @@ elseif sizenum == 3
     %
     % Time Separation Daily Specific Statistics
     %
-    timedif = diff(catalog.data(:,1));
-    dateV = datevec(catalog.data(:,1));
+    timedif = diff(EQEvents.OriginTime);
+    dateV = datevec(EQEvents.OriginTime);
     daily = unique(dateV(:,1:3),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:3),daily,'rows');
     L = length(subs)-1;
@@ -170,8 +163,8 @@ else
     %
     % Time Separation Monthly Specific Statistics
     %
-    timedif = diff(catalog.data(:,1));
-    dateV = datevec(catalog.data(:,1));
+    timedif = diff(EQEvents.OriginTime);
+    dateV = datevec(EQEvents.OriginTime);
     monthly = unique(dateV(:,1:2),'rows'); % finds unique month and year combinations
     [~,subs] = ismember(dateV(:,1:2),monthly,'rows');
     L = length(subs)-1;

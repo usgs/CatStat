@@ -1,4 +1,4 @@
-function plotyrmedmag(eqevents,sizenum)
+function plotyrmedmag(EQEvents,sizenum)
 % This function plots and compares the trend of yearly median magnitude. 
 % Input:
 %   eqevents - Earthquake events from catalog
@@ -12,8 +12,11 @@ disp(['Median magnitude distribution of earthquake events only. All other event 
 %
 %Converts all -9.9 preferred mags to NaN and removes them
 %
-eqevents(eqevents(:,5)==-9.9,5) = NaN; %
-eqevents(isnan(eqevents(:,5)),:) = [];
+EQEvents.Mag(EQEvents.Mag==-9.9,5) = NaN; %
+ind = find(isnan(EQEvents.Mag));
+if ~isempty(ind)
+    EQEvents(ind,:) = [];
+end
 %
 % Plot results
 %
@@ -21,8 +24,10 @@ if sizenum == 1
     %
     % Find year range
     %
-    years = datestr(eqevents(:,1),'yyyy');
+    years = datestr(EQEvents.OriginTime,'yyyy');
     years = str2num(years);
+    Years = table(years);
+    EQEvents = [Years,EQEvents];
     year = unique(years);
     begyear = years(1,1);
     endyear = years(end,1);
@@ -31,7 +36,7 @@ if sizenum == 1
     %
     med = zeros(length(year),2);
     for ii = 1 : length(year)
-        med(ii,:) = [year(ii), median(eqevents(year(ii) == years(:,1),5))];
+        med(ii,:) = [year(ii), median(EQEvents.Mag(year(ii) == EQEvents.years))];
     end
     %
     % Plot Results
@@ -54,7 +59,7 @@ elseif sizenum == 3
     %
     % Find Days (unique year, month, and day combinations)
     %
-    dateV = datevec(eqevents(:,1));
+    dateV = datevec(EQEvents.OriginTime);
     daily = unique(dateV(:,1:3),'rows');
     [~,subs] = ismember(dateV(:,1:3),daily,'rows');
     %

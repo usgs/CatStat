@@ -1,4 +1,4 @@
-function [Mc_est] = catmagcomp(catalog,MagBin,McCorr)
+function [Mc_est] = catmagcomp(EQEvents,name,MagBin,McCorr)
 % This function plots and compares the magnitude completeness. 
 % Input:
 %   catalog - data structure created in loadcat
@@ -10,12 +10,14 @@ function [Mc_est] = catmagcomp(catalog,MagBin,McCorr)
 %
 % Get EQ only
 %
-eqevents = catalog.data(strncmpi('earthquake',catalog.evtype,10),:);
-eqevents(isnan(eqevents(:,5)),:) = []; % Remove NaN
+ind = find(isnan(EQEvents.Mag));
+if ~isempty(ind)
+    EQEvents(ind,:) = []; % Remove NaN
+end
 %
 % Round all mags to the nearest tenth
 %
-eqevents(:,5) = round(eqevents(:,5),1,'decimals');
+EQEvents.Mag = round(EQEvents.Mag,1,'decimals');
 %
 % Display
 %
@@ -32,21 +34,21 @@ disp(['Maximum curvature and maximum likelihood methods, respectively.'])
 %
 % Determine Magnitude Range
 %
-minmag = min(eqevents(:,5));
+minmag = min(EQEvents.Mag);
 if minmag > 0
     minmag = 0;
 end
-maxmag = max(eqevents(:,5));
+maxmag = max(EQEvents.Mag);
 mag_centers = minmag:MagBin:maxmag+MagBin;
 cdf = zeros(length(mag_centers),1);
 for ii = 1 : length(cdf);
-    cdf(ii,1) = sum(eqevents(:,5) >= mag_centers(ii));
+    cdf(ii,1) = sum(EQEvents.Mag >= mag_centers(ii));
 end
 %
 % Get incremental histogram
 %
 mag_edges = minmag-MagBin/2:MagBin:maxmag+MagBin/2;
-[g_r,~] = histcounts(eqevents(:,5),mag_edges);
+[g_r,~] = histcounts(EQEvents.Mag,mag_edges);
 [idf,ii] = max(g_r);
 %%
 % Estimate Magnitude of Completion (Maximum Curvature method)
@@ -55,7 +57,7 @@ Mc_est = mag_centers(ii);
 %
 % Interate around estimated Mc to estimate best fit (Wiemer and Wyss, 2000)
 %
-[Mc_est,bvalue,avalue,L,Mc_bins,std_dev] = Wiemer_and_Wyss_2000(Mc_est,eqevents(:,5),MagBin);
+[Mc_est,bvalue,avalue,L,Mc_bins,std_dev] = Wiemer_and_Wyss_2000(Mc_est,EQEvents.Mag,MagBin);
 %
 % Maximum incremental step
 %
@@ -76,7 +78,7 @@ axis([minmag maxmag 10^0 10^6])
 legend([hh1,hh2,hh3,hh4],['Cumulative'],['Incremental'],sprintf('B-value = %2.3f +- %2.3f',bvalue,std_dev),sprintf('Mc = %2.3f',Mc_est));
 xlabel('Magnitude','fontsize',18)
 ylabel('Number of Events','fontsize',18)
-title(sprintf(['Magnitude Distributions for \n',catalog.name]),'fontsize',15)
+title(sprintf(['Magnitude Distributions for \n',name]),'fontsize',15)
 set(gca,'linewidth',1.5)
 set(gca,'fontsize',15)
 set(gca,'box','on')
