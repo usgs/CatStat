@@ -1,4 +1,4 @@
-function eventfreq(eqevents,sizenum)
+function eventfreq(EQEvents,sizenum)
 % This function plots and compares event frequency over the entire catalog. 
 % Input: 
 %       eqevents - Earthquake events from catalog
@@ -12,13 +12,17 @@ disp(['Frequency of EARTHQUAKE EVENTS ONLY. All other event types ignored.']);
 %
 % Remove NaN Earthquake Mags
 %
-eqevents(isnan(eqevents(:,5)),:) = [];
+ind = find(isnan(EQEvents.Mag));
+if ~isempty(ind);
+    EQEvents(ind,:) = [];
+end
 %
 % Initialize Figure
 %
 figure
 hold on
-histogram(eqevents(:,1),eqevents(1,1)-0.5:1:max(eqevents(:,1))-0.5)
+BINS = EQEvents.OriginTime(1)-0.5:1:max(EQEvents.OriginTime)-0.5;
+histogram(EQEvents.OriginTime,BINS)
 %
 % Format Options
 % 

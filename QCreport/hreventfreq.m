@@ -1,4 +1,4 @@
-function hreventfreq(eqevents,catalog)
+function hreventfreq(EQEvents,catalog)
 % This function plots and compares event frequency throughout the hours in a day. 
 % Input: a structure containing normalized catalog data
 %         cat.name   name of catalog
@@ -13,11 +13,14 @@ disp(['Distribution of earthquake events throughout the hours of the day. All ot
 %
 % Remove NaN
 %
-eqevents(isnan(eqevents(:,5)),:) = [];
+ind = find(isnan(EQEvents.Mag));
+if ~isempty(ind);
+    EQEvents(ind,:) = [];
+end
 %
 % find hour of the day in particular time zone
 %
-hour = mod(eqevents(:,1)*24+catalog.timeoffset,24);
+hour = mod(EQEvents.OriginTime*24+catalog.timeoffset,24);
 %
 % Figure
 %

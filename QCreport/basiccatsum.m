@@ -1,4 +1,4 @@
-function basiccatsum(catalog)
+function [sizenum] = basiccatsum(catalog)
 % This function provides basic catalog information and statistics
 % Input: a structure containing catalog data
 %         cat.name   name of catalog
@@ -12,31 +12,28 @@ function basiccatsum(catalog)
 %
 % Beginning and end dates of the catalog
 %
-begdate = datestr(catalog.data(1,1),'yyyy-mm-dd HH:MM:SS.FFF');
-enddate = datestr(catalog.data(size(catalog.data,1)),'yyyy-mm-dd HH:MM:SS.FFF');
+[begdate, enddate] = findMinMax(catalog.data.OriginTime);
+begdate = datestr(begdate,'yyyy-mm-dd HH:MM:SS.FFF');
+enddate = datestr(enddate,'yyyy-mm-dd HH:MM:SS.FFF');
 %
 % Maximum and minimum event latitude, longitude, depth, and magnitude
 %
-maxlat = max(catalog.data(:,2)); 
-minlat = min(catalog.data(:,2));     
-maxlon = max(catalog.data(:,3));     
-minlon = min(catalog.data(:,3));
-maxdep = max(catalog.data(:,4));
-mindep = min(catalog.data(:,4)); 
-maxmag = max(catalog.data(:,5));
-minmag = min(catalog.data(:,5));
+[minlat, maxlat] = findMinMax(catalog.data.Latitude);
+[minlon, maxlon] = findMinMax(catalog.data.Longitude);
+[mindep, maxdep] = findMinMax(catalog.data.Depth);
+[minmag, maxmag] = findMinMax(catalog.data.Mag);
 %
-% Get NaN and 0 magnitude event totals
+% Get NaN and 0 magnitude and depth event totals
 %
-NAN = sum(isnan(catalog.data(:,5)));
-ZERO = sum(catalog.data(:,5)==0);
+[Zero_Mag, NaN_Mag] = findZeroNaN(catalog.data.Mag);
+[Zero_Dep, NaN_Dep] = findZeroNaN(catalog.data.Depth);
 %
 % Get unique events
 %
-U = unique(catalog.evtype);
+U = unique(catalog.data.Type);
 U_count = zeros(size(U,1),1);
 for ii = 1 : size(U,1)
-   U_count(ii) = sum(strcmpi(catalog.evtype,U(ii)));
+   U_count(ii) = sum(strcmpi(catalog.data.Type,U(ii)));
 end
 %
 % Print Summary
@@ -59,12 +56,66 @@ fprintf(['Maximum Longitude:\t',num2str(maxlon),'\n'])
 fprintf(['\n']);
 fprintf(['Minimum Depth:\t',num2str(mindep),'\n'])
 fprintf(['Maximum Depth:\t',num2str(maxdep),'\n'])
+fprintf(['Number of 0 km depth events:\t',num2str(Zero_Dep),'\n'])
+fprintf(['Number of NaN depth events:\t',num2str(NaN_Dep),'\n'])
 fprintf(['\n']);
 fprintf(['Minimum Magnitude:\t',num2str(minmag),'\n'])
 fprintf(['Maximum Magnitude:\t',num2str(maxmag),'\n'])
-fprintf(['\n']);
-fprintf(['Number of 0 magnitude events:\t',num2str(ZERO),'\n'])
-fprintf(['Number of NaN magnitude events:\t',num2str(NAN),'\n'])
+fprintf(['Number of 0 magnitude events:\t',num2str(Zero_Mag),'\n'])
+fprintf(['Number of NaN magnitude events:\t',num2str(NaN_Mag),'\n'])
+sizenum = catalogsize(catalog.data.OriginTime);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Internal Functions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    function [min_data, max_data] = findMinMax(data)
+        min_data = min(data);
+        max_data = max(data);
+    end
+
+    function [ZERO_Data, NAN_Data] = findZeroNaN(data)
+        NAN_Data = sum(isnan(data));
+        ZERO_Data = sum(data==0);
+    end
+
+    function [sizenum] = catalogsize(data)
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        %
+        % Find unique month and year combinations
+        %
+        dateV = datevec(data);    
+        check = unique(dateV(:,1:2),'rows');
+        %
+        % If there are more than 5 unique month and year combinations
+        %
+        if length(check) > 5
+            %
+            % Check how many years are present
+            %
+            check = unique(dateV(:,1),'rows');
+            if length(check) > 3
+                %
+                % If more than 5 year month combinations and more than 3 years, 
+                % then use yearly plotting
+                %
+                sizenum = 1;
+            else
+                %
+                % If more than 5 year month combinations but less than 3 years, 
+                % then use monthly plotting
+                %
+                sizenum = 2;
+            end
+        else
+            %
+            % If less than 5 year month combinations, then use daily plotting
+            %
+            sizenum = 3; 
+        end
+    end
+        
 %
 % End of function
 %

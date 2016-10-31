@@ -1,4 +1,4 @@
-function catdensplot(catalog,reg)
+function catdensplot(EQEvents,reg)
 % This function creates a seismicity density map for the catalog
 %
 % Input: a structure containing catalog data
@@ -17,8 +17,9 @@ function catdensplot(catalog,reg)
 %
 % Find min and max longitude of catalog events
 %
-maxlon = max(catalog.data(:,3));
-minlon = min(catalog.data(:,3));
+coord = [];
+region = [];
+[minlon, maxlon] = findMinMax(EQEvents.Longitude);
 %
 % Check to see if range goes over Pacific Transition Zone
 %
@@ -26,9 +27,9 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust event locations
     %
-    for ii = 1:length(catalog.data(:,3))
-        if catalog.data(ii,3) < 0
-            catalog.data(ii,3) = catalog.data(ii,3)+360;
+    for ii = 1:length(EQEvents.Longitude)
+        if EQEvents.Longitude(ii) < 0
+            EQEvents.Longitude(ii) = EQEvents.Longitude(ii)+360;
         end
     end
     %
@@ -65,11 +66,9 @@ if minlon < -170 && maxlon > 170
     %
     % Get Boundaries
     %
-    maxlat = max(catalog.data(:,2)); 
-    minlat = min(catalog.data(:,2));
+    [minlat, maxlat] = findMinMax(EQEvents.Latitude);
     midlat = (maxlat+minlat)/2;
-    maxlon = max(catalog.data(:,3));
-    minlon = min(catalog.data(:,3));
+    [minlon, maxlon] = findMinMax(EQEvents.Longitude);
     latbuf = 0.1*(maxlat-minlat);
     lonbuf = 0.1*(maxlon-minlon);
     mapminlon = max(minlon-lonbuf,0);
@@ -89,24 +88,23 @@ if minlon < -170 && maxlon > 170
     for ii = 1 : 2    
         figure('Color','w')
         hold on
-        n = hist2d(catalog.data(:,2),catalog.data(:,3),100)';
+        n = hist2d(EQEvents.Latitude,EQEvents.Longitude,100)';
         if ii == 2;
             n1 = log(n);
             mask = ~logical(filter2(ones(3),n1));
             n1(mask) = NaN;
             n1(n1==-Inf) = NaN;
-            xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n1,1));
-            yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n1,1));
+            xb = linspace(minlon,maxlon,size(n1,1));
+            yb = linspace(minlat,maxlat,size(n1,1));
             pcolor(xb,yb,n1);
             title('Log_{10} Density Plot')
         else
             n(n == 0) = NaN;
-            xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
-            yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n,1));
+            xb = linspace(minlon,maxlon,size(n,1));
+            yb = linspace(minlat,maxlat,size(n,1));
             pcolor(xb,yb,n);
             title('Density Plot')
         end
-
         %
         % Format Options
         %
@@ -139,47 +137,50 @@ if minlon < -170 && maxlon > 170
         drawnow
     end
 else
+    [minlat, maxlat] = findMinMax(EQEvents.Latitude);
+    midlat = (maxlat+minlat)/2;
+    [minlon, maxlon] = findMinMax(EQEvents.Longitude);
+    latbuf = 0.1*(maxlat-minlat);
+    lonbuf = 0.1*(maxlon-minlon);
     if strcmpi(reg,'all')
         X = 0;
-        poly(1,1) = min(catalog.data(:,3));
-        poly(2,1) = max(catalog.data(:,3)); 
-        poly(1,2) = min(catalog.data(:,2));
-        poly(2,2) = max(catalog.data(:,2));
+        [poly(1,1), poly(2,1)] = findMinMax(EQEvents.Longitude);
+        [poly(1,2), poly(2,2)] = findMinMax(EQEvents.Latitude);
     else
         X = 1;
         load('regions.mat')
         ind = find(strcmpi(region,reg));
         poly = coord{ind,1};
     end
-    minlon = min(poly(:,1))-0.5;
-    maxlon = max(poly(:,1))+0.5;
-    minlat = min(poly(:,2))-0.5;
-    maxlat = max(poly(:,2))+1.0;
+    mapminlon = min(poly(:,1))-0.5;
+    mapmaxlon = max(poly(:,1))+0.5;
+    mapminlat = min(poly(:,2))-0.5;
+    mapmaxlat = max(poly(:,2))+1.0;
     if minlon < -170 & maxlon > 170 & maxlat < 79 & minlat > -60
-        maxlon = -1*min(abs(catalog.data(:,3)));
-        minlon = -180;
+        mapmaxlon = -1*min(abs(EQEvents.data(:,3)));
+        mapminlon = -180;
     end
-    midlat = (maxlat + minlat)/2;
+    midlat = (mapmaxlat + mapminlat)/2;
     %
     % Density Plot and Log Density Plot
     %
     for ii = 1 : 2    
         figure('Color','w')
         hold on
-        n = hist2d(catalog.data(:,2),catalog.data(:,3),100)';
+        n = hist2d(EQEvents.Latitude,EQEvents.Longitude,100)';
         if ii == 2;
             n1 = log(n);
             mask = ~logical(filter2(ones(3),n1));
             n1(mask) = NaN;
             n1(n1==-Inf) = NaN;
-            xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n1,1));
-            yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n1,1));
+            xb = linspace(minlon,maxlon,size(n1,1));
+            yb = linspace(minlat,maxlat,size(n1,1));
             pcolor(xb,yb,n1);
             title('Log_{10} Density Plot')
         else
             n(n == 0) = NaN;
-            xb = linspace(min(catalog.data(:,3)),max(catalog.data(:,3)),size(n,1));
-            yb = linspace(min(catalog.data(:,2)),max(catalog.data(:,2)),size(n,1));
+            xb = linspace(minlon,maxlon,size(n,1));
+            yb = linspace(minlat,maxlat,size(n,1));
             pcolor(xb,yb,n);
             title('Density Plot')
         end
@@ -202,12 +203,16 @@ else
             %
             plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
         end
-        axis([minlon maxlon minlat maxlat]);
+        axis([mapminlon mapmaxlon mapminlat mapmaxlat]);
         box on
         hold off
         drawnow
     end
 end
+    function [min_data, max_data] = findMinMax(data)
+        min_data = min(data);
+        max_data = max(data);
+    end
 %
 % End of Function
 %

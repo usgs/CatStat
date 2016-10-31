@@ -1,125 +1,159 @@
 function [cat] = loadcat(cat)
 % This function loads output from a ComCat Web search or feed in .CSV format
+% NOTICE IN ORDER FOR THIS FUNCTION TO WORK PROPERLY THE FOLLOWING HEADER
+% FIELDS MUST BE SPECIFIED: ID, ORIGINTIME, LATITUDE, LONGITUDE, DEPTH,
+% AND MAGNITUDE.  EVENTTYPE HEADER IS OPTIONAL AND, IF IT IS NOT INCLUDED,
+% THE PROGRAM WILL ASSUME ALL EVENTS ARE EARTHQUAKES
 %
 % Input: cat- information from initMkQCreport.dat file.  Read by mkQCreport 
 %
 % Output: Structure of catalog data
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types
+%         cat.data   table of id, origin-time, lat, lon, depth, mag, and
+%         event type
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Open file for reading
-%
-if cat.format ~= 4
-    fid = fopen(cat.file, 'rt');
-else
-    url = cat.file;
-end
-%
-% ComCat format
-%
-if(cat.format == 1);
-  Tref = textscan(fid,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
-  % Need to remove T and Z characters from DateTime string
-  Tref{1} = strrep(Tref{1},'T',' ');
-  Tref{1} = strrep(Tref{1},'Z','');
-  try
-      time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
-  catch
+    %
+    % Get Header Values
+    %
+    delimiter = ',';
+    endRow = 1;
+    formatSpec =  '%s';
+    dataArray = textscan(fid,formatSpec,endRow,'ReturnOnError', false);
+    rawNames = strsplit(dataArray{1}{1},delimiter);
+    %
+    % Find Event ID
+    %
+    if any(strcmpi('ID',rawNames)) %Look for Time header
+        IDInd = find(strcmpi('ID',rawNames));
+    elseif any(strcmpi('EventID',rawNames))
+        IDInd = find(strcmpi('EventID',rawNames));
+    else
+        error('No time or origin time header recognized.  Exiting.')
+    end
+    %
+    % Find Origin Time
+    %
+    if any(strcmpi('Time',rawNames)) %Look for Time header
+        TimeInd = find(strcmpi('Time',rawNames));
+    elseif any(strcmpi('OriginTime',rawNames))
+        TimeInd = find(strcmpi('OriginTime',rawNames));
+    elseif any(strcmpi('OT',rawNames))
+        TimeInd = find(strcmpi('OT',rawNames));
+    else
+        error('No time or origin time header recognized.  Exiting.')
+    end
+    %
+    % Find Latitude
+    %
+    if any(strcmpi('Latitude',rawNames)) %Look for Latitude header
+        LatInd = find(strcmpi('Latitude',rawNames));
+    elseif any(strcmpi('Lat',rawNames))
+        LatInd = find(strcmpi('Lat',rawNames));
+    else
+        error('No latitude header recognized.  Exiting.')
+    end
+    %
+    % Find Longitude
+    %
+    if any(strcmpi('Longitude',rawNames)) %Look for Longitude header
+        LonInd = find(strcmpi('Longitude',rawNames));
+    elseif any(strcmpi('Lon',rawNames))
+        LonInd = find(strcmpi('Lon',rawNames));
+    else
+        error('No longitude header recognized.  Exiting.')
+    end
+    %
+    % Find Depth
+    %
+    if any(strcmpi('Depth',rawNames)) %Look for Longitude header
+        DepInd = find(strcmpi('Depth',rawNames));
+    elseif any(strcmpi('Dep',rawNames))
+        DepInd = find(strcmpi('Dep',rawNames));
+    else
+        error('No depth header recognized.  Please specify depth header as Depth or Dep...Exiting.')
+    end
+    %
+    % Find Magnitude
+    %
+    if any(strcmpi('Magnitude',rawNames)) %Look for Longitude header
+        MagInd = find(strcmpi('Magnitude',rawNames));
+    elseif any(strcmpi('Mag',rawNames))
+        MagInd = find(strcmpi('Mag',rawNames));
+    else
+        error('No magnitude header recognized. Please specify header as Magnitude or Mag...Exiting.')
+    end
+    %
+    % Find EvType
+    %
+    if any(strcmpi('EventType',rawNames)) % Look for Event Type header
+        TypeInd = find(strcmpi('EventType',rawNames));
+    elseif any(strcmpi('EvType',rawNames))
+        TypeInd = find(strcmpi('EvType',rawNames));
+    elseif any(strcmpi('Type',rawNames))
+        TypeInd = find(strcmpi('Type',rawNames));
+    elseif any(strcmpi('event-type',rawNames))
+        TypeInd = find(strcmpi('event-type',rawNames));
+    else
+        disp('No event type header recognized. Please specify header as EventType, EvType, or Type.')
+        disp('Report will proceed but will assume all events are earthquakes')
+    end
+    %
+    % Get number of fields
+    %
+    NOF = size(rawNames,2);
+    % Create Format String
+    formatSpec = [];
+    for ii = 1 : NOF
+        if ii == TimeInd || ii == TypeInd
+            formatSpec = strcat(formatSpec,'%s');
+        elseif ii == LatInd || ii == LonInd || ii == DepInd || ii == MagInd
+            formatSpec = strcat(formatSpec,'%f');
+        else
+            formatSpec = strcat(formatSpec,'%q');
+        end
+    end
+    %
+    % 
+    %
+    frewind(fid);  
+    Tref = textscan(fid,formatSpec,'HeaderLines',1,'Delimiter',',','EmptyValue',NaN); %ComCat Online CSV Upload
+    Tref{TimeInd} = strrep(Tref{TimeInd},'T',' ');
+    Tref{TimeInd} = strrep(Tref{TimeInd},'Z','');
+    try
+        Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS.FFF');
+    catch
         try
-            time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS');
+            Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS');
         catch
             try
-                time = datenum(Tref{1},'yyyy/mm/dd HH:MM:SS') ;
+                Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM') ;
             catch
-                time = str2double(Tref{1});
-                time = epoch_to_matlab(time);
+                Tref{TimeInd} = str2double(Tref{TimeInd});
+                Tref{TimeInd} = epoch_to_matlab(OriginTime);
             end
         end
-  end
-  [cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
-  cat.id = Tref{12}(ii);
-  cat.evtype = Tref{15}(ii);
-%
-% libcomcat format
-%
-elseif(cat.format == 2); % libcomcat format
-  S = textscan(fid,'%s %s %f %f %f %f %s','HeaderLines',1,'Delimiter',','); 
-  % Need to remove T and Z characters from DateTime string
-  S{2} = strrep(S{2},'T',' ');
-  S{2} = strrep(S{2},'Z','');
-      try
-          time = datenum(S{2},'yyyy-mm-dd HH:MM:SS.FFF');
-      catch
-          try
-              time = datenum(S{2},'yyyy-mm-dd HH:MM:SS');
-          catch
-              try
-                  time = datenum(S{2},'yyyy/mm/dd HH:MM:SS');
-              catch
-                time = str2double(S{2});
-                time = epoch_to_matlab(time);
-              end
-          end 
-      end
-  [cat.data,ii] = sortrows(horzcat(time,S{3:6}),1);
-  cat.id = S{1}(ii);
-  cat.evtype = S{7}(ii);
-%
-% iscgem catalog
-%
-elseif(cat.format == 3 ); 
-    T = textscan(fid,'%s %f %f %f %f %f %s %f %f %s %f %f %s %s %f %f %s %f %f %f %f %f %f %s','HeaderLines',59,'Delimiter',',');
-    % ISC-GEM date format yyyy-mm-dd HH:MM:SS.FF; need to append '0' to end
-    T{1} = strcat(T{1},'0');
-    % Now convert to datenum
-    time = datenum(T{1},'yyyy-mm-dd HH:MM:SS.FFF');
-    [cat.data,ii] = sortrows(horzcat(time,T{2},T{3},T{8},T{11}),1);
-    cat.id = T{24}(ii);
-    cat.evtype = cell(size(cat.data,1),1);
-    for ii = 1 : size(cat.evtype,1)
-        cat.evtype{ii} = 'earthquake';
     end
-elseif(cat.format == 4);
-    block = urlread(url);
-    %
-    % Try catch block in here; try to dl everything...if it fails get
-    % starttime and endtime, break them up into months and concatenate
-    % results...mimics getdata.csv
-    %
-    Tref = textscan(block,'%s %f %f %f %f %s %s %s %s %s %s %s %s %q %s %s %s %s %s %s %s %s','HeaderLines',1,'Delimiter',','); %ComCat Online CSV Upload
-    % Need to remove T and Z characters from DateTime string
-    Tref{1} = strrep(Tref{1},'T',' ');
-    Tref{1} = strrep(Tref{1},'Z','');
-    try
-        time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS.FFF');
-    catch
-    try
-        time = datenum(Tref{1},'yyyy-mm-dd HH:MM:SS');
-    catch
-        try
-            time = datenum(Tref{1},'yyyy/mm/dd HH:MM:SS') ;
-        catch
-            time = str2double(Tref{1});
-            time = epoch_to_matlab(time);
+    ID = Tref{IDInd};
+    OriginTime = Tref{TimeInd};
+    Latitude = Tref{LatInd};
+    Longitude = Tref{LonInd};
+    Depth = Tref{DepInd};
+    Mag = Tref{MagInd};
+    if ~isempty(TypeInd)
+        Type = Tref{TypeInd};
+    else
+        Type = cell(size(OriginTime,1),1);
+        for ii = 1 : size(Type,1)
+            Type{ii} = 'earthquake';
         end
     end
-    end
-    [cat.data,ii] = sortrows(horzcat(time,Tref{2:5}),1);
-    cat.id = Tref{12}(ii);
-    cat.evtype = Tref{15}(ii);
-%
-    disp('Catalog Type Unknown')
-end
-%
-% Close the file
-%
-if cat.format ~= 4
+    cat.data = table(ID,OriginTime,Latitude,Longitude,Depth,Mag,Type);
+    cat.data = sortrows(cat.data,2);
+    %
+    % Close the file
+    %
     fclose(fid);
-end
 %
 % End of function
 %

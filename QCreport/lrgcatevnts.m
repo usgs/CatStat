@@ -11,15 +11,14 @@ function lrgcatevnts(catalog)
 % Output: None
 
 largestnum = 10;
-[nn,ii] = sortrows(catalog.data,5);
-catalog.id = catalog.id(ii);
-nancount = sum(isnan(catalog.data(:,5)) | catalog.data(:,5) == -9.9);
+[nn,~] = sortrows(catalog.data,5);
+nancount = sum(isnan(catalog.data.Mag) | catalog.data.Mag == -9.9);
 
 disp(['The ',int2str(largestnum),' largest events within ', catalog.name])
 disp(' ')
 
-for ii = length(nn)-nancount:-1:length(nn)-(largestnum-1)-(nancount)
-              %fprintf('%s\t %10s\t %9.4f\t %8.4f\t %5.1f\t %4.1f\n',datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF'),char(catalog.id(ii)),nn(ii,2),nn(ii,3),nn(ii,4),nn(ii,5))
-              disp([(datestr(nn(ii,1),'yyyy-mm-dd HH:MM:SS.FFF')),'  ',catalog.id{ii},' ',num2str(nn(ii,2)),' ',num2str(nn(ii,3)),' ',num2str(nn(ii,4)),' ',num2str(nn(ii,5))])
+for ii = size(nn,1)-nancount:-1:size(nn,1)-(largestnum-1)-(nancount)
+              disp([(datestr(nn.OriginTime(ii),'yyyy-mm-dd HH:MM:SS.FFF')),'  ',nn.ID{ii},' ',num2str(nn.Latitude(ii)),' ',num2str(nn.Longitude(ii)),' ',num2str(nn.Depth(ii)),' ',num2str(nn.Mag(ii))])
               disp(' ')
+end
 end

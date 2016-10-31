@@ -1,4 +1,4 @@
-function plotcatdeps(eqevents,reg)
+function plotcatdeps(EQEvents,reg,name)
 % This function plots the distribution of event depth 
 % Input:  eqevents - Only earthquake events from the original catalog
 %         
@@ -6,23 +6,33 @@ function plotcatdeps(eqevents,reg)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+coord = [];
+region = [];
 disp('Depth distribution of EARTHQUAKE EVENTS ONLY. All other event types ignored.');
 %
 % Replace any erroneous depths with NaN
 %
-eqevents(eqevents(:,4)==-999,4) = NaN;
+ind = find(EQEvents.Depth==-999);
+if ~isempty(ind);
+    EQEvents(ind,:) = NaN;
+end
 %
 % Get minimum and maximum depths
 %
-maxdep = max(eqevents(:,4));
-mindep = min(eqevents(:,4));
+[mindep, maxdep] = findMinMax(EQEvents.Depth);
 %
 % Determine the number of events with NaN and 0km as depths and remove them
 %
-nandepcount = sum(isnan(eqevents(:,4)));
-zerodepcount = sum(eqevents(:,4) == 0);
-eqevents(isnan(eqevents(:,4)),:) = [];
-eqevents(eqevents(:,4) == 0,:) = [];
+nandepcount = sum(isnan(EQEvents.Depth));
+zerodepcount = sum(EQEvents.Depth == 0);
+ind = find(isnan(EQEvents.Depth));
+if ~isempty(ind);
+    EQEvents(ind,:) = [];
+end
+ind = find(EQEvents.Depth == 0);
+if ~isempty(ind);
+    EQEvents(ind,:) = [];
+end
 %
 % Print results
 %
@@ -31,14 +41,14 @@ disp(['Maximum Depth: ',int2str(maxdep)])
 disp(['Number of Events without a Depth: ',int2str(nandepcount)])
 disp(['Number of Events with 0 km Depth: ',int2str(zerodepcount)])
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-if sum(eqevents(:,4)>=50) >= 1
+if sum(EQEvents.Depth >= 50) >= 1
     %
     % Shallow EQ
     %
     figure
     subplot(2,1,1)
     hold on
-    histogram(eqevents(eqevents(:,4) < 50,4))
+    histogram(EQEvents.Depth(EQEvents.Depth < 50))
     %
     % Format Options
     %
@@ -54,7 +64,7 @@ if sum(eqevents(:,4)>=50) >= 1
     %
     subplot(2,1,2)
     hold on
-    y=histogram(eqevents(eqevents(:,4)>=50,4));
+    y=histogram(EQEvents.Depth(EQEvents.Depth>=50));
     %
     %
     %
@@ -67,74 +77,74 @@ if sum(eqevents(:,4)>=50) >= 1
     %
     % Depth Map of EQ
     %
-    maxlon = max(eqevents(:,3));
-    minlon = min(eqevents(:,3));
-    eqevents(eqevents(:,4)<50,:) = [];
+    [minlon, maxlon] = findMinMax(EQEvents.Depth);
+    ind = find(EQEvents.Depth < 50);
+    EQEvents(ind,:) = [];
     %
     % Check to see if range goes over Pacific Transition Zone
     %
-    if minlon < -170 && maxlon > 170
-        %
-        % Adjust event locations
-        %
-        for ii = 1:length(eqevents(:,3))
-            if eqevents(ii,3) < 0
-                eqevents(ii,3) = eqevents(ii,3)+360;
+   if minlon < -170 & maxlon > 170
+    %
+    % Adjust event locations
+    %
+    for ii = 1:length(EQEvents.Longitude)
+        if EQEvents.Longitude(ii) < 0
+            EQEvents.Longitude(ii) = EQEvents.Longitude(ii)+360;
+        end
+    end
+    %
+    % Adjust World Map
+    %
+    load('Countries.mat');
+    L = length(places);
+    for ii = 1 : L
+        clon=lon{ii,1};
+        for jj = 1 : length(clon)
+            if clon(jj) < 0
+                clon(jj) = clon(jj) + 360;
             end
         end
-        %
-        % Adjust World Map
-        %
-        load('Countries.mat');
-        L = length(places);
-        for ii = 1 : L
-            clon=lon{ii,1};
-            for jj = 1 : length(clon)
-                if clon(jj) < 0
-                    clon(jj) = clon(jj) + 360;
-                end
+        clon(abs(diff(clon))>359) = NaN;
+        lon{ii,1}=clon;
+    end
+    %
+    % Adjust Region
+    %
+    if strcmpi(reg,'all')
+        poly = [];
+    else
+        load('regions.mat')
+        ind = find(strcmpi(region,reg));
+        poly = coord{ind,1};
+        for ii = 1 : length(poly);
+            if poly(ii,1) < 0
+                poly(ii,1) = poly(ii,1)+360;
             end
-            clon(abs(diff(clon))>359) = NaN;
-            lon{ii,1}=clon;
         end
-        %
-        % Adjust Region
-        %
-        if strcmpi(reg,'all')
-            poly = [];
-        else
-            load('regions.mat')
-            ind = find(strcmpi(region,reg));
-            poly = coord{ind,1};
-            for ii = 1 : length(poly);
-                if poly(ii,1) < 0
-                    poly(ii,1) = poly(ii,1)+360;
-                end
-            end
-            poly(abs(diff(poly(:,1)))>359,1) = NaN;
-        end
-        %
-        % Get Boundaries
-        %
-        maxlat = max(eqevents(:,2))+0.5; 
-        minlat = min(eqevents(:,2))-0.5;
-        midlat = (maxlat+minlat)/2;
-        maxlon = max(eqevents(:,3))+0.5;
-        minlon = min(eqevents(:,3))-0.5;
-        mapminlon = max(minlon,0);
-        mapmaxlon = min(maxlon,360);
-        mapminlat = max(minlat,-90);
-        mapmaxlat = min(maxlat,90); 
-        %
-        % Get XTickLabel
-        %
-        X = round(linspace(minlon,maxlon,10));
-        X_Tick = X;
-        X(X>180) = X(X>180)-360;
-        X_label = num2str(X');
-        %
-        % Initialize Figure
-        %
+        poly(abs(diff(poly(:,1)))>359,1) = NaN;
+    end
+    %
+    % Get Boundaries
+    %
+    [minlat, maxlat] = findMinMax(EQEvents.Latitude);
+    midlat = (maxlat+minlat)/2;
+    [minlon, maxlon] = findMinMax(EQEvents.Longitude);
+    latbuf = 0.1*(maxlat-minlat);
+    lonbuf = 0.1*(maxlon-minlon);
+    mapminlon = max(minlon-lonbuf,0);
+    mapmaxlon = min(maxlon+lonbuf,360);
+    mapminlat = max(minlat-latbuf,-90);
+    mapmaxlat = min(maxlat+latbuf,90); 
+    %
+    % Get XTickLabel
+    %
+    X = round(linspace(minlon,maxlon,10));
+    X_Tick = X;
+    X(X>180) = X(X>180)-360;
+    X_label = num2str(X');
+    %
+    % Make figure
+    %
         figure
         hold on
         %
@@ -152,7 +162,7 @@ if sum(eqevents(:,4)>=50) >= 1
         %
         % Plot adjusted events
         %
-        h1 = plot(eqevents(:,3),eqevents(:,2),'r.','MarkerSize',15);
+        h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'r.','MarkerSize',15);
         %
         % Plot Format
         %
@@ -163,7 +173,7 @@ if sum(eqevents(:,4)>=50) >= 1
         set(gca,'XTickLabel',X_label);
         xlabel('Longitude')
         ylabel('Latitude')
-        title(eqevents.name);
+        title(sprintf('Earthquakes >= 50 km depth'));
         legend(h1,'Earthquakes','Location','SouthOutside')
         hold off
     else
@@ -172,15 +182,14 @@ if sum(eqevents(:,4)>=50) >= 1
         figure
         hold on
         plotworld
-
         %
         % Boundaries
         %
         if strcmpi(reg,'all')
-            poly(1,1) = min(eqevents(:,3));
-            poly(2,1) = max(eqevents(:,3)); 
-            poly(1,2) = min(eqevents(:,2));
-            poly(2,2) = max(eqevents(:,2));
+            poly(1,1) = min(EQEvents.Longitude);
+            poly(2,1) = max(EQEvents.Longitude); 
+            poly(1,2) = min(EQEvents.Latitude);
+            poly(2,2) = max(EQEvents.Latitude);
         else
             load('regions.mat')
             ind = find(strcmpi(region,reg));
@@ -193,7 +202,7 @@ if sum(eqevents(:,4)>=50) >= 1
         %
         % Plot earthquakes (red) and non-earthquake events (blue)
         %
-        h1 = plot(eqevents(:,3),eqevents(:,2),'rx','MarkerSize',15);
+        h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'rx','MarkerSize',15);
         minlon = min(poly(:,1))-0.5;
         maxlon = max(poly(:,1))+0.5;
         minlat = min(poly(:,2))-0.5;
@@ -216,7 +225,7 @@ if sum(eqevents(:,4)>=50) >= 1
 else
     figure
     hold on
-    histogram(eqevents(:,4))
+    histogram(EQEvents.Depth)
     %
     % Format Options
     %
@@ -228,6 +237,10 @@ else
     hold off
     drawnow
 end
+    function [min_data, max_data] = findMinMax(data)
+        min_data = min(data);
+        max_data = max(data);
+    end
 %
 %End of Function
 %
