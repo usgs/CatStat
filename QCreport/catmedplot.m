@@ -1,4 +1,19 @@
 function [] = catmedplot(EQEvents,ppa,reg)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function creates a median earthquake magnitude map
+% Input: Necessary components described
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%       ppa - Determines size of grid squares.
+%       catalog.reg - region
+%
+% Output: 
+%       No outputs
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 coord = [];
 region = [];
 min_count = 1;
@@ -211,7 +226,11 @@ else
     hold off
     drawnow
 end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% Internal Functions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     function [min_data, max_data] = findMinMax(data)
         min_data = min(data);
         max_data = max(data);

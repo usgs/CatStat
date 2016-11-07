@@ -1,18 +1,32 @@
 function [cat] = loadcat(cat)
-% This function loads output from a ComCat Web search or feed in .CSV format
-% NOTICE IN ORDER FOR THIS FUNCTION TO WORK PROPERLY THE FOLLOWING HEADER
+% This function loads an earthquake catalog or bulletin in CSV format.
+%%%%%%%%%%%%%%%%%%%%%%%%%  NOTICE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% IN ORDER FOR THIS FUNCTION TO WORK PROPERLY THE FOLLOWING HEADER
 % FIELDS MUST BE SPECIFIED: ID, ORIGINTIME, LATITUDE, LONGITUDE, DEPTH,
-% AND MAGNITUDE.  EVENTTYPE HEADER IS OPTIONAL AND, IF IT IS NOT INCLUDED,
-% THE PROGRAM WILL ASSUME ALL EVENTS ARE EARTHQUAKES
+% AND MAGNITUDE.  EVENTTYPE HEADER IS OPTIONAL. IF IT IS NOT INCLUDED
+% THE PROGRAM WILL ASSUME ALL EVENTS ARE EARTHQUAKES.  HEADER VALUES ARE
+% NOT CASE SENSITIVE.
 %
-% Input: cat- information from initMkQCreport.dat file.  Read by mkQCreport 
+% IF ORIGIN TIME IS IN EPOCH TIME, PLEASE CHANGE
+%
+% Input: cat- information gathered from initMkQCreport.dat file read by
+% mkQCreport.  If running loadcat seperately, cat is a structure that
+% contains the following fields:
+%           cat.file: path to CSV file
+%           cat.name: Name of catalog
+%           cat.timeoffset: Local time UTC offset
+%           cat.timezone: Description of time zone
 %
 % Output: Structure of catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   table of id, origin-time, lat, lon, depth, mag, and
-%         event type
+%         All input variables described above are returned along with:
+%         cat.data   table of ID, OriginTime, Latitude, Longitude, Depth,
+%                    Mag, and Type
+%
+% Written By: Matthew R. Perry
+% Last Edit: 04 November 2016
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    fid = fopen(cat.file,'rt');
     %
     % Get Header Values
     %
@@ -22,7 +36,7 @@ function [cat] = loadcat(cat)
     dataArray = textscan(fid,formatSpec,endRow,'ReturnOnError', false);
     rawNames = strsplit(dataArray{1}{1},delimiter);
     %
-    % Find Event ID
+    % Find Event
     %
     if any(strcmpi('ID',rawNames)) %Look for Time header
         IDInd = find(strcmpi('ID',rawNames));
@@ -99,10 +113,12 @@ function [cat] = loadcat(cat)
         disp('Report will proceed but will assume all events are earthquakes')
     end
     %
-    % Get number of fields
+    % Get number of fields (NOF)
     %
     NOF = size(rawNames,2);
+    %
     % Create Format String
+    %
     formatSpec = [];
     for ii = 1 : NOF
         if ii == TimeInd || ii == TypeInd
@@ -114,25 +130,37 @@ function [cat] = loadcat(cat)
         end
     end
     %
-    % 
+    % Rewind file and skip headerline
     %
     frewind(fid);  
     Tref = textscan(fid,formatSpec,'HeaderLines',1,'Delimiter',',','EmptyValue',NaN); %ComCat Online CSV Upload
-    Tref{TimeInd} = strrep(Tref{TimeInd},'T',' ');
-    Tref{TimeInd} = strrep(Tref{TimeInd},'Z','');
-    try
-        Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS.FFF');
-    catch
+    if strcmpi(cat.epoch,'No')
+        %
+        % LibComCat queries return dates as yyyy-mm-ddTHH:MM:SS.FFFZ, which
+        % MATLAB doesn't like.
+        %
+        Tref{TimeInd} = strrep(Tref{TimeInd},'T',' ');
+        Tref{TimeInd} = strrep(Tref{TimeInd},'Z','');
+        %
+        % Replace any slashes in OriginTime with dashes
+        %
+        Tref{TimeInd} = strrep(Tref{TimeInd},'/','-');
+        %
+        % If date time string is variable, this try/catch will hopefully
+        % capture all variations.
+        %
         try
-            Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS');
+            Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS.FFF');
         catch
             try
-                Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM') ;
+                Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM:SS');
             catch
-                Tref{TimeInd} = str2double(Tref{TimeInd});
-                Tref{TimeInd} = epoch_to_matlab(OriginTime);
+                Tref{TimeInd} = datenum(Tref{TimeInd},'yyyy-mm-dd HH:MM') ;
             end
         end
+    elseif strcmpi(cat.epoch,'Yes')
+        Tref{TimeInd} = str2double(Tref{TimeInd});
+        Tref{TimeInd} = epoch_to_matlab(OriginTime);
     end
     ID = Tref{IDInd};
     OriginTime = Tref{TimeInd};
@@ -154,6 +182,16 @@ function [cat] = loadcat(cat)
     % Close the file
     %
     fclose(fid);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Internal Functions
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    function [time_matlab] = epoch_to_matlab(epoch_time)
+        % Converts unix epoch time to MATLAB datenum
+        time_reference = datenum('1970','yyyy');
+        time_matlab = time_reference + epoch_time./86400;
+    end
 %
 % End of function
 %

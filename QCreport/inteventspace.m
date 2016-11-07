@@ -1,15 +1,13 @@
 function inteventspace(EQEvents,sizenum)
 % This function plots and compares the time between events (inter-temporal event spacing). 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-%    
-%        Sizenum - plotting format determined by catalogsize
+% Input: EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%        sizenum - plotting format determined in basiccatsum
 %
 % Output: None
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -131,7 +129,7 @@ elseif sizenum == 3
     %
     subplot(3,1,2)
     hold on
-    bar(dailydatenum(:,1),maxsepday,'hist')
+    bar(dailydatenum(1:end-1,1),maxsepday,'hist')
     %
     % Subplot 2 Format Options
     %
@@ -148,7 +146,7 @@ elseif sizenum == 3
     %
     subplot(3,1,3)
     hold on
-    bar(dailydatenum(:,1),medsepday,'hist')
+    bar(dailydatenum(1:end-1,1),medsepday,'hist')
     %
     % Subplot 3 Format Options
     %
@@ -177,7 +175,7 @@ else
     % Subplot 2
     %
     subplot(3,1,2)
-    bar(monthlydatenum,maxsepmth,'hist')
+    bar(monthlydatenum(1:end-1),maxsepmth,'hist')
     hold on
     %
     % Subplot 2 Format Options
@@ -195,7 +193,7 @@ else
     %
     subplot(3,1,3)
     hold on
-    bar(monthlydatenum,medsepmth,'hist')
+    bar(monthlydatenum(1:end-1),medsepmth,'hist')
     %
     % Subplot 3 Format Options
     %

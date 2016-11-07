@@ -1,14 +1,14 @@
 function catdensplot(EQEvents,reg)
-% This function creates a seismicity density map for the catalog
+% This function creates a earthquake density map for the catalog
 %
 % Input: a structure containing catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-%         reg - region
+%         EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%         catalog.reg - region
 % Output: None
+%
+% Written By: Matthew R. Perry
+% Last Edit: 07 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

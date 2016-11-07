@@ -1,7 +1,14 @@
 function catmaghist(EQEvents, Mc)
-% This function plots and compares the magnitude completeness. 
-% Input: A matrix of all the catalog.data for earthquake-type events only.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function plots  histogram of the magnitudes in EQEvents
+%
+% Input: Necessary components described
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%       Mc - Estimated magnitude of completeness.
+%
 % Output: None
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Print out
 %

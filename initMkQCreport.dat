@@ -10,6 +10,8 @@ California Institute of Technology
 Pacific Standard Time UTC-8  
 % Authoritative Region, if none put all
 all
+% Authoritative Agency, if none put all
+all
 % Diretory to put report in
 Report
 % File format for report

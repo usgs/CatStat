@@ -1,10 +1,18 @@
-function plotcatdeps(EQEvents,reg,name)
+function plotcatdeps(EQEvents,reg)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function plots the distribution of event depth 
-% Input:  eqevents - Only earthquake events from the original catalog
-%         
-% Output: None
+% Input: Necessary components described
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%       reg - region
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Output: 
+%       No outputs
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 coord = [];
 region = [];
@@ -221,6 +229,17 @@ if sum(EQEvents.Depth >= 50) >= 1
         box on
         hold off
         drawnow
+   end
+    %
+    % Print Out
+    %
+    GT50 = EQEvents(EQEvents.Depth>=50,:);
+    disp(' ')
+    disp('            Events Deeper than 50 km')
+    disp('-------------------------------------------------')
+    for ii = 1 : size(GT50,1)
+        fprintf('%s\t%s\tM%s\t%s\n',GT50.ID{ii},datestr(GT50.OriginTime(ii)),...
+            num2str(GT50.Mag(ii)),num2str(GT50.Depth(ii)));
     end
 else
     figure

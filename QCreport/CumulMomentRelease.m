@@ -1,4 +1,19 @@
 function CumulMomentRelease(EQEvents,name)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Plots cumulative moment release of earthquakes in the catalog.
+% Conversion to moment from magnitude assumes all magnitudes are moment
+% magnitudes.
+%
+% Input: Necessary components described
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%       name - catalog name; typically catalog.name
+%
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Remove NaN
 %
