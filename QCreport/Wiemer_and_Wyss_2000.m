@@ -1,4 +1,28 @@
 function [Mc,bvalue,avalue,L,Mag_bins,std_dev] = Wiemer_and_Wyss_2000(Mc,Mags,bin_size)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Function based off the methods in Wiemer and Wyss, 2000 that searches for
+% the best fit for a given Mc.  Will take Mc estimated from maximum
+% curvature method and search within +-1.5 Mag units for best fit.  "Best
+% fit" is taken to be either the Mc associate with the smallest residual or
+% the first time the goodness-of-fit becomes greater than 90%.
+%
+% Input: Necessary components described
+%       Mc - estimated Magnitude of Completeness
+%       Mags - Magnitudes from EQEvents
+%       bin_size- Magnitude bin size; default if 0.1.
+%
+% Output: 
+%       Mc - refined Mc estimate
+%       bvalue - B-value associated with Mc
+%       avalue - A-value associated with Mc
+%       L      - Synthetic CDF determined using B- and A-values.
+%       Mag-bins - Magnitude bins used in detemining L
+%       std_dev - Standard deviation of B-value.
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Make sure Mags are rounded to nearest tenth, no NaNs also
     Mags(isnan(Mags)) = [];
     Mags = round(Mags,1,'decimal');
@@ -25,7 +49,7 @@ function [Mc,bvalue,avalue,L,Mag_bins,std_dev] = Wiemer_and_Wyss_2000(Mc,Mags,bi
         % Calculate bvalue and std based on _______ CITE ME PLEASE!
         %
         bvalue(ii) = log10(exp(1))/(mean(M)-(Mc_vec(ii)-Corr));
-        std_dev(ii) = bvalue(ii)/sqrt(length(cdf(1)));
+        std_dev(ii) = bvalue(ii)/sqrt(cdf(1));
         %
         % Calculate avalue
         %
@@ -35,8 +59,6 @@ function [Mc,bvalue,avalue,L,Mag_bins,std_dev] = Wiemer_and_Wyss_2000(Mc,Mags,bi
         %
         % Get Number of Events per Bin
         %
-%         B = histogram(M,Mag_bins_edges,'Visible','off');
-%         B = B.Values;
         [B,~] = histcounts(M,Mag_bins_edges);
         S = abs(diff(L));
         R(ii) = (sum(abs(B(1:end-1) - S))/length(M))*100;
@@ -44,7 +66,6 @@ function [Mc,bvalue,avalue,L,Mag_bins,std_dev] = Wiemer_and_Wyss_2000(Mc,Mags,bi
     end
     % Find first value to fall under 10% (90% fit)
     ind = find(R <= 10);
-%     [~,ii] = min(R);
     if ~isempty(ind)
         ii = ind(1);
     else

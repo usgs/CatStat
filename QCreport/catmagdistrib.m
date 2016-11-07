@@ -1,11 +1,14 @@
 function [] = catmagdistrib(EQEvents)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function plots and compares the distribution of magnitude. 
 %
-% Input: eqevents - Earthquake events from the original catalog
-%        sizenum - plot formatting option determined by catalogsize
+% Input: EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
 %
-% Output: yrmageqcsv - matrix contained year and magnitude information
-% about the earthquake events in the catalog
+% Output: No Output
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %

@@ -1,13 +1,16 @@
 function magspecs(EQEvents)
-% This function plots and compares the number of events of a specific magnitude. 
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This function plots and compares the number of events of specific magnitude bins. 
+% Input: Necessary components described
+%        EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
 % Output: None
-
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % Find events below increasing magnitude threshold and plot event count
 %
 %

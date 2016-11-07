@@ -1,12 +1,22 @@
 function [dups] = catdupevents(catalog,secondsMax,kmMax,magthres)
-% This function finds and lists all the possible duplicate events within x seconds and x kilometers.
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-% Output: None
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function finds and lists all the possible duplicate events within
+% x seconds and x kilometers.
+%
+% Input: Necessary components described
+%       catalog.data -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type
+%       catalog.name - Name of the catalog
+%       secondsMax - Time window for duplicates
+%       kmMax - Distance window for duplicates
+%       magthres - Magnitude above which duplicates should be considered.
+%
+% Output: Table of Event IDs for possble duplicates.
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dups = [];
 disp(['List of event pairs within ', num2str(secondsMax),' seconds and ', num2str(kmMax) ' kilometers'] )
 disp(' ')
@@ -39,19 +49,6 @@ for ii = 2:size(catalog.data,1)
            end
        end
 end
-%
-% Write .csv file if there are duplicates
-% %
-% if D~=0
-%     OriginTime = datestr(catalog.data(ind,1),'yyyy-mm-dd HH:MM:SS.FFF');
-%     EventID = catalog.id(ind,1);
-%     Lat = catalog.data(ind,2);
-%     Lon = catalog.data(ind,3);
-%     Depth = catalog.data(ind,4);
-%     Mag = catalog.data(ind,5);
-%     T = table(OriginTime,EventID,Lat,Lon,Depth,Mag,delTime,delLoc,delDep,delMag);
-%     writetable(T,'Duplicates.csv','Delimiter',',');
-% end
 %
 % Print out
 %

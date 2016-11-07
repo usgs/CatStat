@@ -1,20 +1,19 @@
 function catdupsearch(catalog)
-% This function plots and searches for possible duplicate events based on various time and distance parameters.
-% Input: a structure containing normalized catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-% Output: None
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculate Number of Events within XX seconds and XZ km
 % This plot is to help pick thresholds to look for duplicate events. It
 % shows the number of events within a given time and distance
 % separation. It is an estimate because it just compares events adjacent in
 % time. It does not compare each event to every other event in the catalog.
-
-
+%
+% Input: Necessary components described
+%        EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type
+% Output: None
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 nquakes = size(catalog.data,1);
 tdifsec = abs(diff(catalog.data.OriginTime))*24*60*60;
 [ddelkm] = distance_hvrsn(catalog.data.Latitude(1:(nquakes-1)), ...

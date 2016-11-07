@@ -1,13 +1,20 @@
-function [EQEvents, nonEQEvents] = plotcatmap(catalog,reg,auth)
+function [EQEvents, nonEQEvents] = plotcatmap(catalog)
 % This function creates a seismicity map for the catalog, including bounds 
-% Input: a structure containing catalog data
-%         cat.name   name of catalog
-%         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
+% Input: Necessary components described
+%       catalog - a structure containing catalog data (described in loadcat)
+%       catalog.name - Name of the catalog
+%       catalog.data - data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type
+%       catalog.reg  - Selected region
 %
-% Output: eqevents  A matrix of ONLY earthquakes from the original catalog
+% Output: 
+%       EQEvents -- subset of catalog.data where the event type is equal to
+%       'earthquake'
+%       nonEQEvents -- subsets of catalog.data where the event type is not
+%       equal to 'earthquake'
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 disp(['Map of recorded catalog activity distinguished between earthquakes (red) and overlaying non earthquakes (blue).']);
@@ -50,11 +57,11 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust Region
     %
-    if strcmpi(reg,'all')
+    if strcmpi(catalog.reg,'all')
         poly = [];
     else
         load('regions.mat')
-        ind = find(strcmpi(region,reg));
+        ind = find(strcmpi(region,catalog.reg));
         poly = coord{ind,1};
         for ii = 1 : length(poly);
             if poly(ii,1) < 0
@@ -141,12 +148,12 @@ else
     %
     % Boundaries
     %
-    if strcmpi(reg,'all')
+    if strcmpi(catalog.reg,'all')
         [poly(1,1), poly(2,1)] = findMinMax(catalog.data.Longitude);
         [poly(1,2), poly(2,2)] = findMinMax(catalog.data.Latitude);
     else
         load('regions.mat')
-        ind = find(strcmpi(region,reg));
+        ind = find(strcmpi(region,catalog.reg));
         poly = coord{ind,1};
         %
         % Plot region

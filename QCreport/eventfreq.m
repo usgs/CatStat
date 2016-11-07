@@ -1,8 +1,9 @@
 function eventfreq(EQEvents,sizenum)
 % This function plots and compares event frequency over the entire catalog. 
 % Input: 
-%       eqevents - Earthquake events from catalog
-%       sizenum - plotting option determined in catalogsize
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%       sizenum - plotting option determined in basiccatsum
 %
 % Output: None
 %

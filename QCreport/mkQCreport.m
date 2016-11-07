@@ -12,16 +12,12 @@ if exist('./initMkQCreport.dat','file')
     catalog.format = str2num(initdat{1}{6}); 
     catalog.timeoffset= str2num(initdat{1}{8}); 
     catalog.timezone =  char(initdat{1}{10});
-    reg = char(initdat{1}{12});
-    auth = char(initdat{1}{14});
-    pubopts.outputDir = char(initdat{1}{16});
-    pubopts.format = char(initdat{1}{18}); 
-    pubopts.showCode = char(initdat{1}{20}); 
-    if(strcmp(pubopts.showCode,'true'))
-      pubopts.showCode = true;
-    else
-      pubopts.showCode = false;
-    end
+    catalog.reg = char(initdat{1}{12});
+    catalog.auth = char(initdat{1}{14});
+    catalog.epoch = char(initdat{1}{16});
+    pubopts.outputDir = char(initdat{1}{18});
+    pubopts.format = 'html';
+    pubopts.showCode = false;
     fclose(fid);
     publish('QCreport',pubopts)
 else 

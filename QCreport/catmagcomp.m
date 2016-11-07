@@ -1,10 +1,21 @@
-function [Mc_est] = catmagcomp(EQEvents,name,MagBin,McCorr)
-% This function plots and compares the magnitude completeness. 
+function [Mc_est] = catmagcomp(EQEvents,name,MagBin)
+% This function determines the magnitude of completeness and plots
+% FMD of EQEvents.  Initial estimate of Mc is determined using the
+% maximum curvature method with a correction term determined using the
+% methods of Wiemer and Wyss, 2000 in order to determine best fit to the
+% data.  If data considered is too small, the algorithm will default to the
+% initial estimate.
+%
 % Input:
-%   catalog - data structure created in loadcat
+%   EQEvents - data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type of earthquakes ONLY
+%   Name - catalog name; typically saved as catalog.name
 %   MagBin - binning width e.g. 0.1, 0.05, 0.1 is default
 %
 % Output: None
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -56,8 +67,18 @@ mag_edges = minmag-MagBin/2:MagBin:maxmag+MagBin/2;
 Mc_est = mag_centers(ii);
 %
 % Interate around estimated Mc to estimate best fit (Wiemer and Wyss, 2000)
-%
-[Mc_est,bvalue,avalue,L,Mc_bins,std_dev] = Wiemer_and_Wyss_2000(Mc_est,EQEvents.Mag,MagBin);
+% Algorithm will fail if sample size is too small.
+try
+    [Mc_est,bvalue,~,L,Mc_bins,std_dev] = Wiemer_and_Wyss_2000(Mc_est,EQEvents.Mag,MagBin);
+catch
+    Mc_est = Mc_est+0.3;
+    Mc_bins = Mc_est:MagBin:maxmag;
+    bvalue = log10(exp(1))/(mean(EQEvents.Mag(EQEvents.Mag>=Mc_est))-(Mc_est-MagBin/2));
+    avalue = log10(length(EQEvents.Mag(EQEvents.Mag>=Mc_est))) + bvalue*Mc_est;
+    log_L = avalue-bvalue.*Mc_bins;
+    L = 10.*log_L;
+    std_dev = bvalue/sqrt(length(EQEvents.Mag>=Mc_est));
+end
 %
 % Maximum incremental step
 %

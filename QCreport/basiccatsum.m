@@ -3,10 +3,16 @@ function [sizenum] = basiccatsum(catalog)
 % Input: a structure containing catalog data
 %         cat.name   name of catalog
 %         cat.file   name of file contining the catalog
-%         cat.data   real array of origin-time, lat, lon, depth, mag 
-%         cat.id     character cell array of event IDs
-%         cat.evtype character cell array of event types 
-% Output: None
+%         cat.data   data table with ID, OriginTime, Latitude, Lonitude,
+%                    Depth, Mag, and Type 
+%         cat.auth   Authoritative Agency
+% Output: 
+%         sizenum    Integer that describes the temporal extend of the
+%                    catalog. See internal function catalogsize for more
+%                    information
+%
+% Written By: Matthew R. Perry
+% Last Edit: 04 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -40,11 +46,21 @@ end
 %
 fprintf(['Catalog Name:\t',catalog.name,'\n'])
 fprintf(['File Name:\t',catalog.file,'\n'])
+fprintf(['Date Generated:\t',datestr(datetime,'yyyy-mm-dd HH:MM:SS.FFF'),'\n'])
 fprintf(['\n']);
 fprintf(['First Date in Catalog:\t',begdate,'\n'])
 fprintf(['Last Date in Catalog:\t',enddate,'\n'])
 fprintf(['\n']);
 fprintf(['Total Number of Events:\t',int2str(size(catalog.data,1)),'\n'])
+if ~strcmpi('all',catalog.auth)
+    if ~any(strcmp('authevnt',fields(catalog)))
+        tt = length(catalog.auth);
+        catalog.authevnt = sum(strncmpi(catalog.auth,catalog.data.ID,tt));
+        catalog.nonauthevnt = sum(~strncmpi(catalog.auth,catalog.data.ID,tt));
+    end
+    fprintf(['Total Number of ', upper(catalog.auth),' Events:\t',int2str(catalog.authevnt),'\n'])
+    fprintf(['Total Number of non-', upper(catalog.auth),' Events:\t',int2str(catalog.nonauthevnt),'\n'])
+end
 for ii = 1 : size(U,1)
    fprintf(['\t',U{ii},':\t',int2str(U_count(ii)),'\n'])
 end
@@ -114,8 +130,7 @@ sizenum = catalogsize(catalog.data.OriginTime);
             %
             sizenum = 3; 
         end
-    end
-        
+    end     
 %
 % End of function
 %

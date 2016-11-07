@@ -1,7 +1,7 @@
-% function for use in QC Report
 function [] = Cluster_Detection(EQEvents, Mc)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Script based off Zaliapin et al 2013 for Cluster Analysis using minimal
+% Functions based off Zaliapin et al 2013 for Cluster Analysis using minimal
 % spatio-temporal distances
 %
 % Mc of 2.5 or 3.0 will effectively show clustering.  Any smaller than 2.5
@@ -10,6 +10,23 @@ function [] = Cluster_Detection(EQEvents, Mc)
 %
 % If the catalog is sufficiently large, alter the Mc for computational efficiency
 %
+% Only Earthquakes are considered in this algorithm.  Bimodal distribution
+% indicates clusters (i.e. foreshocks and aftershocks) are present in the
+% data.  Unimodal distribution would indicate a declustered catalog.  This
+% analysis is based off nearest-neighbor earthquake distances, which
+% accounts for space, time, and magnitude distance of earthquakes (Zaliapin
+% and Ben-Zion, 2013).
+%
+% Inputs: Necessary components described
+%       EQEvents -  data table containing ID, OriginTime, Latitude,
+%                      Longitude, Depth, Mag, and Type 
+%       Mc - Estimated magnitude of completeness
+%
+% Output: None
+%
+% Written by: Matthew R Perry
+% Last Edit: 07 November 2016
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if length(EQEvents.Mag) > 300000;
     Mc = 3.0;
 end
@@ -46,6 +63,10 @@ for ii = length(EQEvents.Mag):-1:2
     N(ii-1,1) = T(ii-1,1)*R(ii-1,1);%n(ind);
     NND(ii-1,:) = [ind,ii,t(ind),r(ind),n(ind),T(ii-1,1),R(ii-1,1),N(ii-1,1)];
 end
+%
+% Latitude as a function of Origin Time scatter plot; will show spatial and
+% temporal clustering
+%
 figure;clf
 plot(EQEvents.OriginTime(EQEvents.Mag>2.0),EQEvents.Latitude(EQEvents.Mag>2.0),'k.','MarkerSize',0.25)
 datetick('x')

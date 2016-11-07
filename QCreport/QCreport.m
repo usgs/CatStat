@@ -1,33 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%QCReport.m --
+%Script to run in order to generate single catalog QC report.  Please
+%refer to documentation for explanation on functions/algorithms used
+%within.
+%
+%
+%This script is typically run under to 'publish' function through
+%mkQCreport. Comments in the main script need cannot have a space after the percent symbol in
+%order to remain unseen when report is published.  
+%
+%Comments inside subsequent functions are rendered normally and will not display on the
+%report.  
+%
+%Mark-up is supported in the 'publish' function and any need to
+%add or edit mark-up should follow the syntax discribed at 
+%https://www.mathworks.com/help/matlab/matlab_prog/marking-up-matlab-comments-for-publishing.html
+%
+%Written By: Matthew R. Perry
+%
+%Last Edit: 04 November 2016
+%For any issues, comments, or suggestions, please contact me through GitHub
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Basic Catalog Summary
 %
-% Load catalog data
+%Load catalog data
 catalog = loadcat(catalog);
-% Trim the catalog if region is selected
-if strcmpi(reg,'all');
-    catalog = catalog;
-else
-    catalog = trimcatalog(catalog,reg);
+%Trim the catalog if region is selected
+if ~strcmpi(catalog.reg,'all') || ~strcmpi(catalog.auth,'none');
+    catalog = trimcatalog(catalog);
 end
-% 
+%%
 sizenum = basiccatsum(catalog);
 %% Seismicity Map
 %
-[EQEvents, nonEQEvents] = plotcatmap(catalog,reg); % If using a regional network, be sure to change the polygon being displayed (comment out all others)
+[EQEvents, nonEQEvents] = plotcatmap(catalog);
 %
 %% Seismicity Density Plot
 %
 % Earthquakes only considered in these density plots.
 %
-catdensplot(EQEvents,reg);
+catdensplot(EQEvents,catalog.reg);
 %% Median Magnitude Map
 %
-% Only Earthquakes are considered in this plot
+% Only Earthquakes are considered in this plot. Computation of plot can be
+% quite long if large, global catalogs are being considered.
 %
-catmedplot(EQEvents,25,reg)
+catmedplot(EQEvents,25,catalog.reg)
 
 %% Depth Distribution
 
-plotcatdeps(EQEvents,reg,catalog.name);
+plotcatdeps(EQEvents,catalog.reg);
 
 %% Event Frequency
 
@@ -35,14 +58,14 @@ eventfreq(EQEvents,sizenum);
 
 %% Hourly Event Frequency
 
-hreventfreq(EQEvents,catalog);
+hreventfreq(EQEvents,catalog.timeoffset,catalog.timezone);
 
 %% Inter-Event Temporal Spacing -- 
 
 inteventspace(EQEvents,sizenum);
 
 %% Magnitude Distribution: Overall Completeness
-[Mc] = catmagcomp(EQEvents,catalog.name,0.1,0.0);
+[Mc] = catmagcomp(EQEvents,catalog.name,0.1);
 
 %% Magnitude Distribution: All Magnitudes
 
@@ -65,16 +88,6 @@ plotyrmedmag(EQEvents,sizenum);
 if sizenum == 1
    catmagcomphist(EQEvents);
 end
-%% Cluster Identification
-%
-% Only Earthquakes are considered in this algorithm.  Bimodal distribution
-% indicates clusters (i.e. foreshocks and aftershocks) are present in the
-% data.  Unimodal distribution would indicate a declustered catalog.  This
-% analysis is based off nearest-neighbor earthquake distances, which
-% accounts for space, time, and magnitude distance of earthquakes (Zaliapin
-% and Ben-Zion, 2013).
-Cluster_Detection(EQEvents, Mc)
-
 %% Cumulative Moment Release
 CumulMomentRelease(EQEvents,catalog.name)
 
@@ -82,9 +95,9 @@ CumulMomentRelease(EQEvents,catalog.name)
 
 lrgcatevnts(catalog)
 
-%% Event Type Frequency - last figure needs fixed
+%% Event Type Frequency
 
-evtypetest(catalog,sizenum)
+evtype(catalog,sizenum)
 
 %% Searching for Duplicate Events
 
@@ -95,8 +108,12 @@ maxSeconds = 2;
 maxKm = 5;
 magthres = -10;
 dups=catdupevents(catalog,maxSeconds,maxKm,magthres);
-
-% Yearly Event Count List
-% 
-% dispyrcount(catalog,sizenum)
-
+%% Cluster Identification
+%
+% Only Earthquakes are considered in this algorithm.  Bimodal distribution
+% indicates clusters (i.e. foreshocks and aftershocks) are present in the
+% data.  Unimodal distribution would indicate a declustered catalog.  This
+% analysis is based off nearest-neighbor earthquake distances, which
+% accounts for space, time, and magnitude distance of earthquakes (Zaliapin
+% and Ben-Zion, 2013).
+%Cluster_Detection(EQEvents, Mc)
