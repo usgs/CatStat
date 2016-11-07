@@ -17,17 +17,17 @@ hold on
 %
 % Plots
 %
-plot(cat2.data(:,1),-1.*ones(size(cat2.data,1),1),'b.','MarkerSize',15)
-if ~isempty(missing.events2)
-    plot(missing.events2(:,1),-0.5.*ones(size(missing.events2,1),1),'bx','MarkerSize',15)
+plot(cat2.data.OriginTime,-1.*ones(size(cat2.data,1),1),'b.','MarkerSize',15)
+if ~isempty(missing.cat2)
+    plot(missing.cat2.OriginTime,-0.5.*ones(size(missing.cat2,1),1),'bx','MarkerSize',15)
 end
-if ~isempty(matching.data)
-    plot(matching.data(:,1),zeros(size(matching.data,1),1),'k.','MarkerSize',15)
+if ~isempty(matching.cat1)
+    plot(matching.cat1.OriginTime,zeros(size(matching.cat1,1),1),'k.','MarkerSize',15)
 end
-if ~isempty(missing.events1)
-    plot(missing.events1(:,1),0.5.*ones(size(missing.events1,1),1),'rx','MarkerSize',15)
+if ~isempty(missing.cat1)
+    plot(missing.cat1.OriginTime,0.5.*ones(size(missing.cat1,1),1),'rx','MarkerSize',15)
 end
-plot(cat1.data(:,1),ones(size(cat1.data,1),1),'r.','MarkerSize',15)
+plot(cat1.data.OriginTime,ones(size(cat1.data,1),1),'r.','MarkerSize',15)
 %
 % Plot Formatting
 %

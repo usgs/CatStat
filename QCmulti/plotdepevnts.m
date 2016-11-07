@@ -29,19 +29,19 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(dep.events1(:,3),dep.events1(:,2),'.','Color',[1 1 1]);
-h2 = plot(dep.events1(:,3),dep.events1(:,2),'r.');
-h3 = plot(dep.events2(:,3),dep.events2(:,2),'b.');
+h1 = plot(dep.cat1.Longitude,dep.cat1.Latitude,'.','Color',[1 1 1]);
+h2 = plot(dep.cat1.Longitude,dep.cat1.Latitude,'r.');
+h3 = plot(dep.cat2.Longitude,dep.cat2.Latitude,'b.');
 %
 % Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
 load('regions.mat')
 if strcmpi(reg,'all')
-    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+    poly(1,1) = min([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(2,1) = max([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(1,2) = min([cat1.data.Latitude;cat2.data.Latitude]);
+    poly(2,2) = max([cat1.data.Latitude;cat2.data.Latitude]);
 else
     ind = find(strcmp(region,reg));
     poly = coord{ind,1};
@@ -57,7 +57,7 @@ maxlat = max(poly(:,2))+1.0;
 %
 % Plot formatting
 %
-legend([h1,h2,h3],['N=',num2str(size(dep.events1,1))],cat1.name,cat2.name)
+legend([h1,h2,h3],['N=',num2str(size(dep.cat1,1))],cat1.name,cat2.name)
 axis([minlon maxlon minlat maxlat])
 midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
@@ -69,24 +69,14 @@ box on
 hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% Print Results
-%
-%disp(['There are ',num2str(size(dep.events1,1)),' events with different depths'])
-%fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'Res(km)')
-%for ii = 1 : size(dep.events1,1)
-%    fprintf(FormatSpec1,dep.ids{ii,1},datestr(dep.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events1(ii,2)),num2str(dep.events1(ii,3)),num2str(dep.events1(ii,4)),num2str(dep.events1(ii,5)),num2str(dep.events1(ii,6)))
-%    fprintf(FormatSpec2,dep.ids{ii,2},datestr(dep.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(dep.events2(ii,2)),num2str(dep.events2(ii,3)),num2str(dep.events2(ii,4)),num2str(dep.events2(ii,5)));
-%    disp('--')
-%end
-%disp('----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Plot histogram of residuals
 %
+delDepth = dep.cat1.Depth - dep.cat2.Depth;
 figure
 hold on
-histogram(dep.events1(:,6))
+histogram(delDepth)
 %
 % Figure formatting
 %

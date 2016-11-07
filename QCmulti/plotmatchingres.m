@@ -14,27 +14,27 @@ function plotmatchingres(matching,cat1name,cat2name)
 % Get bounds
 %
 % Time
-Dmin = min(matching.data(:,1));
-Dmax = max(matching.data(:,1));
+Dmin = min([matching.cat1.OriginTime;matching.cat2.OriginTime]);
+Dmax = max([matching.cat1.OriginTime;matching.cat2.OriginTime]);
 % OT Residuals
-Tmin = min(matching.data(:,9))*86400;
-Tmx = max(matching.data(:,9))*86400;
-Tmax = max([abs(Tmin),Tmx]);
+Tmin = min(matching.cat1.delTime)*86400;
+Tmx = max(matching.cat1.delTime)*86400;
+Tmax = max([abs(Tmin);Tmx]);
 % Location Residuals
-DistMax = max(matching.data(:,6));
+DistMax = max(matching.cat1.delD);
 if DistMax == 0
     DistMax = 1;
 end
 % Depth Residuals
-Depmin = min(matching.data(:,7));
-Depmx = max(matching.data(:,7));
+Depmin = min(matching.cat1.delDepth);
+Depmx = max(matching.cat1.delDepth);
 Depmax = max([abs(Depmin),Depmx]);
 if Depmax == 0;
     Depmax = 1;
 end
 % Magnitude Residuals
-Magmin = min(matching.data(:,8));
-Magmx = max(matching.data(:,8));
+Magmin = min(matching.cat1.delMag);
+Magmx = max(matching.cat1.delMag);
 MagMax = max([abs(Magmin), Magmx]);
 %
 % Initialize figure
@@ -44,7 +44,7 @@ figure('Position',[500 500 750 750])
 % Subplot 1: Time residuals
 %
 subplot(4,1,1)
-plot(matching.data(:,1), matching.data(:,9)*86400,'k.')
+plot(matching.cat1.OriginTime, matching.cat1.delTime.*86400,'k.')
 %
 % Formatting
 %
@@ -61,7 +61,7 @@ set(gca,'FontSize',14)
 % Subplot 2: Location Residuals
 %
 subplot(4,1,2)
-plot(matching.data(:,1), matching.data(:,6),'k.')
+plot(matching.cat1.OriginTime, matching.cat1.delD,'k.')
 %
 % Formatting
 %
@@ -74,7 +74,7 @@ set(gca,'FontSize',14)
 % Subplot 3: Depth Residuals
 %
 subplot(4,1,3)
-plot(matching.data(:,1), matching.data(:,7),'k.')
+plot(matching.cat1.OriginTime, matching.cat1.delDepth,'k.')
 %
 % Formatting
 %
@@ -87,7 +87,7 @@ set(gca,'FontSize',14)
 % Subplot 4: Magnitude Residuals
 %
 subplot(4,1,4)
-plot(matching.data(:,1), matching.data(:,8),'k.')
+plot(matching.cat1.OriginTime, matching.cat1.delMag,'k.')
 %
 % Formatting
 %

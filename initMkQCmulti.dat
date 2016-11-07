@@ -1,34 +1,24 @@
 % NCrst catalog data file name
-/Users/mrperry/Documents/CATALOGS/CI/CI_Complete.csv
+/Users/mrperry/Documents/CATALOGS/CI/CI_2015.csv
 % Human readable catalog description
 CI Catalog
-% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-1
 % Second catalog Data file name
-/Users/mrperry/Documents/CATALOGS/NC/14Mar/NC_preupload_RF.csv
+/Users/mrperry/Documents/NewCatStat/QCmulti/ComCatQuery.csv
 % Human readable catalog description
-NC Catalog
-% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-2
+ComCat Query
 % Time Window
 16
 % Distance Range
 100
 % Region
+CI
+% Auth
 NC
 % Set Mag Limit
 -10
 % Set Mag Difference Max
-9999
+0.2
 % Set Depth difference tolerance
-9999
+10
 % Diretory to put report in
 Report
-% File format for report
-html
-% show code in report (true/false)
-false
-% Display event list
-yes
-% Compared Authoritative IDs
-no
