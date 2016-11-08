@@ -15,8 +15,8 @@ function plotmatchingevnts(cat1, cat2, matching, reg)
 %
 % Find min and max longitude of matching data
 %
-maxlon = max(matching.data(:,3));
-minlon = min(matching.data(:,3));
+maxlon = max([matching.cat1.Longitude;matching.cat2.Longitude]);
+minlon = min([matching.cat1.Longitude;matching.cat2.Longitude]);
 %
 % Check the range
 %
@@ -24,16 +24,16 @@ if minlon<-170 && maxlon > 170
     %
     % Adjust event locations
     %
-    for ii = 1 : length(matching.data(:,3))
-        if matching.data(ii,3) < 0 
-            matching_lon(ii) = matching.data(ii,3) + 360;
+    for ii = 1 : length(matching.cat1.Longitude)
+        if matching.cat1.Longitude(ii,3) < 0 
+            matching_lon(ii) = matching.cat1.Longitude(ii) + 360;
         else
-            matching_lon(ii) = matching.data(ii,3);
+            matching_lon(ii) = matching.cat1.Longitude(ii);
         end
-        if matching.data2(ii,3) < 0
-            matching_lon2(ii) = matching.data2(ii,3)+360;
+        if matching.cat2.Longitude(ii,3) < 0
+            matching_lon2(ii) = matching.cat2.Longitude(ii)+360;
         else
-            matching_lon2(ii) = matching.data2(ii,3);
+            matching_lon2(ii) = matching.cat2.Longitude(ii);
         end
     end
     %
@@ -70,11 +70,11 @@ if minlon<-170 && maxlon > 170
     %
     % Get Boundaries
     %
-    maxlat = max(matching.data(:,2)); 
-    minlat = min(matching.data(:,2));
+    maxlat = max([matching.cat1.Latitude;matching.cat2.Latitude]); 
+    minlat = min([matching.cat1.Latitude;matching.cat2.Latitude(:,2)]);
     midlat = (maxlat+minlat)/2;
-    maxlon = max(matching_lon);
-    minlon = min(matching_lon);
+    maxlon = max([matching_lon;matching_lon2]);
+    minlon = min([matching_lon;matching_lon2]);
     latbuf = 0.1*(maxlat-minlat);
     lonbuf = 0.1*(maxlon-minlon);
     mapminlon = max(minlon-lonbuf,0);
@@ -103,9 +103,9 @@ if minlon<-170 && maxlon > 170
     if ~isempty(poly);
         plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
     end
-    h1 = plot(matching_lon,matching.data(:,2),'.','Color',[1 1 1]);
-    h2 = plot(matching_lon,matching.data(:,2),'r.');
-    h3 = plot(matching_lon2,matching.data2(:,2),'b.');
+    h1 = plot(matching_lon,matching.cat1.Latitude,'.','Color',[1 1 1]);
+    h2 = plot(matching_lon,matching.cat1.Latitude,'r.');
+    h3 = plot(matching_lon2,matching.cat2.Latitude,'b.');
     %
     % Plot Format
     %
@@ -117,7 +117,7 @@ if minlon<-170 && maxlon > 170
     xlabel('Longitude')
     ylabel('Latitude')
     title('MatchingEvents')
-    legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
+    legend([h1, h2, h3],['N=',num2str(size(matching.cat1,1))],cat1.name,cat2.name)
     box on
     hold off
     drawnow
@@ -135,19 +135,19 @@ else
     % Plot matching events from catalog 1 and 2
     % Ghost plot for information in legend
     % 
-    h1 = plot(matching.data(:,3),matching.data(:,2),'.','Color',[1 1 1]);
-    h2 = plot(matching.data(:,3),matching.data(:,2),'r.');
-    h3 = plot(matching.data2(:,3),matching.data2(:,2),'b.');
+    h1 = plot(matching.cat1.Longitude,matching.cat1.Latitude,'.','Color',[1 1 1]);
+    h2 = plot(matching.cat1.Longitude,matching.cat1.Latitude,'r.');
+    h3 = plot(matching.cat2.Longitude,matching.cat2.Latitude,'b.');
     %
     % Restrict to Region of interest
     % Get minimum and maximum values for restricted axes
     %
     load('regions.mat')
     if strcmpi(reg,'all')
-        poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-        poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-        poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-        poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+        poly(1,1) = min([cat1.data.Longitude;cat2.data.Longitude]);
+        poly(2,1) = max([cat1.data.Longitude;cat2.data.Longitude]);
+        poly(1,2) = min([cat1.data.Latitude;cat2.data.Latitude]);
+        poly(2,2) = max([cat1.data.Latitude;cat2.data.Latitude]);
     else
         ind = find(strcmpi(region,reg));
         poly = coord{ind,1};
@@ -170,29 +170,30 @@ else
     ylabel('Latitude','FontSize',15)
     title('MatchingEvents')
     set(gca,'FontSize',15)
-    legend([h1, h2, h3],['N=',num2str(size(matching.data,1))],cat1.name,cat2.name)
+    legend([h1, h2, h3],['N=',num2str(size(matching.cat1,1))],cat1.name,cat2.name)
     box on
     hold off
     drawnow
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-catdensplot(matching,reg)
+% catdensplot(matching,reg)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 plotmatchingrose(matching,cat1.name,cat2.name)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Histograms
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Mn = min(matching.data(:,5))-0.05;
-Mx = max(matching.data(:,5))+0.05;
+Mn = min([matching.cat1.Mag;matching.cat2.Mag])-0.05;
+Mx = max([matching.cat1.Mag;matching.cat2.Mag])+0.05;
 step = 0.1;
 bins = Mn:step:Mx;
 %
 % Magnitude Distribution
 %
 figure
+subplot(2,1,1)
 hold on
-histogram(matching.data(:,5),bins)
+histogram(matching.cat1.Mag,bins)
 %
 %Figure formatting
 %
@@ -203,24 +204,40 @@ axis tight
 box on
 hold off
 drawnow
+%
+% Catalog 2
+%
+subplot(2,1,2)
+hold on
+histogram(matching.cat2.Mag,bins)
+%
+%Figure formatting
+%
+ylabel('Counts','FontSize',15)
+xlabel(['Magnitudes from ',cat2.name],'FontSize',15)
+title('Magnitudes for Matching Events','FontSize',15)
+axis tight
+box on
+hold off
+drawnow
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % Magnitude Comparison
 %
-p = polyfit(matching.data2(:,5),matching.data(:,5),1);
-[P] = polyval(p,matching.data2(:,5));
-R = corrcoef(P,matching.data(:,5));
+p = polyfit(matching.cat2.Mag,matching.cat1.Mag,1);
+[P] = polyval(p,matching.cat2.Mag);
+R = corrcoef(P,matching.cat1.Mag);
 R = R(1,2)^2;
 figure
 hold on
-h1 = scatter(matching.data2(:,5),matching.data(:,5));
-h2 = plot(matching.data2(:,5),P,'r-');
+h1 = scatter(matching.cat2.Mag,matching.cat1.Mag);
+h2 = plot(matching.cat2.Mag,P,'r-');
 h3 = plot([0 9],[0 9],'k-');
 %
 % Bounds
 %
-Mins = min([min(matching.data2(:,5)),min(matching.data(:,5))]);
-Maxs = max([max(matching.data2(:,5)),max(matching.data(:,5))]);
+Mins = min([matching.cat2.Mag;matching.cat1.Mag]);
+Maxs = max([matching.cat2.Mag;matching.cat1.Mag]);
 %
 %Figure formatting
 %
@@ -238,9 +255,14 @@ drawnow
 %%
 % Depth Distribution
 %
+Mn = min([matching.cat1.Depth;matching.cat2.Depth])-0.05;
+Mx = max([matching.cat1.Depth;matching.cat2.Depth])+0.05;
+step = 5;
+bins = 0-step/2:step:Mx+step/2;
 figure
+subplot(2,1,1)
 hold on
-histogram(matching.data(:,4))
+histogram(matching.cat1.Depth,bins)
 %
 % Figure formatting
 %
@@ -250,26 +272,38 @@ title('Depths for Matching Events','FontSize',15)
 axis tight
 box on
 hold off
+subplot(2,1,2)
+hold on
+histogram(matching.cat2.Depth,bins)
+%
+% Figure formatting
+%
+ylabel('Counts','FontSize',15)
+xlabel(['Depth (km) from ',cat2.name],'FontSize',15)
+title('Depths for Matching Events','FontSize',15)
+axis tight
+box on
+hold off
 drawnow
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % Depth Comparison
 %
-p = polyfit(matching.data2(:,4),matching.data(:,4),1);
-[P] = polyval(p,matching.data2(:,4));
-R = corrcoef(P,matching.data(:,4));
+p = polyfit(matching.cat2.Depth,matching.cat1.Depth,1);
+[P] = polyval(p,matching.cat2.Depth);
+R = corrcoef(P,matching.cat1.Depth);
 R = R(1,2)^2;
 figure
 hold on
-h1 = scatter(matching.data2(:,4),matching.data(:,4));
-h2 = plot(matching.data2(:,4),P,'r-');
-B = polyval([1 0],matching.data2(:,4));
-h3 = plot(matching.data2(:,4),B,'k-');
+h1 = scatter(matching.cat2.Depth,matching.cat1.Depth);
+h2 = plot(matching.cat2.Depth,P,'r-');
+B = polyval([1 0],matching.cat2.Depth);
+h3 = plot(matching.cat2.Depth,B,'k-');
 %
 % Bounds
 %
-Mins = min([min(matching.data2(:,4)),min(matching.data(:,4))]);
-Maxs = max([max(matching.data2(:,4)),max(matching.data(:,4))]);
+Mins = min([matching.cat2.Depth;matching.cat1.Depth]);
+Maxs = max([matching.cat2.Depth;matching.cat1.Depth]);
 %
 %Figure formatting
 %
@@ -288,14 +322,14 @@ drawnow
 %
 % Time Residuals [86400 seconds in 1 day]
 %
-Time_convert = matching.data(:,9)*86400; %Seconds
+Time_convert = matching.cat1.delTime*86400; %Seconds
 min_delT = min(Time_convert)-1.5;
 max_delT = max(Time_convert)+1.5;
 step = 0.1;
 bins = min_delT:step:max_delT;
 figure
 hold on
-histogram(matching.data(:,9)*86400,bins)
+histogram(matching.cat1.delTime*86400,bins)
 %
 % Figure formatting
 %
@@ -310,13 +344,13 @@ drawnow
 %%
 % Location (Distance Residuals)
 %
-min_delD = min(matching.data(:,6))-0.5;
-max_delD = max(matching.data(:,6))+0.5;
+min_delD = min(matching.cat1.delD)-0.5;
+max_delD = max(matching.cat1.delD)+0.5;
 step = 0.1;
 bins = min_delD:step:max_delD;
 figure
 hold on
-histogram(matching.data(:,6),bins)
+histogram(matching.cat1.delD,bins)
 %
 % Figure formatting
 %
@@ -331,9 +365,10 @@ drawnow
 %%
 % Magnitude Residuals
 %
+bins = min(matching.cat1.delMag)-0.05:0.1:max(matching.cat1.delMag)+0.05;
 figure
 hold on
-histogram(matching.data(:,8),[-1:0.1:1]);
+histogram(matching.cat1.delMag,bins);
 %
 % Figure formatting
 %
@@ -348,13 +383,13 @@ drawnow
 %%
 % Depth Residuals
 %
-min_delDp = min(matching.data(:,7))-0.5;
-max_delDp = max(matching.data(:,7))+0.5;
-step = 0.1;
+min_delDp = min(matching.cat1.delDepth)-0.5;
+max_delDp = max(matching.cat1.delDepth)+0.5;
+step = 1;
 bins = min_delDp:step:max_delDp;
 figure
 hold on
-histogram(matching.data(:,7),bins)
+histogram(matching.cat1.delDepth,bins)
 %
 % Figure formatting
 %

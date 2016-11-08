@@ -13,8 +13,8 @@ function plottrimcats(cat1, cat2, reg)
 %
 % Find min and max longitude
 %
-maxlon = max(max(cat1.data(:,3)),max(cat2.data(:,3)));
-minlon = min(min(cat1.data(:,3)),min(cat2.data(:,3)));
+maxlon = max(max(cat1.data.Longitude),max(cat2.data.Longitude));
+minlon = min(min(cat1.data.Longitude),min(cat2.data.Longitude));
 %
 % Check to see if range goes over Pacific Transition Zone
 %
@@ -22,21 +22,23 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust event locations
     % Catalog 1
-    for ii = 1 : length(cat1.data(:,3))
-        if cat1.data(ii,3) < 0
-            cat1.data(ii,3) = cat1.data(ii,3)+360;
+    for ii = 1 : length(cat1.data.Longitude)
+        if cat1.data.Longitude(ii) < 0
+            cat1.data.Longitude(ii) = cat1.data.Longitude(ii)+360;
         end
     end
     % Catalog 2
-    for ii = 1 : length(cat2.data(:,3))
-        if cat2.data(:,3) < 0
-            cat2.data(ii,3) = cat2.data(ii,3)+360;
+    for ii = 1 : length(cat2.data.Longitude)
+        if cat2.data.Longitude(ii) < 0
+            cat2.data.Longitude(ii) = cat2.data.Longitude(ii)+360;
         end
     end
     %
     % Adjust World Map
     %
     load('Countries.mat')
+    lon = [];
+    lat = [];
     L = length(places);
     for ii = 1 : L
         clon=lon{ii,1};
@@ -67,11 +69,11 @@ if minlon < -170 && maxlon > 170
     %
     % Get Boundaries
     %
-    maxlat = max(max(cat1.data(:,2)),max(cat2.data(:,2)))+.5; 
-    minlat = min(min(cat1.data(:,2)),min(cat2.data(:,2)))-.5;
+    maxlat = max([cat1.data.Latitude;cat2.data.Latitude])+.5; 
+    minlat = min([cat1.data.Latitude;cat2.data.Latitude])-.5;
     midlat = (maxlat+minlat)/2;
-    maxlon = max(max(cat1.data(:,3)),max(cat2.data(:,3)))+.5;
-    minlon = min(min(cat1.data(:,3)),min(cat2.data(:,3)))-.5;
+    maxlon = max([cat1.data.Longitude;cat2.data.Longitude])+.5;
+    minlon = min([cat1.data.Longitude;cat2.data.Longitude])-.5;
     mapminlon = max(minlon,0);
     mapmaxlon = min(maxlon,360);
     mapminlat = max(minlat,-90);
@@ -100,8 +102,8 @@ if minlon < -170 && maxlon > 170
     if ~isempty(poly);
         plot(poly(:,1),poly(:,2),'k--','LineWidth',2)
     end
-    h1 = plot(cat1.data(:,3),cat1.data(:,2),'r.');
-    h2 = plot(cat2.data(:,3),cat2.data(:,2),'b.');
+    h1 = plot(cat1.data.Longitude,cat1.data.Latitude,'r.');
+    h2 = plot(cat2.data.Longitude,cat2.data.Latitude,'b.');
     %
     % Plot Format
     %
@@ -130,21 +132,21 @@ else
     %
     % Plot Catalog 1 data
     %
-    h1 = plot(cat1.data(:,3),cat1.data(:,2),'r.');
+    h1 = plot(cat1.data.Longitude,cat1.data.Latitude,'r.');
     %
     % Plot Catalog 2 data
     %
-    h2 = plot(cat2.data(:,3),cat2.data(:,2),'b.');
+    h2 = plot(cat2.data.Longitude,cat2.data.Latitude,'b.');
     %
     % Restrict to Region of interest
     % Get minimum and maximum values for restricted axes
     %
     load('regions.mat')
     if strcmpi(reg,'all')
-        poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-        poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-        poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-        poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+        poly(1,1) = min([cat1.data.Longitude;cat2.data.Longitude]);
+        poly(2,1) = max([cat1.data.Longitude;cat2.data.Longitude]);
+        poly(1,2) = min([cat1.data.Latitude;cat2.data.Latitude]);
+        poly(2,2) = max([cat1.data.Latitude;cat2.data.Latitude]);
     else
         ind = find(strcmpi(region,reg));
         poly = coord{ind,1};

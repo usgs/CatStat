@@ -13,7 +13,8 @@ function plotmatchingrose(matching,cat1name,cat2name)
 % Get vector of azimuths (ignoring exact matches)
 %
 disp('Exact matches ignored for rose histogram plot')
-B = forwardbearing(matching.data(:,2),matching.data(:,3),matching.data2(:,2),matching.data2(:,3));
+B = forwardbearing(matching.cat1.Latitude,matching.cat1.Longitude,...
+    matching.cat2.Latitude,matching.cat2.Longitude);
 %
 % Initialize Figure
 %
@@ -21,6 +22,7 @@ B=B(B~=0);
 if ~isempty(B)
     figure
     rose(B)
+    set(gca,'View',[-90 90],'YDir','reverse')
     %
     % Formatting
     %
@@ -32,6 +34,18 @@ if ~isempty(B)
     drawnow
 else
     disp('No plot due to exact location matches.')
+end
+function bearing=forwardbearing(lat1,lon1,lat2,lon2)
+    %
+    % Calculate the two parts
+    %
+    A = sind(lon2-lon1).*cosd(lat2);
+    b = cosd(lat1).*sind(lat2)-sind(lat1).*cosd(lat2).*cosd(lon2-lon1);
+    %
+    % Get the bearing
+    %
+    bearing = atan2d(A,b);
+    bearing = mod(bearing+360,360);
 end
 %
 %End of function

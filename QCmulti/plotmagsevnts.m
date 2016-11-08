@@ -28,19 +28,19 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(mags.events1(:,3),mags.events1(:,2),'.','Color',[1 1 1]);
-h2 = plot(mags.events1(:,3),mags.events1(:,2),'r.');
-h3 = plot(mags.events2(:,3),mags.events2(:,2),'b.');
+h1 = plot(mags.cat1.Longitude,mags.cat1.Latitude,'.','Color',[1 1 1]);
+h2 = plot(mags.cat1.Longitude,mags.cat1.Latitude,'r.');
+h3 = plot(mags.cat2.Longitude,mags.cat2.Latitude,'b.');
 %
 % Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
 load('regions.mat')
 if strcmpi(reg,'all')
-    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+    poly(1,1) = min([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(2,1) = max([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(1,2) = min([cat1.data.Latitude;cat2.data.Latitude]);
+    poly(2,2) = max([cat1.data.Latitude;cat2.data.Latitude]);
 else
     ind = find(strcmpi(region,reg));
     poly = coord{ind,1};
@@ -56,7 +56,7 @@ maxlat = max(poly(:,2))+1.0;
 %
 % Plot formatting
 %
-legend([h1,h2,h3],['N=',num2str(size(mags.events1,1))],cat1.name,cat2.name)
+legend([h1,h2,h3],['N=',num2str(size(mags.cat1,1))],cat1.name,cat2.name)
 axis([minlon maxlon minlat maxlat])
 midlat = (maxlat+minlat)/2;
 set(gca,'DataAspectRatio',[1,cosd(midlat),1])
@@ -83,9 +83,10 @@ drawnow
 %
 % Plot histogram of residuals
 %
+delMag = mags.cat1.Mag-mags.cat2.Mag;
 figure
 hold on
-histogram(mags.events1(:,6))
+histogram(delMag)
 %
 % Figure formatting
 %

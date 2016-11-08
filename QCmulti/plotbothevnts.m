@@ -28,19 +28,19 @@ plotworld
 %
 % Plot Events on the map
 %
-h1 = plot(both.events1(:,3),both.events1(:,2),'.','Color',[1 1 1]);
-h2 = plot(both.events1(:,3),both.events1(:,2),'r.');
-h3 = plot(both.events2(:,3),both.events2(:,2),'b.');
+h1 = plot(both.cat1.Longitude,both.cat1.Latitude,'.','Color',[1 1 1]);
+h2 = plot(both.cat1.Longitude,both.cat1.Latitude,'r.');
+h3 = plot(both.cat2.Longitude,both.cat2.Latitude,'b.');
 %
 % Restrict to Region of interest
 % Get minimum and maximum values for restricted axes
 %
 load('regions.mat')
 if strcmpi(reg,'all')
-    poly(1,1) = min([cat1.data(:,3);cat2.data(:,3)]);
-    poly(2,1) = max([cat1.data(:,3);cat2.data(:,3)]);
-    poly(1,2) = min([cat1.data(:,2);cat2.data(:,2)]);
-    poly(2,2) = max([cat1.data(:,2);cat2.data(:,2)]);
+    poly(1,1) = min([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(2,1) = max([cat1.data.Longitude;cat2.data.Longitude]);
+    poly(1,2) = min([cat1.data.Latitude;cat2.data.Latitude]);
+    poly(2,2) = max([cat1.data.Latitude;cat2.data.Latitude]);
 else
     ind = find(strcmp(region,reg));
     poly = coord{ind,1};
@@ -71,21 +71,22 @@ drawnow
 %
 % Print Results
 %
-disp(['There are ',num2str(size(both.events1,1)),' events with different depths'])
+% disp(['There are ',num2str(size(both.events1,1)),' events with different depths'])
 % fprintf(FormatSpec1,'Catalog 1', 'Origin Time', 'Lon.','Lat.','Dep(km)', 'Mag', 'DepRes','MagRes')
 % for ii = 1 : size(both.events1,1)
 %     fprintf(FormatSpec1,both.ids{ii,1},datestr(both.events1(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events1(ii,2)),num2str(both.events1(ii,3)),num2str(both.events1(ii,4)),num2str(both.events1(ii,5)),num2str(both.events1(ii,6)), num2str(both.events1(ii,7)))
 %     fprintf(FormatSpec2,both.ids{ii,2},datestr(both.events2(ii,1),'yyyy/mm/dd HH:MM:SS'),num2str(both.events2(ii,2)),num2str(both.events2(ii,3)),num2str(both.events2(ii,4)),num2str(both.events2(ii,5)));
 %     disp('--')
 % end
-disp('----------------------------------------------')
+% disp('----------------------------------------------')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Plot histogram of depth residuals
 %
+delDepth = both.cat1.Depth - both.cat2.Depth;
 figure
 hold on
-histogram(both.events1(:,6))
+histogram(delDepth)
 %
 % Figure formatting
 %
@@ -101,9 +102,10 @@ drawnow
 %
 % Plot histogram of magnitude residuals
 %
+delMag = both.cat1.Mag - both.cat2.Mag;
 figure
 hold on
-histogram(both.events1(:,7))
+histogram(delMag)
 %
 % Figure formatting
 %

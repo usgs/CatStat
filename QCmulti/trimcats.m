@@ -1,4 +1,4 @@
-function [cat1, cat2] = trimcats(cat1, cat2, reg, maglim, tmax,delmax,magdelmax,depdelmax)
+function [cat1, cat2] = trimcats(cat1, cat2, reg, auth, maglim, tmax,delmax,magdelmax,depdelmax)
 %
 % Function that will trim the catalogs to meet the criteria from the input
 % file.  These criteria include:
@@ -7,6 +7,7 @@ function [cat1, cat2] = trimcats(cat1, cat2, reg, maglim, tmax,delmax,magdelmax,
 %   cat1 - Catalog 1 structure (from loadmulticat)
 %   cat2 - Catalog 2 structure (fron loadmulticat)
 %   reg - Region of interest (originally from initQCMulti.dat)
+%   auth - Authoritative agency
 %   maglim - Minimum magnitude to be considered (originally from
 %   initQCMulti.dat)
 %   tmax - Maximum time window for matching events (originally from
@@ -22,6 +23,9 @@ function [cat1, cat2] = trimcats(cat1, cat2, reg, maglim, tmax,delmax,magdelmax,
 %   cat1 - First catalog entries that fell within criteria
 %   cat2 - First catalog entries that fell within criteria
 %
+% Written By: Matthew R Perry
+% Last Edited: 07 November 2016
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Begin function
@@ -30,37 +34,31 @@ function [cat1, cat2] = trimcats(cat1, cat2, reg, maglim, tmax,delmax,magdelmax,
 %
 T = tmax;
 tmax = tmax/24/60/60;
-startdate = max(cat2.data(1,1),cat1.data(1,1))-tmax;
-enddate = min(cat2.data(length(cat2.data),1),cat1.data(length(cat1.data),1))+tmax;
+startdate = max(min(cat2.data.OriginTime),min(cat1.data.OriginTime))-tmax;
+enddate = min(max(cat2.data.OriginTime(size(cat2.data,1))),max(cat1.data.OriginTime(size(cat1.data,1))))+tmax;
 %
 %Trim catalog 1 for overlapping time
 %
-time_ind1 = find(cat1.data(:,1) >= startdate & cat1.data(:,1) <= enddate);
+time_ind1 = find(cat1.data.OriginTime >= startdate & cat1.data.OriginTime <= enddate);
 cat1.data = cat1.data(time_ind1,:);
-cat1.id = cat1.id(time_ind1,:);
-cat1.evtype = cat1.evtype(time_ind1,:);
 %
 %Trim catalog 2 for overlapping time
 %
-time_ind2 = find(cat2.data(:,1) >= startdate & cat2.data(:,1) <= enddate);
+time_ind2 = find(cat2.data.OriginTime >= startdate & cat2.data.OriginTime <= enddate);
 cat2.data = cat2.data(time_ind2,:);
-cat2.id = cat2.id(time_ind2,:);
-cat2.evtype = cat2.evtype(time_ind2,:);
 %
-%Eliminate Magitudes below threshold and keep NaN magnitudes
+%Eliminate Magitudes below threshold and keep NaN magnitudes; give half mag
+%unit tolerance
 %
+maglim = maglim - 0.5;
 %Catalog 1
-mag_ind1 = find(cat1.data(:,5) >= maglim | isnan(cat1.data(:,5)));
+mag_ind1 = find(cat1.data.Mag >= maglim | isnan(cat1.data.Mag));
 cat1.data = cat1.data(mag_ind1,:);
-cat1.id = cat1.id(mag_ind1,:);
-cat1.evtype = cat1.evtype(mag_ind1,:);
 %
 %Catalog 2
 %
-mag_ind2 = find(cat2.data(:,5) >= maglim | isnan(cat2.data(:,5)));
+mag_ind2 = find(cat2.data.Mag >= maglim | isnan(cat2.data.Mag));
 cat2.data = cat2.data(mag_ind2,:);
-cat2.id = cat2.id(mag_ind2,:);
-cat2.evtype = cat2.evtype(mag_ind2,:);
 %
 %Restrict catalog to region of interest
 %
@@ -70,11 +68,20 @@ poly = coord{ind,1};
 %
 %Catalog 1
 %
-ind1 = inpolygon(cat1.data(:,3),cat1.data(:,2),poly(:,1),poly(:,2));
+ind1 = inpolygon(cat1.data.Longitude,cat1.data.Latitude,poly(:,1),poly(:,2));
 %
 %Catalog 2
 %
-ind2 = inpolygon(cat2.data(:,3),cat2.data(:,2),poly(:,1),poly(:,2));
+ind2 = inpolygon(cat2.data.Longitude,cat2.data.Latitude,poly(:,1),poly(:,2));
+%
+%Save output
+%
+%Catalog 1
+cat1.data = cat1.data(ind1,:);
+%
+%Catalog 2
+%
+cat2.data = cat2.data(ind2,:);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %Print out
@@ -83,7 +90,8 @@ disp(' ')
 disp('------- Filters ------')
 disp(['Overlapping time period: ',datestr(startdate),' to ',datestr(enddate)])
 disp(['Region: ',reg])
-disp(['Lower Mag. Limit: ',num2str(maglim)])
+disp(['Authoritative Agency: ',auth])
+disp(['Lower Mag. Limit (0.5 magnitude unit tolerance): ',num2str(maglim)])
 disp(' ')
 disp('---Matching Criteria--- ')
 disp(['Time window: ',num2str(T),' s'])
@@ -103,19 +111,6 @@ disp(' ')
 disp('Problem events match in both origin time and location, but could have descrepencies in')
 disp('depth, magnitude, or both.')
 disp(' ')
-%
-%Save output
-%
-%Catalog 1
-cat1.data = cat1.data(ind1,:);
-cat1.id = cat1.id(ind1,:);
-cat1.evtype = cat1.evtype(ind1,:);
-%
-%Catalog 2
-%
-cat2.data = cat2.data(ind2,:);
-cat2.id = cat2.id(ind2,:);
-cat2.evtype = cat2.evtype(ind2,:);
 %
 %End of function
 %
