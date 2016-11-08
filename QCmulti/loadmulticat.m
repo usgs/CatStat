@@ -10,6 +10,8 @@ function [cat1, cat2] = loadmulticat(cat1, cat2)
 % cat1 - Information and data for the first catalog
 % cat2 - Information and data for the second catalog
 %
+% Written By: Matthew R Perry
+% Last Edit: 08 November 2016
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Begin function
@@ -18,6 +20,9 @@ function [cat1, cat2] = loadmulticat(cat1, cat2)
 % Load first catalog
 %
 fid1 = fopen(cat1.file, 'rt');
+if fid1 == -1
+    error('File 1 not found.  Exiting')
+end
 %
 % Get Header Values
 %
@@ -34,7 +39,7 @@ if any(strcmpi('ID',rawNames)) %Look for Time header
 elseif any(strcmpi('EventID',rawNames))
     IDInd = find(strcmpi('EventID',rawNames));
 else
-    error('No time or origin time header recognized.  Exiting.')
+    error('Catalog 1: No time or origin time header recognized.  Exiting.')
 end
 %
 % Find Origin Time
@@ -46,7 +51,7 @@ elseif any(strcmpi('OriginTime',rawNames))
 elseif any(strcmpi('OT',rawNames))
     TimeInd = find(strcmpi('OT',rawNames));
 else
-    error('No time or origin time header recognized.  Exiting.')
+    error('Catalog 1: No time or origin time header recognized.  Exiting.')
 end
 %
 % Find Latitude
@@ -56,7 +61,7 @@ if any(strcmpi('Latitude',rawNames)) %Look for Latitude header
 elseif any(strcmpi('Lat',rawNames))
     LatInd = find(strcmpi('Lat',rawNames));
 else
-    error('No latitude header recognized.  Exiting.')
+    error('Catalog 1: No latitude header recognized.  Exiting.')
 end
 %
 % Find Longitude
@@ -66,7 +71,7 @@ if any(strcmpi('Longitude',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Lon',rawNames))
     LonInd = find(strcmpi('Lon',rawNames));
 else
-    error('No longitude header recognized.  Exiting.')
+    error('Catalog 1: No longitude header recognized.  Exiting.')
 end
 %
 % Find Depth
@@ -76,7 +81,7 @@ if any(strcmpi('Depth',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Dep',rawNames))
     DepInd = find(strcmpi('Dep',rawNames));
 else
-    error('No depth header recognized.  Please specify depth header as Depth or Dep...Exiting.')
+    error('Catalog 1: No depth header recognized.  Please specify depth header as Depth or Dep...Exiting.')
 end
 %
 % Find Magnitude
@@ -86,7 +91,7 @@ if any(strcmpi('Magnitude',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Mag',rawNames))
     MagInd = find(strcmpi('Mag',rawNames));
 else
-    error('No magnitude header recognized. Please specify header as Magnitude or Mag...Exiting.')
+    error('Catalog 1: No magnitude header recognized. Please specify header as Magnitude or Mag...Exiting.')
 end
 %
 % Find EvType
@@ -100,8 +105,9 @@ elseif any(strcmpi('Type',rawNames))
 elseif any(strcmpi('event-type',rawNames))
     TypeInd = find(strcmpi('event-type',rawNames));
 else
-    disp('No event type header recognized. Please specify header as EventType, EvType, or Type.')
+    disp('Catalog 1: No event type header recognized. Please specify header as EventType, EvType, or Type.')
     disp('Report will proceed but will assume all events are earthquakes')
+    TypeInd = [];
 end
 %
 % Get number of fields
@@ -167,6 +173,9 @@ clear dataArray
 % Load second catalog
 %
 fid2 = fopen(cat2.file, 'rt');
+if fid2 == -1
+    error('File 2 not found.  Exiting')
+end
 %
 % Get Header Values
 %
@@ -183,7 +192,7 @@ if any(strcmpi('ID',rawNames)) %Look for Time header
 elseif any(strcmpi('EventID',rawNames))
     IDInd = find(strcmpi('EventID',rawNames));
 else
-    error('No time or origin time header recognized.  Exiting.')
+    error('Catalog 2: No time or origin time header recognized.  Exiting.')
 end
 %
 % Find Origin Time
@@ -195,7 +204,7 @@ elseif any(strcmpi('OriginTime',rawNames))
 elseif any(strcmpi('OT',rawNames))
     TimeInd = find(strcmpi('OT',rawNames));
 else
-    error('No time or origin time header recognized.  Exiting.')
+    error('Catalog 2: No time or origin time header recognized.  Exiting.')
 end
 %
 % Find Latitude
@@ -205,7 +214,7 @@ if any(strcmpi('Latitude',rawNames)) %Look for Latitude header
 elseif any(strcmpi('Lat',rawNames))
     LatInd = find(strcmpi('Lat',rawNames));
 else
-    error('No latitude header recognized.  Exiting.')
+    error('Catalog 2: No latitude header recognized.  Exiting.')
 end
 %
 % Find Longitude
@@ -215,7 +224,7 @@ if any(strcmpi('Longitude',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Lon',rawNames))
     LonInd = find(strcmpi('Lon',rawNames));
 else
-    error('No longitude header recognized.  Exiting.')
+    error('Catalog 2: No longitude header recognized.  Exiting.')
 end
 %
 % Find Depth
@@ -225,7 +234,7 @@ if any(strcmpi('Depth',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Dep',rawNames))
     DepInd = find(strcmpi('Dep',rawNames));
 else
-    error('No depth header recognized.  Please specify depth header as Depth or Dep...Exiting.')
+    error('Catalog 2: No depth header recognized.  Please specify depth header as Depth or Dep...Exiting.')
 end
 %
 % Find Magnitude
@@ -235,7 +244,7 @@ if any(strcmpi('Magnitude',rawNames)) %Look for Longitude header
 elseif any(strcmpi('Mag',rawNames))
     MagInd = find(strcmpi('Mag',rawNames));
 else
-    error('No magnitude header recognized. Please specify header as Magnitude or Mag...Exiting.')
+    error('Catalog 2: No magnitude header recognized. Please specify header as Magnitude or Mag...Exiting.')
 end
 %
 % Find EvType
@@ -249,8 +258,9 @@ elseif any(strcmpi('Type',rawNames))
 elseif any(strcmpi('event-type',rawNames))
     TypeInd = find(strcmpi('event-type',rawNames));
 else
-    disp('No event type header recognized. Please specify header as EventType, EvType, or Type.')
+    disp('Catalog 2: No event type header recognized. Please specify header as EventType, EvType, or Type.')
     disp('Report will proceed but will assume all events are earthquakes')
+    TypeInd = [];
 end
 %
 % Get number of fields

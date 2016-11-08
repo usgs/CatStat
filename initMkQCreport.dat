@@ -1,20 +1,16 @@
-% Catalog Data file name
-/Users/mrperry/Documents/CATALOGS/CI/23Feb/CI.csv
+% Catalog Data File Name and Path (for completeness, always include full path)
+path/to/catalog/dataset/datasetname.csv
 % Human readable catalog description
-California Institute of Technology
-% Catalog Format 1 = ComCat CSV; 2 = libcomcat CSV format
-2
+String describing the catalog
 % UTC offset [hours]
--8
-% Time Zone 
-Pacific Standard Time UTC-8  
+Integer either + or - depending on timezone
+% Time Zone Name
+String - Name of timezone for use in plot labels
 % Authoritative Region, if none put all
-all
-% Authoritative Agency, if none put all
-all
-% Diretory to put report in
-Report
-% File format for report
-html
-% show code in report (true/false)
-false
+String - See Appendix for abbreviations
+% Authoritative Agency, if none put none
+String - See Appendix for abbreviations
+% Origin Time in Unix Epoch?
+Yes or No
+%Directory to Put Report File Into
+Example_Report_Directory

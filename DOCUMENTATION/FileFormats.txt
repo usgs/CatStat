@@ -1,9 +1,0 @@
-ComCat CSV Format (http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php)
-time, latitude, longitude, depth, mag, magType, nst, gap, dmin, rms, net, id, updated, place, type, horizontalError, depthError, magError, magNst, status, locationSource, magSource
-
-Time should be in this format: yyyy-mm-ddTHH:MM:SS.FFF
-
-LibComCat CSV Format 
-EventID, Time, Latitude, Longitude, Depth, Mag, EventType
-
-Time should be in this format: yyyy-mm-dd HH:MM:SS.FFF

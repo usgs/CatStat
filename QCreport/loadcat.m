@@ -7,8 +7,6 @@ function [cat] = loadcat(cat)
 % THE PROGRAM WILL ASSUME ALL EVENTS ARE EARTHQUAKES.  HEADER VALUES ARE
 % NOT CASE SENSITIVE.
 %
-% IF ORIGIN TIME IS IN EPOCH TIME, PLEASE CHANGE
-%
 % Input: cat- information gathered from initMkQCreport.dat file read by
 % mkQCreport.  If running loadcat seperately, cat is a structure that
 % contains the following fields:
@@ -23,10 +21,13 @@ function [cat] = loadcat(cat)
 %                    Mag, and Type
 %
 % Written By: Matthew R. Perry
-% Last Edit: 04 November 2016
+% Last Edit: 08 November 2016
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     fid = fopen(cat.file,'rt');
+    if fid == -1
+        error('File cannot be located.  Please check the path specified in the input file.  Exiting')
+    end
     %
     % Get Header Values
     %
@@ -111,6 +112,7 @@ function [cat] = loadcat(cat)
     else
         disp('No event type header recognized. Please specify header as EventType, EvType, or Type.')
         disp('Report will proceed but will assume all events are earthquakes')
+        TypeInd = [];
     end
     %
     % Get number of fields (NOF)
@@ -121,7 +123,7 @@ function [cat] = loadcat(cat)
     %
     formatSpec = [];
     for ii = 1 : NOF
-        if ii == TimeInd || ii == TypeInd
+        if ii == TimeInd | ii == TypeInd
             formatSpec = strcat(formatSpec,'%s');
         elseif ii == LatInd || ii == LonInd || ii == DepInd || ii == MagInd
             formatSpec = strcat(formatSpec,'%f');

@@ -1,24 +1,25 @@
-% NCrst catalog data file name
-/Users/mrperry/Documents/CATALOGS/CI/CI_2015.csv
-% Human readable catalog description
-CI Catalog
+% First catalog data file name
+/Users/usgs/CI/CI.csv
+% Human readable catalog descriptcity ion
+String describing the first catalog
 % Second catalog Data file name
-/Users/mrperry/Documents/NewCatStat/QCmulti/ComCatQuery.csv
+/path/to/first/catalog/catalog2.csv
 % Human readable catalog description
-ComCat Query
+String describing the second catalog
 % Time Window
-16
+Time window in seconds for event association (matching time tolerance)
 % Distance Range
-100
-% Region
-CI
-% Auth
-NC
+Distance window in kilometers for event association (matching distance tolerance)
+% Authoritative Region; if none put all
+String - See Appendix for abbreviations
+% Authoritative Agency; if none put none; will turn on authoritative ID check
+String - See Appendix for abbreviations
 % Set Mag Limit
--10
+Lower Magnitude limit to be considered
 % Set Mag Difference Max
-0.2
+Magnitude tolerance for event association (set to 9999, if not needed)
 % Set Depth difference tolerance
-10
+Depth tolerance in kilometers for event association (set to 9999, if not needed)
 % Diretory to put report in
-Report
+Example_Report_Directory
+

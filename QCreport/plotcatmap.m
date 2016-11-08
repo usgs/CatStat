@@ -30,7 +30,7 @@ places = [];
 %
 % Check to see if range goes over Pacific Transition Zone
 %
-if minlon < -170 && maxlon > 170
+if minlon < -170 & maxlon > 170
     %
     % Adjust event locations
     %
