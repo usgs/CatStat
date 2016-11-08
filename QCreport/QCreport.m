@@ -43,10 +43,12 @@ sizenum = basiccatsum(catalog);
 catdensplot(EQEvents,catalog.reg);
 %% Median Magnitude Map
 %
-% Only Earthquakes are considered in this plot. Computation of plot can be
-% quite long if large, global catalogs are being considered.
+% Only Earthquakes are considered in this plot. Will only plot if region is
+% selected.
 %
-catmedplot(EQEvents,25,catalog.reg)
+if ~strcmpi(catalog.reg,'all')
+    catmedplot(EQEvents,25,catalog.reg)
+end
 
 %% Depth Distribution
 
