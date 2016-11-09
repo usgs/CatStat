@@ -24,16 +24,16 @@ if minlon<-170 && maxlon > 170
     %
     % Adjust event locations
     %
-    for ii = 1 : length(matching.cat1.Longitude)
-        if matching.cat1.Longitude(ii,3) < 0 
-            matching_lon(ii) = matching.cat1.Longitude(ii) + 360;
+    for ii = 1 : size(matching.cat1.Longitude,1)
+        if matching.cat1.Longitude(ii) < 0 
+            matching_lon(ii,1) = matching.cat1.Longitude(ii) + 360;
         else
-            matching_lon(ii) = matching.cat1.Longitude(ii);
+            matching_lon(ii,1) = matching.cat1.Longitude(ii);
         end
-        if matching.cat2.Longitude(ii,3) < 0
-            matching_lon2(ii) = matching.cat2.Longitude(ii)+360;
+        if matching.cat2.Longitude(ii) < 0
+            matching_lon2(ii,1) = matching.cat2.Longitude(ii)+360;
         else
-            matching_lon2(ii) = matching.cat2.Longitude(ii);
+            matching_lon2(ii,1) = matching.cat2.Longitude(ii);
         end
     end
     %
@@ -71,7 +71,7 @@ if minlon<-170 && maxlon > 170
     % Get Boundaries
     %
     maxlat = max([matching.cat1.Latitude;matching.cat2.Latitude]); 
-    minlat = min([matching.cat1.Latitude;matching.cat2.Latitude(:,2)]);
+    minlat = min([matching.cat1.Latitude;matching.cat2.Latitude]);
     midlat = (maxlat+minlat)/2;
     maxlon = max([matching_lon;matching_lon2]);
     minlon = min([matching_lon;matching_lon2]);

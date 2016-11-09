@@ -52,6 +52,21 @@ if exist(initfile,'file')
     pubopts.format = 'html'; % Format option. See doc publish for more information
     pubopts.showCode = false; % Format option.  See doc publish for more information
     fclose(fid);
+    publish('QCmulti',pubopts)
+    % 
+    %
+    % Create additional page to list missing events
+    %
+    EventThres = 1000;
+    if ~isempty(matching.cat1) && size(matching.cat1,1)<=EventThres
+        publish('MatchingEvents',pubopts)
+    end
+    if ~isempty(missing.cat1) || ~isempty(missing.cat2)
+        publish('MissingEvents',pubopts)
+    end
+    if ~isempty(mags.cat1) || ~isempty(dep.cat1) || ~isempty(both.cat1)
+        publish('ProblemEvents',pubopts)
+    end
 else
     % The files are not in the working directory, the
     % files will not be read.
@@ -61,22 +76,8 @@ end
 % Run remaining script and functions under publish function to create
 % document
 %
-publish('QCmulti',pubopts)
+
 %%
-% 
-%
-% Create additional page to list missing events
-%
-EventThres = 1000;
-if ~isempty(matching.cat1) && size(matching.cat1,1)<=EventThres
-    publish('MatchingEvents',pubopts)
-end
-if ~isempty(missing.cat1) || ~isempty(missing.cat2)
-    publish('MissingEvents',pubopts)
-end
-if ~isempty(mags.cat1) || ~isempty(dep.cat1) || ~isempty(both.cat1)
-    publish('ProblemEvents',pubopts)
-end
 
 close all
 %

@@ -36,9 +36,9 @@ if minlon < -170 && maxlon > 170
     %
     % Adjust World Map
     %
-    load('Countries.mat')
     lon = [];
     lat = [];
+    load('Countries.mat')
     L = length(places);
     for ii = 1 : L
         clon=lon{ii,1};

@@ -16,6 +16,7 @@ function plotcatdeps(EQEvents,reg)
 %
 coord = [];
 region = [];
+places = [];
 disp('Depth distribution of EARTHQUAKE EVENTS ONLY. All other event types ignored.');
 %
 % Replace any erroneous depths with NaN
@@ -91,15 +92,15 @@ if sum(EQEvents.Depth >= 50) >= 1
     %
     % Check to see if range goes over Pacific Transition Zone
     %
-   if minlon < -170 & maxlon > 170
+   if maxlon >= 180
     %
     % Adjust event locations
     %
-    for ii = 1:length(EQEvents.Longitude)
-        if EQEvents.Longitude(ii) < 0
-            EQEvents.Longitude(ii) = EQEvents.Longitude(ii)+360;
-        end
-    end
+%     for ii = 1:length(EQEvents.Longitude)
+%         if EQEvents.Longitude(ii) < 0
+%             EQEvents.Longitude(ii) = EQEvents.Longitude(ii)+360;
+%         end
+%     end
     %
     % Adjust World Map
     %
@@ -210,7 +211,7 @@ if sum(EQEvents.Depth >= 50) >= 1
         %
         % Plot earthquakes (red) and non-earthquake events (blue)
         %
-        h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'rx','MarkerSize',15);
+        h1 = plot(EQEvents.Longitude,EQEvents.Latitude,'r.','MarkerSize',15);
         minlon = min(poly(:,1))-0.5;
         maxlon = max(poly(:,1))+0.5;
         minlat = min(poly(:,2))-0.5;

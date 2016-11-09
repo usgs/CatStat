@@ -54,6 +54,8 @@ time_window = time_window/sec_per_day;
 %
 % Empty matrices
 %
+missing_ind1 = [];
+matching_ind = [];
 missing.cat1 = [];
 missing.cat2 = [];
 dist.cat1 = [];
@@ -235,7 +237,9 @@ end
 %
 % Missing Events
 %
-missing.cat1 = cat1.data(missing_ind1(:,1),:);
+if ~isempty(missing_ind1)
+    missing.cat1 = cat1.data(missing_ind1(:,1),:);
+end
 %
 % Matching Events
 %
@@ -271,8 +275,12 @@ end
 %
 % Remove events already parsed
 %
-cat1_ind = [matching_ind(:,1);missing_ind1(:,1)];
-cat2_ind = [matching_ind(:,2)];
+if ~isempty(missing_ind1)
+    cat1_ind = [matching_ind(:,1);missing_ind1(:,1)];
+else
+    cat1_ind = matching_ind(:,1);
+end
+cat2_ind = matching_ind(:,2);
 cat1.data(cat1_ind,:) = [];
 cat2.data(cat2_ind,:) = [];
 %
@@ -594,8 +602,12 @@ end
 fpath = strcat(pwd,'/',outputDir);
 writetable(matching.cat1,strcat(fpath,'/Matching_CAT1.csv'))
 writetable(matching.cat2,strcat(fpath,'/Matching_CAT2.csv'))
-writetable(missing.cat1,strcat(fpath,'/Missing_CAT1.csv'))
-writetable(missing.cat2,strcat(fpath,'/Missing_CAT2.csv'))
+if ~isempty(missing.cat1)
+    writetable(missing.cat1,strcat(fpath,'/Missing_CAT1.csv'))
+end
+if ~isempty(missing.cat2)
+    writetable(missing.cat2,strcat(fpath,'/Missing_CAT2.csv'))
+end
 disp(' ')
 disp(['***CSV FILES OF MATCHING AND MISSING EVENTS AVAILABLE IN', fpath,'***'])
 %
