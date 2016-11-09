@@ -71,7 +71,7 @@ elseif sizenum == 3
     %
     % Calculate median for each day
     %
-    medmagday = accumarray(subs,eqevents(:,5),[],@median);
+    medmagday = accumarray(subs,EQEvents.Mag,[],@median);
     %
     % Create first day of every month matrix and convert (might not be
     % necessary) Used for plotting
