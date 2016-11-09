@@ -129,7 +129,11 @@ elseif sizenum == 3
     %
     subplot(3,1,2)
     hold on
-    bar(dailydatenum(1:end-1,1),maxsepday,'hist')
+    try 
+        bar(dailydatenum(1:end-1,1),maxsepday,'hist')
+    catch
+        bar(dailydatenum(1:end,1),maxsepday,'hist')
+    end
     %
     % Subplot 2 Format Options
     %
@@ -146,7 +150,11 @@ elseif sizenum == 3
     %
     subplot(3,1,3)
     hold on
-    bar(dailydatenum(1:end-1,1),medsepday,'hist')
+    try
+        bar(dailydatenum(1:end-1,1),medsepday,'hist')
+    catch
+        bar(dailydatenum(1:end,1),medsepday,'hist')
+    end
     %
     % Subplot 3 Format Options
     %
