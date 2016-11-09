@@ -19,19 +19,12 @@ function catdensplot(EQEvents,reg)
 %
 coord = [];
 region = [];
+places = [];
 [minlon, maxlon] = findMinMax(EQEvents.Longitude);
 %
 % Check to see if range goes over Pacific Transition Zone
 %
-if minlon < -170 && maxlon > 170
-    %
-    % Adjust event locations
-    %
-    for ii = 1:length(EQEvents.Longitude)
-        if EQEvents.Longitude(ii) < 0
-            EQEvents.Longitude(ii) = EQEvents.Longitude(ii)+360;
-        end
-    end
+if maxlon >= 180
     %
     % Adjust World Map
     %

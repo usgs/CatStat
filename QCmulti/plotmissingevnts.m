@@ -233,8 +233,8 @@ if ~isempty(missing.cat2)
         % Adjust missing event locations
         %
         for ii = 1 : size(missing.cat2,1)
-            if missing.events2(ii,3) < 0
-                missing.events2(ii,3) = missing.events2(ii,3) + 360;
+            if missing.cat2.Longitude(ii) < 0
+                missing.cat2.Longitude(ii) = missing.cat2.Longitude(ii) + 360;
             end
         end
         %
