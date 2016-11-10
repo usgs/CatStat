@@ -58,6 +58,10 @@ missing_ind1 = [];
 matching_ind = [];
 missing.cat1 = [];
 missing.cat2 = [];
+missing.cat1auth = [];
+missing.cat1nonauth = [];
+missing.cat2auth = [];
+missing.cat2nonauth = [];
 dist.cat1 = [];
 dist.cat2 = []; 
 dep.cat1 = []; dep.cat2 = [];
@@ -320,18 +324,24 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if ~strcmpi('none',auth)
-    matching.authboth = find(strncmpi(cat1.auth,matching.cat1.ID,N) & ...
-        strncmpi(cat2.auth,matching.cat2.ID,N));
-    matching.authcat1 = find(strncmpi(cat1.auth,matching.cat1.ID,N) & ...
-        ~strncmpi(cat2.auth,matching.cat2.ID,N));
-    matching.authcat2 = find(~strncmpi(cat1.auth,matching.cat1.ID,N) & ...
-        strncmpi(cat2.auth,matching.cat2.ID,N));
-    matching.neither = find(~strncmpi(cat1.auth,matching.cat1.ID,N) & ...
-        ~strncmpi(cat2.auth,matching.cat2.ID,N));
-    missing.cat1auth = find(strncmpi(cat1.auth,missing.cat1.ID,N));
-    missing.cat2auth = find(strncmpi(cat2.auth,missing.cat2.ID,N));
-    missing.cat1nonauth = find(~strncmpi(cat1.auth,missing.cat1.ID,N));
-    missing.cat2nonauth = find(~strncmpi(cat2.auth,missing.cat2.ID,N));
+    if ~isempty(matching.cat1)
+        matching.authboth = find(strncmpi(cat1.auth,matching.cat1.ID,N) & ...
+            strncmpi(cat2.auth,matching.cat2.ID,N));
+        matching.authcat1 = find(strncmpi(cat1.auth,matching.cat1.ID,N) & ...
+            ~strncmpi(cat2.auth,matching.cat2.ID,N));
+        matching.authcat2 = find(~strncmpi(cat1.auth,matching.cat1.ID,N) & ...
+            strncmpi(cat2.auth,matching.cat2.ID,N));
+        matching.neither = find(~strncmpi(cat1.auth,matching.cat1.ID,N) & ...
+            ~strncmpi(cat2.auth,matching.cat2.ID,N));
+    end
+    if ~isempty(missing.cat1)
+        missing.cat1auth = find(strncmpi(cat1.auth,missing.cat1.ID,N));
+        missing.cat1nonauth = find(~strncmpi(cat1.auth,missing.cat1.ID,N));
+    end
+    if ~isempty(missing.cat2)
+        missing.cat2auth = find(strncmpi(cat2.auth,missing.cat2.ID,N));
+        missing.cat2nonauth = find(~strncmpi(cat2.auth,missing.cat2.ID,N));
+    end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
