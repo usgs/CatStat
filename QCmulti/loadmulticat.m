@@ -116,7 +116,7 @@ NOF = size(rawNames,2);
 % Create Format String
 formatSpec = [];
 for ii = 1 : NOF
-    if ii == TimeInd || ii == TypeInd
+    if ii == TimeInd | ii == TypeInd
         formatSpec = strcat(formatSpec,'%s');
     elseif ii == LatInd || ii == LonInd || ii == DepInd || ii == MagInd
         formatSpec = strcat(formatSpec,'%f');
@@ -269,7 +269,7 @@ NOF = size(rawNames,2);
 % Create Format String
 formatSpec = [];
 for ii = 1 : NOF
-    if ii == TimeInd || ii == TypeInd
+    if ii == TimeInd | ii == TypeInd
         formatSpec = strcat(formatSpec,'%s');
     elseif ii == LatInd || ii == LonInd || ii == DepInd || ii == MagInd
         formatSpec = strcat(formatSpec,'%f');

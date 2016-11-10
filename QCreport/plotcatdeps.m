@@ -234,13 +234,15 @@ if sum(EQEvents.Depth >= 50) >= 1
     %
     % Print Out
     %
-    GT50 = EQEvents(EQEvents.Depth>=50,:);
-    disp(' ')
-    disp('            Events Deeper than 50 km')
-    disp('-------------------------------------------------')
-    for ii = 1 : size(GT50,1)
-        fprintf('%s\t%s\tM%s\t%s\n',GT50.ID{ii},datestr(GT50.OriginTime(ii)),...
-            num2str(GT50.Mag(ii)),num2str(GT50.Depth(ii)));
+    if size(EQEvents.Depth(EQEvents.Depth>=50),1) <= 20
+        GT50 = EQEvents(EQEvents.Depth>=50,:);
+        disp(' ')
+        disp('            Events Deeper than 50 km')
+        disp('-------------------------------------------------')
+        for ii = 1 : size(GT50,1)
+            fprintf('%s\t%s\tM%s\t%s\n',GT50.ID{ii},datestr(GT50.OriginTime(ii)),...
+                num2str(GT50.Mag(ii)),num2str(GT50.Depth(ii)));
+        end
     end
 else
     figure

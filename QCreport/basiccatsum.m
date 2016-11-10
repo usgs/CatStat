@@ -52,7 +52,7 @@ fprintf(['First Date in Catalog:\t',begdate,'\n'])
 fprintf(['Last Date in Catalog:\t',enddate,'\n'])
 fprintf(['\n']);
 fprintf(['Total Number of Events:\t',int2str(size(catalog.data,1)),'\n'])
-if ~strcmpi('all',catalog.auth)
+if ~strcmpi('none',catalog.auth)
     if ~any(strcmp('authevnt',fields(catalog)))
         tt = length(catalog.auth);
         catalog.authevnt = sum(strncmpi(catalog.auth,catalog.data.ID,tt));
