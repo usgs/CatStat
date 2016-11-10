@@ -1,5 +1,5 @@
 % First catalog data file name
-/Users/usgs/CI/CI.csv
+/path/to/first/catalog/catalog1.csv
 % Human readable catalog descriptcity ion
 String describing the first catalog
 % Second catalog Data file name
@@ -17,9 +17,9 @@ String - See Appendix for abbreviations
 % Set Mag Limit
 Lower Magnitude limit to be considered
 % Set Mag Difference Max
-Magnitude tolerance for event association (set to 9999, if not needed)
+Magnitude tolerance for event association (set to NaN, if not needed)
 % Set Depth difference tolerance
-Depth tolerance in kilometers for event association (set to 9999, if not needed)
+Depth tolerance in kilometers for event association (set to NaN, if not needed)
 % Diretory to put report in
 Example_Report_Directory
 
